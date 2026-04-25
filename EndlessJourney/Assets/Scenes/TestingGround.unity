@@ -643,11 +643,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   includeTriggerTargets: 0
-  hitboxOffset: {x: 1.5, y: 0}
+  hitboxOffset: {x: 0.5, y: 0}
   hitboxScaleMultiplier: {x: 1, y: 1}
-  lockFacingAtAttackStart: 0
+  lockFacingAtAttackStart: 1
   enableMeleeAttack: 1
-  requireUsableWeapon: 1
+  requireUsableWeapon: 0
   allowAttackWhileMovementLocked: 1
   fallbackAttackInterval: 0.25
   minimumAttackInterval: 0.08
@@ -671,10 +671,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerCombatCore
   baseStrength: 10
   equippedWeaponName: None
-  attackRange: 0.8
-  attackDamagePerHit: 10
+  attackRange: 1.2
+  attackDamagePerHit: 17
   attackHitCount: 1
-  attackSpeed: 0.2
+  attackSpeed: 0.25
 --- !u!1 &516557170
 GameObject:
   m_ObjectHideFlags: 0
