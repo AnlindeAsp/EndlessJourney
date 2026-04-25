@@ -245,8 +245,7 @@ namespace EndlessJourney.Player
                     continue;
                 }
 
-                if (IsSelfCollider(other))
-                {
+                if (IsSelfCollider(other)){
                     continue;
                 }
 
@@ -426,7 +425,7 @@ namespace EndlessJourney.Player
 
             Transform zoneTransform = hitboxCollider.transform;
             float facing = facingDirection >= 0 ? 1f : -1f;
-            zoneTransform.localPosition = _hitboxBaseLocalPosition + new Vector3(hitboxOffset.x * facing, hitboxOffset.y, 0f);
+            zoneTransform.localPosition = _hitboxBaseLocalPosition + new Vector3((hitboxOffset.x + combatCore.AttackRange) * facing, hitboxOffset.y, 0f);
 
             float scaleXMultiplier = Mathf.Max(0.01f, Mathf.Abs(hitboxScaleMultiplier.x));
             float scaleYMultiplier = Mathf.Max(0.01f, Mathf.Abs(hitboxScaleMultiplier.y));
