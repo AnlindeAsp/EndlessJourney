@@ -138,13 +138,11 @@ namespace EndlessJourney.Player
             bool gamepadJumpHeld = gamepad != null && gamepad.buttonSouth.isPressed;
 
             // Dash uses edge trigger so one press = one dash start attempt.
-            bool keyboardDashPressed = keyboard != null &&
-                                      (keyboard.leftShiftKey.wasPressedThisFrame ||
-                                       keyboard.rightShiftKey.wasPressedThisFrame);
+            bool mouseDashPressed = mouse != null && mouse.rightButton.wasPressedThisFrame;
             bool gamepadDashPressed = gamepad != null && gamepad.buttonEast.wasPressedThisFrame;
 
-            // Melee attack key: F by default, with gamepad fallback.
-            bool keyboardAttackPressed = keyboard != null && keyboard.fKey.wasPressedThisFrame;
+            // Melee attack uses left mouse button by default, with gamepad fallback.
+            bool mouseAttackPressed = mouse != null && mouse.leftButton.wasPressedThisFrame;
             bool gamepadAttackPressed = gamepad != null && gamepad.buttonWest.wasPressedThisFrame;
 
             // Spell cast key: C on keyboard, right shoulder on gamepad by default.
@@ -153,8 +151,8 @@ namespace EndlessJourney.Player
 
             JumpPressedThisFrame = keyboardJumpPressed || gamepadJumpPressed;
             JumpHeld = keyboardJumpHeld || gamepadJumpHeld;
-            DashPressedThisFrame = keyboardDashPressed || gamepadDashPressed;
-            AttackPressedThisFrame = keyboardAttackPressed || gamepadAttackPressed;
+            DashPressedThisFrame = mouseDashPressed || gamepadDashPressed;
+            AttackPressedThisFrame = mouseAttackPressed || gamepadAttackPressed;
             CastPressedThisFrame = keyboardCastPressed || gamepadCastPressed;
 
             return true;

@@ -20,6 +20,7 @@ namespace EndlessJourney.Player
         [SerializeField] private PlayerCore2D core;
         [SerializeField] private PlayerCombatCore combatCore;
         [SerializeField] private PlayerWeaponSystem weaponSystem;
+        [SerializeField] private PlayerAttackRecoil2D attackRecoil;
 
         [Header("Hitbox")]
         [Tooltip("This collider is the real melee attack range.")]
@@ -59,6 +60,7 @@ namespace EndlessJourney.Player
         private float _attackActiveTimer;
         private bool _isAttackActive;
         private int _attackFacingDirection = 1;
+        private bool _hasAppliedHitRecoilThisAttack;
 
         private Vector3 _hitboxBaseLocalPosition;
         private Vector3 _hitboxBaseLocalScale = Vector3.one;
@@ -80,6 +82,11 @@ namespace EndlessJourney.Player
 
         private void Awake()
         {
+            if (attackRecoil == null)
+            {
+                attackRecoil = GetComponent<PlayerAttackRecoil2D>();
+            }
+
             if (core == null || combatCore == null || hitboxCollider == null)
             {
                 Debug.LogError("PlayerMeleeAttack2D is missing required references. Please assign core, combatCore, and hitboxCollider manually in Inspector.");
@@ -103,6 +110,7 @@ namespace EndlessJourney.Player
         {
             _isAttackActive = false;
             _attackActiveTimer = 0f;
+            _hasAppliedHitRecoilThisAttack = false;
             SetHitboxActive(false, _attackFacingDirection);
         }
 
@@ -185,6 +193,7 @@ namespace EndlessJourney.Player
             _isAttackActive = true;
             _attackActiveTimer = Mathf.Max(0.01f, attackActiveDuration);
             _attackFacingDirection = core.FacingDirection;
+            _hasAppliedHitRecoilThisAttack = false;
             _hitTargetIds.Clear();
 
             SetHitboxActive(true, _attackFacingDirection);
@@ -267,6 +276,7 @@ namespace EndlessJourney.Player
                 }
 
                 _hitTargetIds.Add(targetId);
+                TryApplyHitRecoilOnce();
 
                 if (logHitDebug)
                 {
@@ -336,6 +346,20 @@ namespace EndlessJourney.Player
             }
 
             return totalApplied;
+        }
+
+        private void TryApplyHitRecoilOnce()
+        {
+            if (_hasAppliedHitRecoilThisAttack || attackRecoil == null)
+            {
+                return;
+            }
+
+            WeaponData weapon = weaponSystem != null ? weaponSystem.EquippedWeapon : null;
+            if (attackRecoil.TryApplyMeleeHitRecoil(_attackFacingDirection, weapon))
+            {
+                _hasAppliedHitRecoilThisAttack = true;
+            }
         }
 
         private static void ResolveReceivers(

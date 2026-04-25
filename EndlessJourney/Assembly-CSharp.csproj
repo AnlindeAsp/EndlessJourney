@@ -80,6 +80,7 @@
     <Compile Include="Assets\Scripts\Combat\HitType.cs" />
     <Compile Include="Assets\Scripts\Combat\HitContext.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IDamageable2D.cs" />
+    <Compile Include="Assets\Scripts\Player\Combat\PlayerAttackRecoil2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat\PlayerCombatCore.cs" />
   </ItemGroup>
   <ItemGroup>

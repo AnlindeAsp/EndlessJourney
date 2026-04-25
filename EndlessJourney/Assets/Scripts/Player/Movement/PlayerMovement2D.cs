@@ -31,6 +31,7 @@ namespace EndlessJourney.Player
         [SerializeField, Min(0f)] private float apexHangVelocityThreshold = 1.25f;
         [SerializeField, Min(0f)] private float apexHangTime = 0.08f;
         [SerializeField, Range(0.05f, 1f)] private float apexHangGravityMultiplier = 0.45f;
+        [SerializeField, Min(0.1f)] private float maxFallSpeed = 18f;
 
         private float _coyoteTimer;
         private float _jumpBufferTimer;
@@ -86,6 +87,7 @@ namespace EndlessJourney.Player
 
             ApplyHorizontalMovement();
             ApplyJumpGravityScale();
+            ClampFallingSpeed();
         }
 
         private void UpdateTimers()
@@ -190,6 +192,18 @@ namespace EndlessJourney.Player
             }
 
             core.SetGravityMultiplier(gravityMultiplier);
+        }
+
+        private void ClampFallingSpeed()
+        {
+            Vector2 velocity = core.Body.linearVelocity;
+            if (velocity.y >= -maxFallSpeed)
+            {
+                return;
+            }
+
+            velocity.y = -maxFallSpeed;
+            core.Body.linearVelocity = velocity;
         }
 
         private void OnLanded()
