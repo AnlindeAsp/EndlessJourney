@@ -692,9 +692,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerAttackRecoil2D
   core: {fileID: 496806213}
   enableMeleeHitRecoil: 1
-  baseHorizontalRecoil: 18
-  weightInfluence: 0.8
-  minRecoilMultiplier: 0.2
+  baseHorizontalRecoil: 15
   unarmedWeight: 1
   recoilCooldown: 0.03
   addVerticalRecoil: 0

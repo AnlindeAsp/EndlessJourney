@@ -16,8 +16,6 @@ namespace EndlessJourney.Player
         [Header("Melee Hit Recoil")]
         [SerializeField] private bool enableMeleeHitRecoil = true;
         [SerializeField, Min(0f)] private float baseHorizontalRecoil = 3.2f;
-        [SerializeField, Min(0f)] private float weightInfluence = 0.45f;
-        [SerializeField, Min(0f)] private float minRecoilMultiplier = 0.2f;
         [SerializeField, Min(0f)] private float unarmedWeight = 0.8f;
         [SerializeField, Min(0f)] private float recoilCooldown = 0.03f;
 
@@ -63,9 +61,9 @@ namespace EndlessJourney.Player
             }
 
             int facing = attackFacingDirection >= 0 ? 1 : -1;
-            float recoilMultiplier = ResolveWeightMultiplier(equippedWeapon);
-            float horizontalRecoil = baseHorizontalRecoil * recoilMultiplier;
-            float verticalRecoil = addVerticalRecoil ? baseVerticalRecoil * recoilMultiplier : 0f;
+            float weight = equippedWeapon != null ? equippedWeapon.Weight : unarmedWeight;
+            float horizontalRecoil = baseHorizontalRecoil - weight * 1.5f;
+            float verticalRecoil = addVerticalRecoil ? baseVerticalRecoil : 0f;
 
             Vector2 velocity = core.Body.linearVelocity;
             velocity.x += -facing * horizontalRecoil;
@@ -77,18 +75,9 @@ namespace EndlessJourney.Player
             return true;
         }
 
-        private float ResolveWeightMultiplier(WeaponData equippedWeapon)
-        {
-            float weight = equippedWeapon != null ? equippedWeapon.Weight : unarmedWeight;
-            float multiplier = 1f / (1f + Mathf.Max(0f, weight) * weightInfluence);
-            return Mathf.Max(minRecoilMultiplier, multiplier);
-        }
-
         private void OnValidate()
         {
             baseHorizontalRecoil = Mathf.Max(0f, baseHorizontalRecoil);
-            weightInfluence = Mathf.Max(0f, weightInfluence);
-            minRecoilMultiplier = Mathf.Max(0f, minRecoilMultiplier);
             unarmedWeight = Mathf.Max(0f, unarmedWeight);
             recoilCooldown = Mathf.Max(0f, recoilCooldown);
         }
