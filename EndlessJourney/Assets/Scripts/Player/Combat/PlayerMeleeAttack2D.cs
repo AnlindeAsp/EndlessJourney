@@ -86,6 +86,7 @@ namespace EndlessJourney.Player
 
         /// <summary>Raised when a target takes damage from this melee attack.</summary>
         public event Action<GameObject, float> OnTargetHit;
+        private Quaternion _hitboxBaseLocalRotation;
 
         private void Awake()
         {
@@ -113,6 +114,7 @@ namespace EndlessJourney.Player
             Transform zoneTransform = hitboxCollider.transform;
             _hitboxBaseLocalPosition = zoneTransform.localPosition;
             _hitboxBaseLocalScale = zoneTransform.localScale;
+            _hitboxBaseLocalRotation = hitboxCollider.transform.localRotation;
 
             SetHitboxActive(false, core.FacingDirection);
         }
@@ -385,7 +387,7 @@ namespace EndlessJourney.Player
             {
                 return;
             }
-            
+
             WeaponData weapon = weaponSystem != null ? weaponSystem.EquippedWeapon : null;
             if (attackRecoil.TryApplyMeleeHitRecoil(_attackDirection, _attackFacingDirection, weapon))
             {
@@ -506,6 +508,7 @@ namespace EndlessJourney.Player
 
             Transform zoneTransform = hitboxCollider.transform;
             Vector3 scale = _hitboxBaseLocalScale;
+            zoneTransform.localRotation = _hitboxBaseLocalRotation;
             float scaleXMultiplier;
             float scaleYMultiplier;
 
@@ -513,14 +516,15 @@ namespace EndlessJourney.Player
             {
                 zoneTransform.localPosition = _hitboxBaseLocalPosition + new Vector3(
                     upAttackHitboxOffset.x,
-                    upAttackHitboxOffset.y + combatCore.AttackRange,
+                    upAttackHitboxOffset.y + combatCore.AttackRange *0.5f,
                     0f
                 );
+                zoneTransform.localRotation = _hitboxBaseLocalRotation * Quaternion.Euler(0f, 0f, 90f);
 
                 scaleXMultiplier = Mathf.Max(0.01f, Mathf.Abs(upAttackHitboxScaleMultiplier.x));
                 scaleYMultiplier = Mathf.Max(0.01f, Mathf.Abs(upAttackHitboxScaleMultiplier.y));
-                scale.x = Mathf.Abs(scale.x) * scaleXMultiplier * combatCore.AttackRange;
-                scale.y = Mathf.Abs(scale.y) * scaleYMultiplier * combatCore.AttackRange;
+                scale.x = Mathf.Abs(scale.x) * scaleXMultiplier * combatCore.AttackRange * 0.5f;
+                scale.y = Mathf.Abs(scale.y) * scaleYMultiplier * combatCore.AttackRange * 2f;
             }
             else
             {
@@ -536,7 +540,6 @@ namespace EndlessJourney.Player
                 scale.x = Mathf.Abs(scale.x) * scaleXMultiplier * facing * combatCore.AttackRange;
                 scale.y = Mathf.Abs(scale.y) * scaleYMultiplier * combatCore.AttackRange;
             }
-
             zoneTransform.localScale = scale;
         }
 

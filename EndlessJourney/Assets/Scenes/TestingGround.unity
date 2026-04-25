@@ -479,7 +479,7 @@ Transform:
   m_GameObject: {fileID: 496806204}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.25, y: 2.05, z: 0}
+  m_LocalPosition: {x: -12, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -653,7 +653,7 @@ MonoBehaviour:
   hitboxScaleMultiplier: {x: 1, y: 1}
   lockFacingAtAttackStart: 1
   enableUpAttack: 1
-  upAttackHitboxOffset: {x: 0, y: 0.9}
+  upAttackHitboxOffset: {x: 0, y: 0.5}
   upAttackHitboxScaleMultiplier: {x: 1, y: 1}
   enableMeleeAttack: 1
   requireUsableWeapon: 0
@@ -662,7 +662,7 @@ MonoBehaviour:
   minimumAttackInterval: 0.08
   useCombatAttackSpeedAsInterval: 1
   attackActiveDuration: 0.05
-  drawHitboxGizmo: 0
+  drawHitboxGizmo: 1
   logHitDebug: 1
   logAttackBlockReason: 1
   logAttackSuccess: 1
