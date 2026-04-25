@@ -775,7 +775,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &638345046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2420,6 +2420,7 @@ GameObject:
   - component: {fileID: 1919979898}
   - component: {fileID: 1919979897}
   - component: {fileID: 1919979900}
+  - component: {fileID: 1919979901}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2545,6 +2546,36 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &1919979901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919979896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eda4402a6ea4fb4d81b4506f272a178, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Cameras.SimpleCameraFollow2D
+  target: {fileID: 496806208}
+  autoFindPlayerOnStart: 1
+  offset: {x: 0, y: 3, z: -20}
+  snapOnStart: 0
+  smoothTimeX: 0.1
+  smoothTimeY: 0.16
+  enableLookAhead: 1
+  lookAheadDistance: 1.6
+  lookAheadSmoothTime: 0.16
+  lookAheadResetSpeed: 6
+  lookAheadMoveThreshold: 0.02
+  enableDeadZone: 1
+  deadZoneWidth: 1.2
+  deadZoneHeight: 0.7
+  clampToBounds: 0
+  minBounds: {x: -999, y: -999}
+  maxBounds: {x: 999, y: 999}
+  drawDeadZoneGizmo: 1
 --- !u!1 &1928000334
 GameObject:
   m_ObjectHideFlags: 0

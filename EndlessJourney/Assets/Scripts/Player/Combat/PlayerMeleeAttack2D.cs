@@ -30,7 +30,7 @@ namespace EndlessJourney.Player
 
         [Header("Hitbox Pose")]
         [Tooltip("Local offset applied to hitbox. X is mirrored by facing direction.")]
-        [SerializeField] private Vector2 hitboxOffset = new Vector2(1f, 0f);
+        [SerializeField] private Vector2 hitboxOffset = new Vector2(0.5f, 0f);
         [Tooltip("Runtime scale multiplier applied on top of hitbox base local scale.")]
         [SerializeField] private Vector2 hitboxScaleMultiplier = Vector2.one;
         [SerializeField] private bool lockFacingAtAttackStart = true;
