@@ -19,9 +19,9 @@ namespace EndlessJourney.Player
         [SerializeField, Min(0f)] private float unarmedWeight = 0.8f;
         [SerializeField, Min(0f)] private float recoilCooldown = 0.03f;
 
-        [Header("Optional Vertical Response")]
-        [SerializeField] private bool addVerticalRecoil = false;
-        [SerializeField] private float baseVerticalRecoil = 0f;
+        [Header("Down Attack Recoil")]
+        [SerializeField] private bool enableDownAttackRecoil = true;
+        [SerializeField, Min(0f)] private float downAttackUpwardRecoil = 6f;
 
         private float _nextAllowedRecoilTime;
 
@@ -48,8 +48,9 @@ namespace EndlessJourney.Player
         /// Applies recoil when melee successfully hits a target.
         /// Returns true when recoil was applied.
         /// </summary>
-        public bool TryApplyMeleeHitRecoil(int attackFacingDirection, WeaponData equippedWeapon)
+        public bool TryApplyMeleeHitRecoil(AttackDirection2D attackDirection, int attackFacingDirection, WeaponData equippedWeapon)
         {
+            Debug.Log($"TryApplyMeleeHitRecoil called: direction={attackDirection}, facing={attackFacingDirection}, weapon={(equippedWeapon != null ? equippedWeapon.WeaponName : "None")}");
             if (!enableMeleeHitRecoil || core == null || core.Body == null)
             {
                 return false;
@@ -60,18 +61,33 @@ namespace EndlessJourney.Player
                 return false;
             }
 
-            int facing = attackFacingDirection >= 0 ? 1 : -1;
-            float weight = equippedWeapon != null ? equippedWeapon.Weight : unarmedWeight;
-            float horizontalRecoil = baseHorizontalRecoil - weight * 1.5f;
-            float verticalRecoil = addVerticalRecoil ? baseVerticalRecoil : 0f;
-
+            if (attackDirection == AttackDirection2D.Up)
+            {
+                // attack up should not go recoil
+                return false;
+            }
             Vector2 velocity = core.Body.linearVelocity;
-            velocity.x += -facing * horizontalRecoil;
-            velocity.y += verticalRecoil;
-            core.Body.linearVelocity = velocity;
+            if (attackDirection == AttackDirection2D.Down)
+            {
+                if (!enableDownAttackRecoil)
+                {
+                    // Down attack recoil is disabled.
+                    return false;
+                }
+                velocity.y += downAttackUpwardRecoil;
+                Debug.Log($"Applying down attack recoil: upwardRecoil={downAttackUpwardRecoil}");
+            }
+            else
+            {
+                int facing = attackFacingDirection >= 0 ? 1 : -1;
+                float weight = equippedWeapon != null ? equippedWeapon.Weight : unarmedWeight;
+                float horizontalRecoil = baseHorizontalRecoil - weight * 1.5f;
+                velocity.x += -facing * horizontalRecoil;
+                Debug.Log($"Applying melee hit recoil: direction={attackDirection}, facing={facing}, weight={weight}, horizontalRecoil={horizontalRecoil}");
+            }
 
+            core.Body.linearVelocity = velocity;
             _nextAllowedRecoilTime = Time.time + recoilCooldown;
-            Debug.Log("Applied melee hit recoil: " + horizontalRecoil);
             return true;
         }
 
@@ -80,6 +96,7 @@ namespace EndlessJourney.Player
             baseHorizontalRecoil = Mathf.Max(0f, baseHorizontalRecoil);
             unarmedWeight = Mathf.Max(0f, unarmedWeight);
             recoilCooldown = Mathf.Max(0f, recoilCooldown);
+            downAttackUpwardRecoil = Mathf.Max(0f, downAttackUpwardRecoil);
         }
     }
 }

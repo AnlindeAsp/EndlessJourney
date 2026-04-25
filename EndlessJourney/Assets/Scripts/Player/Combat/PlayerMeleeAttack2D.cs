@@ -21,6 +21,7 @@ namespace EndlessJourney.Player
         [SerializeField] private PlayerCombatCore combatCore;
         [SerializeField] private PlayerWeaponSystem weaponSystem;
         [SerializeField] private PlayerAttackRecoil2D attackRecoil;
+        [SerializeField] private PlayerAttackDirectionResolver2D directionResolver;
 
         [Header("Hitbox")]
         [Tooltip("This collider is the real melee attack range.")]
@@ -28,6 +29,7 @@ namespace EndlessJourney.Player
         [SerializeField] private bool disableHitboxWhenInactive = true;
         [SerializeField] private LayerMask targetLayers = ~0;
         [SerializeField] private bool includeTriggerTargets = false;
+        [SerializeField] private bool syncPhysicsTransformsBeforeHitScan = true;
 
         [Header("Hitbox Pose")]
         [Tooltip("Local offset applied to hitbox. X is mirrored by facing direction.")]
@@ -35,6 +37,9 @@ namespace EndlessJourney.Player
         [Tooltip("Runtime scale multiplier applied on top of hitbox base local scale.")]
         [SerializeField] private Vector2 hitboxScaleMultiplier = Vector2.one;
         [SerializeField] private bool lockFacingAtAttackStart = true;
+        [SerializeField] private bool enableUpAttack = true;
+        [SerializeField] private Vector2 upAttackHitboxOffset = new Vector2(0f, 0.9f);
+        [SerializeField] private Vector2 upAttackHitboxScaleMultiplier = new Vector2(1f, 1f);
 
         [Header("Attack Rules")]
         [SerializeField] private bool enableMeleeAttack = true;
@@ -60,7 +65,9 @@ namespace EndlessJourney.Player
         private float _attackActiveTimer;
         private bool _isAttackActive;
         private int _attackFacingDirection = 1;
+        private AttackDirection2D _attackDirection = AttackDirection2D.Forward;
         private bool _hasAppliedHitRecoilThisAttack;
+        private bool _loggedNoTargetThisAttack;
 
         private Vector3 _hitboxBaseLocalPosition;
         private Vector3 _hitboxBaseLocalScale = Vector3.one;
@@ -86,6 +93,10 @@ namespace EndlessJourney.Player
             {
                 attackRecoil = GetComponent<PlayerAttackRecoil2D>();
             }
+            if (directionResolver == null)
+            {
+                directionResolver = GetComponent<PlayerAttackDirectionResolver2D>();
+            }
 
             if (core == null || combatCore == null || hitboxCollider == null)
             {
@@ -110,6 +121,7 @@ namespace EndlessJourney.Player
         {
             _isAttackActive = false;
             _attackActiveTimer = 0f;
+            _attackDirection = AttackDirection2D.Forward;
             _hasAppliedHitRecoilThisAttack = false;
             SetHitboxActive(false, _attackFacingDirection);
         }
@@ -193,7 +205,9 @@ namespace EndlessJourney.Player
             _isAttackActive = true;
             _attackActiveTimer = Mathf.Max(0.01f, attackActiveDuration);
             _attackFacingDirection = core.FacingDirection;
+            _attackDirection = ResolveAttackDirection();
             _hasAppliedHitRecoilThisAttack = false;
+            _loggedNoTargetThisAttack = false;
             _hitTargetIds.Clear();
 
             SetHitboxActive(true, _attackFacingDirection);
@@ -201,7 +215,7 @@ namespace EndlessJourney.Player
 
             if (logAttackSuccess)
             {
-                Debug.Log($"Melee attack started: facing={_attackFacingDirection}, duration={_attackActiveTimer:0.##}s");
+                Debug.Log($"Melee attack started: dir={_attackDirection}, facing={_attackFacingDirection}, duration={_attackActiveTimer:0.##}s");
             }
         }
 
@@ -217,7 +231,7 @@ namespace EndlessJourney.Player
                 _attackFacingDirection = core.FacingDirection;
             }
 
-            ApplyHitboxPoseAndScale(_attackFacingDirection);
+            ApplyHitboxPoseAndScale(_attackFacingDirection, _attackDirection);
             PerformHitScan();
 
             _attackActiveTimer -= deltaTime;
@@ -245,7 +259,20 @@ namespace EndlessJourney.Player
                 useTriggers = includeTriggerTargets
             };
 
+            if (syncPhysicsTransformsBeforeHitScan)
+            {
+                Physics2D.SyncTransforms();
+            }
+
             int hitCount = hitboxCollider.Overlap(filter, _overlapResults);
+            if (hitCount <= 0 && logHitDebug && !_loggedNoTargetThisAttack)
+            {
+                _loggedNoTargetThisAttack = true;
+                Debug.Log(
+                    $"Melee hit scan found no target. attackDir={_attackDirection}, facing={_attackFacingDirection}, " +
+                    $"targetLayers={targetLayers.value}, includeTriggers={includeTriggerTargets}.");
+            }
+
             for (int i = 0; i < hitCount; i++)
             {
                 Collider2D other = _overlapResults[i];
@@ -272,6 +299,10 @@ namespace EndlessJourney.Player
                 float totalDamageApplied = TryApplyDamage(other, targetRoot);
                 if (totalDamageApplied <= 0f)
                 {
+                    if (logHitDebug)
+                    {
+                        Debug.Log($"Melee overlap but no damage applied: target=[{targetRoot.name}] collider=[{other.name}]");
+                    }
                     continue;
                 }
 
@@ -294,7 +325,7 @@ namespace EndlessJourney.Player
             float damagePerHit = Mathf.Max(0f, combatCore.AttackDamagePerHit);
             float totalApplied = 0f;
 
-            Vector2 hitDirection = new Vector2(_attackFacingDirection, 0f);
+            Vector2 hitDirection = ResolveHitDirection();
             Vector2 hitPoint = col.ClosestPoint(transform.position);
 
             if (hittable != null)
@@ -354,9 +385,9 @@ namespace EndlessJourney.Player
             {
                 return;
             }
-
+            
             WeaponData weapon = weaponSystem != null ? weaponSystem.EquippedWeapon : null;
-            if (attackRecoil.TryApplyMeleeHitRecoil(_attackFacingDirection, weapon))
+            if (attackRecoil.TryApplyMeleeHitRecoil(_attackDirection, _attackFacingDirection, weapon))
             {
                 _hasAppliedHitRecoilThisAttack = true;
             }
@@ -429,9 +460,36 @@ namespace EndlessJourney.Player
             return Mathf.Max(minimumAttackInterval, fallbackAttackInterval);
         }
 
+        private AttackDirection2D ResolveAttackDirection()
+        {
+            AttackDirection2D resolved = directionResolver != null
+                ? directionResolver.ResolveDirectionForNewAttack()
+                : AttackDirection2D.Forward;
+
+            if (resolved == AttackDirection2D.Up && !enableUpAttack)
+            {
+                return AttackDirection2D.Forward;
+            }
+
+            return resolved;
+        }
+
+        private Vector2 ResolveHitDirection()
+        {
+            switch (_attackDirection)
+            {
+                case AttackDirection2D.Up:
+                    return Vector2.up;
+                case AttackDirection2D.Down:
+                    return Vector2.down;
+                default:
+                    return new Vector2(_attackFacingDirection, 0f);
+            }
+        }
+
         private void SetHitboxActive(bool active, int facingDirection)
         {
-            ApplyHitboxPoseAndScale(facingDirection);
+            ApplyHitboxPoseAndScale(facingDirection, _attackDirection);
 
             if (hitboxCollider != null && disableHitboxWhenInactive)
             {
@@ -439,24 +497,46 @@ namespace EndlessJourney.Player
             }
         }
 
-        private void ApplyHitboxPoseAndScale(int facingDirection)
+        private void ApplyHitboxPoseAndScale(int facingDirection, AttackDirection2D attackDirection)
         {
-            //float scaleByRange = combatCore.AttackRange / Mathf.Max(0.01f, hitboxOffset.x);
             if (hitboxCollider == null)
             {
                 return;
             }
 
             Transform zoneTransform = hitboxCollider.transform;
-            float facing = facingDirection >= 0 ? 1f : -1f;
-            zoneTransform.localPosition = _hitboxBaseLocalPosition + new Vector3((hitboxOffset.x + combatCore.AttackRange) * facing, hitboxOffset.y, 0f);
-
-            float scaleXMultiplier = Mathf.Max(0.01f, Mathf.Abs(hitboxScaleMultiplier.x));
-            float scaleYMultiplier = Mathf.Max(0.01f, Mathf.Abs(hitboxScaleMultiplier.y));
-
             Vector3 scale = _hitboxBaseLocalScale;
-            scale.x = Mathf.Abs(scale.x) * scaleXMultiplier * facing * combatCore.AttackRange;
-            scale.y = Mathf.Abs(scale.y) * scaleYMultiplier * combatCore.AttackRange;
+            float scaleXMultiplier;
+            float scaleYMultiplier;
+
+            if (attackDirection == AttackDirection2D.Up && enableUpAttack)
+            {
+                zoneTransform.localPosition = _hitboxBaseLocalPosition + new Vector3(
+                    upAttackHitboxOffset.x,
+                    upAttackHitboxOffset.y + combatCore.AttackRange,
+                    0f
+                );
+
+                scaleXMultiplier = Mathf.Max(0.01f, Mathf.Abs(upAttackHitboxScaleMultiplier.x));
+                scaleYMultiplier = Mathf.Max(0.01f, Mathf.Abs(upAttackHitboxScaleMultiplier.y));
+                scale.x = Mathf.Abs(scale.x) * scaleXMultiplier * combatCore.AttackRange;
+                scale.y = Mathf.Abs(scale.y) * scaleYMultiplier * combatCore.AttackRange;
+            }
+            else
+            {
+                float facing = facingDirection >= 0 ? 1f : -1f;
+                zoneTransform.localPosition = _hitboxBaseLocalPosition + new Vector3(
+                    (hitboxOffset.x + combatCore.AttackRange) * facing,
+                    hitboxOffset.y,
+                    0f
+                );
+
+                scaleXMultiplier = Mathf.Max(0.01f, Mathf.Abs(hitboxScaleMultiplier.x));
+                scaleYMultiplier = Mathf.Max(0.01f, Mathf.Abs(hitboxScaleMultiplier.y));
+                scale.x = Mathf.Abs(scale.x) * scaleXMultiplier * facing * combatCore.AttackRange;
+                scale.y = Mathf.Abs(scale.y) * scaleYMultiplier * combatCore.AttackRange;
+            }
+
             zoneTransform.localScale = scale;
         }
 
@@ -474,6 +554,16 @@ namespace EndlessJourney.Player
             if (Mathf.Abs(hitboxScaleMultiplier.y) < 0.01f)
             {
                 hitboxScaleMultiplier.y = 0.01f;
+            }
+
+            if (Mathf.Abs(upAttackHitboxScaleMultiplier.x) < 0.01f)
+            {
+                upAttackHitboxScaleMultiplier.x = 0.01f;
+            }
+
+            if (Mathf.Abs(upAttackHitboxScaleMultiplier.y) < 0.01f)
+            {
+                upAttackHitboxScaleMultiplier.y = 0.01f;
             }
         }
 

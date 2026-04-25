@@ -339,6 +339,7 @@ GameObject:
   - component: {fileID: 496806217}
   - component: {fileID: 496806216}
   - component: {fileID: 496806219}
+  - component: {fileID: 496806220}
   m_Layer: 8
   m_Name: player
   m_TagString: Untagged
@@ -640,15 +641,20 @@ MonoBehaviour:
   combatCore: {fileID: 496806218}
   weaponSystem: {fileID: 496806216}
   attackRecoil: {fileID: 496806219}
+  directionResolver: {fileID: 496806220}
   hitboxCollider: {fileID: 516557173}
   disableHitboxWhenInactive: 1
   targetLayers:
     serializedVersion: 2
     m_Bits: 128
   includeTriggerTargets: 0
+  syncPhysicsTransformsBeforeHitScan: 1
   hitboxOffset: {x: 0.5, y: 0}
   hitboxScaleMultiplier: {x: 1, y: 1}
   lockFacingAtAttackStart: 1
+  enableUpAttack: 1
+  upAttackHitboxOffset: {x: 0, y: 0.9}
+  upAttackHitboxScaleMultiplier: {x: 1, y: 1}
   enableMeleeAttack: 1
   requireUsableWeapon: 0
   allowAttackWhileMovementLocked: 1
@@ -657,7 +663,7 @@ MonoBehaviour:
   useCombatAttackSpeedAsInterval: 1
   attackActiveDuration: 0.05
   drawHitboxGizmo: 0
-  logHitDebug: 0
+  logHitDebug: 1
   logAttackBlockReason: 1
   logAttackSuccess: 1
 --- !u!114 &496806218
@@ -695,8 +701,25 @@ MonoBehaviour:
   baseHorizontalRecoil: 15
   unarmedWeight: 1
   recoilCooldown: 0.03
-  addVerticalRecoil: 0
-  baseVerticalRecoil: 0
+  enableDownAttackRecoil: 1
+  downAttackUpwardRecoil: 22
+--- !u!114 &496806220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 496806204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f14d7432f4f918849a4f8a717afd65dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerAttackDirectionResolver2D
+  core: {fileID: 496806213}
+  enableUpAttack: 1
+  enableDownAttack: 0
+  downAttackRequiresAirborne: 1
+  verticalIntentThreshold: 0.35
 --- !u!1 &516557170
 GameObject:
   m_ObjectHideFlags: 0

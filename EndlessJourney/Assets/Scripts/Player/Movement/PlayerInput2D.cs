@@ -42,9 +42,16 @@ namespace EndlessJourney.Player
 
         /// <summary>
         /// True only on the frame melee attack was pressed.
-        /// Default binding in the new Input System is keyboard F.
+        /// Default binding in the new Input System is mouse left button.
         /// </summary>
         public bool AttackPressedThisFrame { get; private set; }
+
+        /// <summary>
+        /// Vertical attack intent in range [-1, 1].
+        /// +1 = up intent, -1 = down intent.
+        /// This is separated from jump so combat systems can resolve directional attacks.
+        /// </summary>
+        public float VerticalIntent { get; private set; }
 
         /// <summary>
         /// True only on the frame cast key was pressed.
@@ -57,6 +64,7 @@ namespace EndlessJourney.Player
         [Tooltip("Used only when the new Input System has no active keyboard/gamepad/mouse.")]
         // Legacy axis/button names from Project Settings > Input Manager.
         [SerializeField] private string horizontalAxis = "Horizontal";
+        [SerializeField] private string verticalAxis = "Vertical";
         [SerializeField] private string jumpButton = "Jump";
         [SerializeField] private string dashButton = "Fire3";
         [SerializeField] private string attackButton = "Fire1";
@@ -85,6 +93,7 @@ namespace EndlessJourney.Player
             {
                 // Explicitly reset all values when no input backend is available.
                 MoveX = 0f;
+                VerticalIntent = 0f;
                 JumpPressedThisFrame = false;
                 JumpHeld = false;
                 DashPressedThisFrame = false;
@@ -123,18 +132,26 @@ namespace EndlessJourney.Player
 
             MoveX = Mathf.Clamp(move, -1f, 1f);
 
+            float verticalIntent = 0f;
+            if (keyboard != null)
+            {
+                if (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed) verticalIntent += 1f;
+                if (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed) verticalIntent -= 1f;
+            }
+
+            if (gamepad != null)
+            {
+                verticalIntent += gamepad.leftStick.ReadValue().y;
+            }
+
+            VerticalIntent = Mathf.Clamp(verticalIntent, -1f, 1f);
+
             // "PressedThisFrame" is an edge trigger for actions that should happen once.
-            bool keyboardJumpPressed = keyboard != null &&
-                                      (keyboard.spaceKey.wasPressedThisFrame ||
-                                       keyboard.wKey.wasPressedThisFrame ||
-                                       keyboard.upArrowKey.wasPressedThisFrame);
+            bool keyboardJumpPressed = keyboard != null && keyboard.spaceKey.wasPressedThisFrame;
             bool gamepadJumpPressed = gamepad != null && gamepad.buttonSouth.wasPressedThisFrame;
 
             // "Held" is used for continuous state checks (example: variable jump height).
-            bool keyboardJumpHeld = keyboard != null &&
-                                   (keyboard.spaceKey.isPressed ||
-                                    keyboard.wKey.isPressed ||
-                                    keyboard.upArrowKey.isPressed);
+            bool keyboardJumpHeld = keyboard != null && keyboard.spaceKey.isPressed;
             bool gamepadJumpHeld = gamepad != null && gamepad.buttonSouth.isPressed;
 
             // Dash uses edge trigger so one press = one dash start attempt.
@@ -164,9 +181,11 @@ namespace EndlessJourney.Player
         {
             // Legacy API mirrors the same semantic outputs:
             // - axis for MoveX
+            // - axis for VerticalIntent
             // - button down for one-frame triggers
             // - button for held state
             MoveX = Input.GetAxisRaw(horizontalAxis);
+            VerticalIntent = Input.GetAxisRaw(verticalAxis);
             JumpPressedThisFrame = Input.GetButtonDown(jumpButton);
             JumpHeld = Input.GetButton(jumpButton);
             DashPressedThisFrame = Input.GetButtonDown(dashButton);
