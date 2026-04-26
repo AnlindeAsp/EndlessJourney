@@ -140,5 +140,15 @@ namespace EndlessJourney.Player
                 core.Body.linearVelocity.y
             );
         }
+
+        /// <summary>
+        /// Restores dash availability immediately.
+        /// Used by mechanics such as successful down-attack hit rewards.
+        /// </summary>
+        public void ResetDashAvailability()
+        {
+            _airDashAvailable = true;
+            _cooldownTimer = 0f;
+        }
     }
 }

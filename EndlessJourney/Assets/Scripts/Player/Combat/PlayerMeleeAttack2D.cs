@@ -22,6 +22,8 @@ namespace EndlessJourney.Player
         [SerializeField] private PlayerWeaponSystem weaponSystem;
         [SerializeField] private PlayerAttackRecoil2D attackRecoil;
         [SerializeField] private PlayerAttackDirectionResolver2D directionResolver;
+        [SerializeField] private PlayerDash2D dash;
+        [SerializeField] private PlayerDoubleJump2D doubleJump;
 
         [Header("Hitbox")]
         [Tooltip("This collider is the real melee attack range.")]
@@ -53,6 +55,7 @@ namespace EndlessJourney.Player
         [SerializeField] private bool useCombatAttackSpeedAsInterval = true;
         [Tooltip("How long one melee hitbox stays active.")]
         [SerializeField, Min(0.01f)] private float attackActiveDuration = 0.18f;
+        [SerializeField] private bool resetAirActionsOnDownHit = true;
 
         [Header("Debug")]
         [SerializeField] private bool drawHitboxGizmo = true;
@@ -70,6 +73,7 @@ namespace EndlessJourney.Player
         private AttackDirection2D _attackDirection = AttackDirection2D.Forward;
         private bool _hasAppliedHitRecoilThisAttack;
         private bool _loggedNoTargetThisAttack;
+        private bool _hasResetAirActionsThisAttack;
 
         private Vector3 _hitboxBaseLocalPosition;
         private Vector3 _hitboxBaseLocalScale = Vector3.one;
@@ -100,6 +104,14 @@ namespace EndlessJourney.Player
             {
                 directionResolver = GetComponent<PlayerAttackDirectionResolver2D>();
             }
+            if (dash == null)
+            {
+                dash = GetComponent<PlayerDash2D>();
+            }
+            if (doubleJump == null)
+            {
+                doubleJump = GetComponent<PlayerDoubleJump2D>();
+            }
 
             if (core == null || combatCore == null || hitboxCollider == null)
             {
@@ -127,6 +139,7 @@ namespace EndlessJourney.Player
             _attackActiveTimer = 0f;
             _attackDirection = AttackDirection2D.Forward;
             _hasAppliedHitRecoilThisAttack = false;
+            _hasResetAirActionsThisAttack = false;
             SetHitboxActive(false, _attackFacingDirection);
         }
 
@@ -212,6 +225,7 @@ namespace EndlessJourney.Player
             _attackDirection = ResolveAttackDirection();
             _hasAppliedHitRecoilThisAttack = false;
             _loggedNoTargetThisAttack = false;
+            _hasResetAirActionsThisAttack = false;
             _hitTargetIds.Clear();
 
             SetHitboxActive(true, _attackFacingDirection);
@@ -311,6 +325,7 @@ namespace EndlessJourney.Player
                 }
 
                 _hitTargetIds.Add(targetId);
+                TryResetAirActionsOnDownHitOnce();
                 TryApplyHitRecoilOnce();
 
                 if (logHitDebug)
@@ -394,6 +409,28 @@ namespace EndlessJourney.Player
             if (attackRecoil.TryApplyMeleeHitRecoil(_attackDirection, _attackFacingDirection, weapon))
             {
                 _hasAppliedHitRecoilThisAttack = true;
+            }
+        }
+
+        private void TryResetAirActionsOnDownHitOnce()
+        {
+            if (_hasResetAirActionsThisAttack || !resetAirActionsOnDownHit)
+            {
+                return;
+            }
+
+            if (_attackDirection != AttackDirection2D.Down)
+            {
+                return;
+            }
+
+            dash?.ResetDashAvailability();
+            doubleJump?.ResetExtraJumps();
+            _hasResetAirActionsThisAttack = true;
+
+            if (logHitDebug)
+            {
+                Debug.Log("Down hit reward applied: dash and extra jumps reset.");
             }
         }
 

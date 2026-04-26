@@ -84,5 +84,14 @@ namespace EndlessJourney.Player
             _remainingExtraJumps--;
             movement.PerformAbilityJump();
         }
+
+        /// <summary>
+        /// Restores all extra jumps immediately.
+        /// Used by mechanics such as successful down-attack hit rewards.
+        /// </summary>
+        public void ResetExtraJumps()
+        {
+            _remainingExtraJumps = extraJumps;
+        }
     }
 }

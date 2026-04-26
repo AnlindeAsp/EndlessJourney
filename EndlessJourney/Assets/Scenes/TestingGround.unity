@@ -643,6 +643,8 @@ MonoBehaviour:
   weaponSystem: {fileID: 496806216}
   attackRecoil: {fileID: 496806219}
   directionResolver: {fileID: 496806220}
+  dash: {fileID: 0}
+  doubleJump: {fileID: 0}
   hitboxCollider: {fileID: 516557173}
   disableHitboxWhenInactive: 1
   targetLayers:
@@ -665,6 +667,7 @@ MonoBehaviour:
   minimumAttackInterval: 0.08
   useCombatAttackSpeedAsInterval: 1
   attackActiveDuration: 0.05
+  resetAirActionsOnDownHit: 1
   drawHitboxGizmo: 0
   logHitDebug: 1
   logAttackBlockReason: 1
@@ -683,10 +686,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerCombatCore
   baseStrength: 10
   equippedWeaponName: None
-  attackRange: 1.2
-  attackDamagePerHit: 3
+  attackRange: 1.5
+  attackDamagePerHit: 5
   attackHitCount: 1
-  attackSpeed: 0.25
+  attackSpeed: 0.3
 --- !u!114 &496806219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -705,7 +708,7 @@ MonoBehaviour:
   unarmedWeight: 1
   recoilCooldown: 0.03
   enableDownAttackRecoil: 1
-  downAttackUpwardRecoil: 25
+  downAttackUpwardRecoil: 20
 --- !u!114 &496806220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -800,8 +803,10 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: 1, y: 0}
+      - {x: 0, y: 0.5}
       - {x: -1, y: 0.5}
       - {x: -1, y: -0.5}
+      - {x: 0, y: -0.5}
   m_UseDelaunayMesh: 1
 --- !u!1 &550959809
 GameObject:
@@ -1241,7 +1246,7 @@ Transform:
   m_GameObject: {fileID: 664270385}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.28, y: 1.43, z: 0}
+  m_LocalPosition: {x: -19.49, y: 11.33, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
