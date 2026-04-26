@@ -74,7 +74,9 @@ namespace EndlessJourney.Player
                     // Down attack recoil is disabled.
                     return false;
                 }
-                velocity.y += downAttackUpwardRecoil;
+                // velocity.y = downAttackUpwardRecoil; When attackging down, player velocity should be reset and got push up
+                velocity.y = downAttackUpwardRecoil;
+                velocity.x = 0f; // Optional: reset horizontal velocity on down attack for more consistent feel
                 Debug.Log($"Applying down attack recoil: upwardRecoil={downAttackUpwardRecoil}");
             }
             else

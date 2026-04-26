@@ -33,6 +33,10 @@ namespace EndlessJourney.Player
         [SerializeField, Range(0.05f, 1f)] private float apexHangGravityMultiplier = 0.45f;
         [SerializeField, Min(0.1f)] private float maxFallSpeed = 18f;
 
+        [Header("Ability Jump")]
+        [Tooltip("Horizontal velocity damping applied when PerformAbilityJump is used. 0 = clear X velocity.")]
+        [SerializeField, Range(0f, 1f)] private float abilityJumpHorizontalDamping = 0f;
+
         private float _coyoteTimer;
         private float _jumpBufferTimer;
         private float _apexHangTimer;
@@ -228,6 +232,7 @@ namespace EndlessJourney.Player
             _apexHangTimer = 0f;
 
             Vector2 velocity = core.Body.linearVelocity;
+            velocity.x *= abilityJumpHorizontalDamping;
             velocity.y = jumpVelocity;
             core.Body.linearVelocity = velocity;
         }

@@ -13,8 +13,6 @@ namespace EndlessJourney.Player
         [SerializeField] private PlayerCore2D core;
 
         [Header("Direction Rules")]
-        [SerializeField] private bool enableUpAttack = true;
-        [SerializeField] private bool enableDownAttack = false;
         [SerializeField] private bool downAttackRequiresAirborne = true;
         [SerializeField, Range(0.01f, 1f)] private float verticalIntentThreshold = 0.35f;
 
@@ -43,12 +41,12 @@ namespace EndlessJourney.Player
 
             float verticalIntent = core.Input.VerticalIntent;
 
-            if (enableUpAttack && verticalIntent >= verticalIntentThreshold)
+            if (verticalIntent >= verticalIntentThreshold)
             {
                 return AttackDirection2D.Up;
             }
 
-            if (enableDownAttack && verticalIntent <= -verticalIntentThreshold)
+            if (verticalIntent <= -verticalIntentThreshold)
             {
                 if (!downAttackRequiresAirborne || !core.IsGrounded)
                 {

@@ -399,7 +399,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 5
+  m_GravityScale: 4
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -516,6 +516,7 @@ MonoBehaviour:
   apexHangTime: 0.08
   apexHangGravityMultiplier: 0.45
   maxFallSpeed: 22
+  abilityJumpHorizontalDamping: 0
 --- !u!114 &496806211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -543,10 +544,10 @@ MonoBehaviour:
   core: {fileID: 496806213}
   enableDash: 1
   dashSpeed: 25
-  dashDuration: 0.2
+  dashDuration: 0.3
   dashCooldown: 0.25
   dashGravityMultiplier: 0
-  postDashSpeedMultiplier: 0.5
+  postDashSpeedMultiplier: 0.505
   oneDashPerAirborne: 1
   preserveVerticalVelocity: 0
 --- !u!114 &496806213
@@ -652,9 +653,11 @@ MonoBehaviour:
   hitboxOffset: {x: 0.5, y: 0}
   hitboxScaleMultiplier: {x: 1, y: 1}
   lockFacingAtAttackStart: 1
-  enableUpAttack: 1
   upAttackHitboxOffset: {x: 0, y: 0.5}
   upAttackHitboxScaleMultiplier: {x: 1, y: 1}
+  downAttackHitboxOffset: {x: 0, y: -0.5}
+  downAttackHitboxScaleMultiplier: {x: 1, y: 1}
+  downAttackRotationZ: -90
   enableMeleeAttack: 1
   requireUsableWeapon: 0
   allowAttackWhileMovementLocked: 1
@@ -662,7 +665,7 @@ MonoBehaviour:
   minimumAttackInterval: 0.08
   useCombatAttackSpeedAsInterval: 1
   attackActiveDuration: 0.05
-  drawHitboxGizmo: 1
+  drawHitboxGizmo: 0
   logHitDebug: 1
   logAttackBlockReason: 1
   logAttackSuccess: 1
@@ -702,7 +705,7 @@ MonoBehaviour:
   unarmedWeight: 1
   recoilCooldown: 0.03
   enableDownAttackRecoil: 1
-  downAttackUpwardRecoil: 22
+  downAttackUpwardRecoil: 25
 --- !u!114 &496806220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -716,8 +719,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerAttackDirectionResolver2D
   core: {fileID: 496806213}
-  enableUpAttack: 1
-  enableDownAttack: 0
   downAttackRequiresAirborne: 1
   verticalIntentThreshold: 0.35
 --- !u!1 &516557170

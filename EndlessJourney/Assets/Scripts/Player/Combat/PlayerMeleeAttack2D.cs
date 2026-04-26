@@ -37,9 +37,11 @@ namespace EndlessJourney.Player
         [Tooltip("Runtime scale multiplier applied on top of hitbox base local scale.")]
         [SerializeField] private Vector2 hitboxScaleMultiplier = Vector2.one;
         [SerializeField] private bool lockFacingAtAttackStart = true;
-        [SerializeField] private bool enableUpAttack = true;
         [SerializeField] private Vector2 upAttackHitboxOffset = new Vector2(0f, 0.9f);
         [SerializeField] private Vector2 upAttackHitboxScaleMultiplier = new Vector2(1f, 1f);
+        [SerializeField] private Vector2 downAttackHitboxOffset = new Vector2(0f, -0.9f);
+        [SerializeField] private Vector2 downAttackHitboxScaleMultiplier = new Vector2(1f, 1f);
+        [SerializeField] private float downAttackRotationZ = -90f;
 
         [Header("Attack Rules")]
         [SerializeField] private bool enableMeleeAttack = true;
@@ -464,16 +466,9 @@ namespace EndlessJourney.Player
 
         private AttackDirection2D ResolveAttackDirection()
         {
-            AttackDirection2D resolved = directionResolver != null
+            return directionResolver != null
                 ? directionResolver.ResolveDirectionForNewAttack()
                 : AttackDirection2D.Forward;
-
-            if (resolved == AttackDirection2D.Up && !enableUpAttack)
-            {
-                return AttackDirection2D.Forward;
-            }
-
-            return resolved;
         }
 
         private Vector2 ResolveHitDirection()
@@ -512,7 +507,7 @@ namespace EndlessJourney.Player
             float scaleXMultiplier;
             float scaleYMultiplier;
 
-            if (attackDirection == AttackDirection2D.Up && enableUpAttack)
+            if (attackDirection == AttackDirection2D.Up)
             {
                 zoneTransform.localPosition = _hitboxBaseLocalPosition + new Vector3(
                     upAttackHitboxOffset.x,
@@ -523,6 +518,20 @@ namespace EndlessJourney.Player
 
                 scaleXMultiplier = Mathf.Max(0.01f, Mathf.Abs(upAttackHitboxScaleMultiplier.x));
                 scaleYMultiplier = Mathf.Max(0.01f, Mathf.Abs(upAttackHitboxScaleMultiplier.y));
+                scale.x = Mathf.Abs(scale.x) * scaleXMultiplier * combatCore.AttackRange * 0.5f;
+                scale.y = Mathf.Abs(scale.y) * scaleYMultiplier * combatCore.AttackRange * 2f;
+            }
+            else if (attackDirection == AttackDirection2D.Down)
+            {
+                zoneTransform.localPosition = _hitboxBaseLocalPosition + new Vector3(
+                    downAttackHitboxOffset.x,
+                    downAttackHitboxOffset.y - combatCore.AttackRange * 0.5f,
+                    0f
+                );
+                zoneTransform.localRotation = _hitboxBaseLocalRotation * Quaternion.Euler(0f, 0f, downAttackRotationZ);
+
+                scaleXMultiplier = Mathf.Max(0.01f, Mathf.Abs(downAttackHitboxScaleMultiplier.x));
+                scaleYMultiplier = Mathf.Max(0.01f, Mathf.Abs(downAttackHitboxScaleMultiplier.y));
                 scale.x = Mathf.Abs(scale.x) * scaleXMultiplier * combatCore.AttackRange * 0.5f;
                 scale.y = Mathf.Abs(scale.y) * scaleYMultiplier * combatCore.AttackRange * 2f;
             }
@@ -567,6 +576,16 @@ namespace EndlessJourney.Player
             if (Mathf.Abs(upAttackHitboxScaleMultiplier.y) < 0.01f)
             {
                 upAttackHitboxScaleMultiplier.y = 0.01f;
+            }
+
+            if (Mathf.Abs(downAttackHitboxScaleMultiplier.x) < 0.01f)
+            {
+                downAttackHitboxScaleMultiplier.x = 0.01f;
+            }
+
+            if (Mathf.Abs(downAttackHitboxScaleMultiplier.y) < 0.01f)
+            {
+                downAttackHitboxScaleMultiplier.y = 0.01f;
             }
         }
 
