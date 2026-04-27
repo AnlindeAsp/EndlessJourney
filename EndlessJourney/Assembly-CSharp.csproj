@@ -80,6 +80,7 @@
     <Compile Include="Assets\Scripts\Weapon\WeaponData.cs" />
     <Compile Include="Assets\Scripts\Combat\HitType.cs" />
     <Compile Include="Assets\Scripts\Player\Combat\AttackDirection2D.cs" />
+    <Compile Include="Assets\Scripts\Enemy\AI\EnemyHitReaction2D.cs" />
     <Compile Include="Assets\Scripts\Combat\HitContext.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IDamageable2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat\PlayerAttackRecoil2D.cs" />

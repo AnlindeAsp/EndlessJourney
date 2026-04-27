@@ -87,6 +87,12 @@ namespace EndlessJourney.Enemy
                 return;
             }
 
+            if (core != null && core.IsStunned)
+            {
+                TickHitStun();
+                return;
+            }
+
             switch (blackboard.CurrentState)
             {
                 case EnemyBlackboard2D.BrainState.Chase:
@@ -94,6 +100,9 @@ namespace EndlessJourney.Enemy
                     break;
                 case EnemyBlackboard2D.BrainState.Attack:
                     TickAttack();
+                    break;
+                case EnemyBlackboard2D.BrainState.HitStun:
+                    TickHitStun();
                     break;
                 case EnemyBlackboard2D.BrainState.Return:
                     TickReturn();
@@ -107,6 +116,11 @@ namespace EndlessJourney.Enemy
             bool canSee = blackboard.CanSeeTarget;
             bool hasMemory = blackboard.HasRecentSight(loseSightMemoryDuration);
             float distance = blackboard.DistanceToTarget;
+
+            if (core != null && core.IsStunned)
+            {
+                return EnemyBlackboard2D.BrainState.HitStun;
+            }
 
             switch (blackboard.CurrentState)
             {
@@ -141,6 +155,27 @@ namespace EndlessJourney.Enemy
                     }
                     return EnemyBlackboard2D.BrainState.Attack;
 
+                case EnemyBlackboard2D.BrainState.HitStun:
+                    if (core != null && core.IsStunned)
+                    {
+                        return EnemyBlackboard2D.BrainState.HitStun;
+                    }
+
+                    if (canSee || hasMemory)
+                    {
+                        return hasTarget && distance <= attackRange
+                            ? EnemyBlackboard2D.BrainState.Attack
+                            : EnemyBlackboard2D.BrainState.Chase;
+                    }
+
+                    float returnDeltaAfterStun = Mathf.Abs(transform.position.x - core.SpawnPosition.x);
+                    if (returnDeltaAfterStun <= returnArrivalDistance)
+                    {
+                        return EnemyBlackboard2D.BrainState.Patrol;
+                    }
+
+                    return EnemyBlackboard2D.BrainState.Return;
+
                 case EnemyBlackboard2D.BrainState.Return:
                     if (canSee || hasMemory)
                     {
@@ -165,9 +200,10 @@ namespace EndlessJourney.Enemy
                 patrolModule.enabled = usePatrol;
             }
 
-            bool canAttackByContact = keepContactAttackAlwaysActive ||
+            bool canAttackByContact = state != EnemyBlackboard2D.BrainState.HitStun && (
+                                      keepContactAttackAlwaysActive ||
                                       state == EnemyBlackboard2D.BrainState.Chase ||
-                                      state == EnemyBlackboard2D.BrainState.Attack;
+                                      state == EnemyBlackboard2D.BrainState.Attack);
             if (contactAttackModule != null)
             {
                 contactAttackModule.enabled = canAttackByContact;
@@ -193,6 +229,12 @@ namespace EndlessJourney.Enemy
             }
 
             core.StopMovement();
+        }
+
+        private void TickHitStun()
+        {
+            // Intentionally empty: hit reaction module owns velocity response.
+            // FSM just blocks patrol/chase/attack logic while stunned.
         }
 
         private void TickReturn()

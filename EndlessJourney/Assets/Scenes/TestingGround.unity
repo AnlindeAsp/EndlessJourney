@@ -669,9 +669,9 @@ MonoBehaviour:
   attackActiveDuration: 0.05
   resetAirActionsOnDownHit: 1
   drawHitboxGizmo: 0
-  logHitDebug: 1
-  logAttackBlockReason: 1
-  logAttackSuccess: 1
+  logHitDebug: 0
+  logAttackBlockReason: 0
+  logAttackSuccess: 0
 --- !u!114 &496806218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -686,7 +686,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerCombatCore
   baseStrength: 10
   equippedWeaponName: None
-  attackRange: 1.5
+  attackRange: 2
   attackDamagePerHit: 5
   attackHitCount: 1
   attackSpeed: 0.3
@@ -1018,7 +1018,7 @@ Transform:
   m_GameObject: {fileID: 565883742}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.4, y: 3.78, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1144,6 +1144,7 @@ GameObject:
   - component: {fileID: 664270394}
   - component: {fileID: 664270395}
   - component: {fileID: 664270396}
+  - component: {fileID: 664270397}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -1315,6 +1316,7 @@ MonoBehaviour:
   hittable: {fileID: 664270395}
   visualRoot: {fileID: 664270389}
   startFacingDirection: -1
+  isStunned: 0
 --- !u!114 &664270394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1394,6 +1396,32 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   logContactHit: 1
+--- !u!114 &664270397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 664270385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4282a973a7be6d4f9c7f884bb969bfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Enemy.EnemyHitReaction2D
+  core: {fileID: 664270392}
+  hittable: {fileID: 664270395}
+  enableHitReaction: 1
+  baseHitStunDuration: 0.08
+  damageToHitStun: 0.015
+  maxHitStunDuration: 0.28
+  stunHorizontalDamping: 18
+  baseKnockbackX: 4.5
+  damageToKnockbackXRatio: 0.08
+  enableVerticalKnockback: 0
+  baseKnockbackY: 2
+  damageToKnockbackYRatio: 0.02
+  knockResistance: 1
+  logHitReaction: 0
 --- !u!1 &696145564
 GameObject:
   m_ObjectHideFlags: 0
@@ -2738,6 +2766,7 @@ MonoBehaviour:
   hittable: {fileID: 1086603101}
   visualRoot: {fileID: 1086603099}
   startFacingDirection: -1
+  isStunned: 0
 --- !u!61 &1086603104
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3142,6 +3171,7 @@ MonoBehaviour:
   hittable: {fileID: 1183805523}
   visualRoot: {fileID: 1183805521}
   startFacingDirection: -1
+  isStunned: 0
 --- !u!61 &1183805526
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4043,6 +4073,7 @@ MonoBehaviour:
   hittable: {fileID: 1769142809}
   visualRoot: {fileID: 1769142815}
   startFacingDirection: -1
+  isStunned: 0
 --- !u!61 &1769142812
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5249,6 +5280,7 @@ GameObject:
   - component: {fileID: 2127660942}
   - component: {fileID: 2127660941}
   - component: {fileID: 2127660940}
+  - component: {fileID: 2127660948}
   m_Layer: 7
   m_Name: Enemy4
   m_TagString: Untagged
@@ -5351,6 +5383,7 @@ MonoBehaviour:
   hittable: {fileID: 2127660941}
   visualRoot: {fileID: 2127660947}
   startFacingDirection: -1
+  isStunned: 0
 --- !u!61 &2127660944
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5499,6 +5532,32 @@ Transform:
   - {fileID: 565883744}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2127660948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127660939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4282a973a7be6d4f9c7f884bb969bfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Enemy.EnemyHitReaction2D
+  core: {fileID: 2127660943}
+  hittable: {fileID: 2127660941}
+  enableHitReaction: 1
+  baseHitStunDuration: 0.2
+  damageToHitStun: 0.05
+  maxHitStunDuration: 5
+  stunHorizontalDamping: 18
+  baseKnockbackX: 5
+  damageToKnockbackXRatio: 0.2
+  enableVerticalKnockback: 0
+  baseKnockbackY: 2
+  damageToKnockbackYRatio: 0.02
+  knockResistance: 1
+  logHitReaction: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

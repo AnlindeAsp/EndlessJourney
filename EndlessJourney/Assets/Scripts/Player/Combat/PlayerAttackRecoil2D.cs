@@ -50,7 +50,7 @@ namespace EndlessJourney.Player
         /// </summary>
         public bool TryApplyMeleeHitRecoil(AttackDirection2D attackDirection, int attackFacingDirection, WeaponData equippedWeapon)
         {
-            Debug.Log($"TryApplyMeleeHitRecoil called: direction={attackDirection}, facing={attackFacingDirection}, weapon={(equippedWeapon != null ? equippedWeapon.WeaponName : "None")}");
+            //Debug.Log($"TryApplyMeleeHitRecoil called: direction={attackDirection}, facing={attackFacingDirection}, weapon={(equippedWeapon != null ? equippedWeapon.WeaponName : "None")}");
             if (!enableMeleeHitRecoil || core == null || core.Body == null)
             {
                 return false;
@@ -77,7 +77,7 @@ namespace EndlessJourney.Player
                 // velocity.y = downAttackUpwardRecoil; When attackging down, player velocity should be reset and got push up
                 velocity.y = downAttackUpwardRecoil;
                 velocity.x = 0f; // Optional: reset horizontal velocity on down attack for more consistent feel
-                Debug.Log($"Applying down attack recoil: upwardRecoil={downAttackUpwardRecoil}");
+                //Debug.Log($"Applying down attack recoil: upwardRecoil={downAttackUpwardRecoil}");
             }
             else
             {
@@ -85,7 +85,7 @@ namespace EndlessJourney.Player
                 float weight = equippedWeapon != null ? equippedWeapon.Weight : unarmedWeight;
                 float horizontalRecoil = baseHorizontalRecoil - weight * 1.5f;
                 velocity.x += -facing * horizontalRecoil;
-                Debug.Log($"Applying melee hit recoil: direction={attackDirection}, facing={facing}, weight={weight}, horizontalRecoil={horizontalRecoil}");
+                //Debug.Log($"Applying melee hit recoil: direction={attackDirection}, facing={facing}, weight={weight}, horizontalRecoil={horizontalRecoil}");
             }
 
             core.Body.linearVelocity = velocity;

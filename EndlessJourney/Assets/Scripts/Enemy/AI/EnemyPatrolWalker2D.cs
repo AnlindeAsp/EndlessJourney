@@ -66,9 +66,7 @@ namespace EndlessJourney.Enemy
                 _changeDirectionTimer = directionChangeCooldown;
             }
 
-            Vector2 velocity = body.linearVelocity;
-            velocity.x = FacingDirection * moveSpeed;
-            body.linearVelocity = velocity;
+            core.SetHorizontalVelocity(FacingDirection * moveSpeed);
         }
 
         private bool IsWallAhead()

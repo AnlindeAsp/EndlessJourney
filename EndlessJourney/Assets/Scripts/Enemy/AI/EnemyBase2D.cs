@@ -20,6 +20,8 @@ namespace EndlessJourney.Enemy
 
         /// <summary>True when this enemy is dead and should stop acting.</summary>
         protected bool IsDead => core != null && core.IsDead;
+        /// <summary>True when this enemy is stunned and should not drive AI locomotion.</summary>
+        protected bool IsStunned => core != null && core.IsStunned;
 
         protected virtual void Reset()
         {
@@ -42,6 +44,11 @@ namespace EndlessJourney.Enemy
             if (IsDead)
             {
                 StopHorizontalMovement();
+                return;
+            }
+
+            if (IsStunned)
+            {
                 return;
             }
 

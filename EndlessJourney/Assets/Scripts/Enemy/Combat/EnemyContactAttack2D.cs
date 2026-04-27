@@ -118,6 +118,11 @@ namespace EndlessJourney.Enemy
                 return false;
             }
 
+            if (core != null && core.IsStunned)
+            {
+                return false;
+            }
+
             if (IsSelfCollider(other))
             {
                 return false;

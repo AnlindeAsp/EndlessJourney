@@ -14,6 +14,7 @@ namespace EndlessJourney.Enemy
             Patrol,
             Chase,
             Attack,
+            HitStun,
             Return
         }
 

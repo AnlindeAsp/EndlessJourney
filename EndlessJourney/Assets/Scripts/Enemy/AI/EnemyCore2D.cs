@@ -20,6 +20,9 @@ namespace EndlessJourney.Enemy
         [Tooltip("Start facing direction: -1 = left, +1 = right.")]
         [SerializeField] private int startFacingDirection = -1;
 
+        [Header("Status (Read-Only At Runtime)")]
+        [SerializeField] private bool isStunned;
+
         private int _facingDirection = -1;
         private Vector2 _spawnPosition;
 
@@ -31,6 +34,8 @@ namespace EndlessJourney.Enemy
 
         /// <summary>True when enemy is dead.</summary>
         public bool IsDead => hittable != null && hittable.IsDead;
+        /// <summary>True when enemy is in hitstun.</summary>
+        public bool IsStunned => isStunned;
 
         /// <summary>Current horizontal facing direction (-1 or +1).</summary>
         public int FacingDirection => _facingDirection;
@@ -89,6 +94,11 @@ namespace EndlessJourney.Enemy
                 return;
             }
 
+            if (isStunned && Mathf.Abs(velocityX) > 0.0001f)
+            {
+                return;
+            }
+
             Vector2 velocity = body.linearVelocity;
             velocity.x = velocityX;
             body.linearVelocity = velocity;
@@ -100,6 +110,14 @@ namespace EndlessJourney.Enemy
         public void StopMovement()
         {
             SetHorizontalVelocity(0f);
+        }
+
+        /// <summary>
+        /// Sets current stunned status.
+        /// </summary>
+        public void SetStunned(bool stunned)
+        {
+            isStunned = stunned;
         }
 
         private void ApplyVisualFacing()
