@@ -72,11 +72,13 @@
     <Compile Include="Assets\Scripts\UI\ManaDisplay.cs" />
     <Compile Include="Assets\Scripts\Player\Combat\PlayerWeaponSystem.cs" />
     <Compile Include="Assets\Scripts\Player\Combat\SpellCastSystem.cs" />
+    <Compile Include="Assets\Scripts\System\KeybindSettingsController2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyStabler2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\Properties\EnemyHittable.cs" />
     <Compile Include="Assets\Scripts\Player\Movement\PlayerDoubleJump2D.cs" />
     <Compile Include="Assets\Scripts\UI\HealthDisplayer.cs" />
     <Compile Include="Assets\Scripts\Enemy\Basic\EnemyCore2D.cs" />
+    <Compile Include="Assets\Scripts\System\PauseMenuController2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\Combat\EnemyContactAttack2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyBase2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyBrainFSM2D.cs" />

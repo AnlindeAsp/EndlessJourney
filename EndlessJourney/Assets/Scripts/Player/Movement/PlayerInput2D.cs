@@ -16,6 +16,25 @@ namespace EndlessJourney.Player
     /// </summary>
     public class PlayerInput2D : MonoBehaviour
     {
+        public enum MouseButtonBinding
+        {
+            Left = 0,
+            Right = 1,
+            Middle = 2
+        }
+
+        [Header("Input System Rebindable Keys")]
+        [SerializeField] private Key moveLeftKey = Key.A;
+        [SerializeField] private Key moveRightKey = Key.D;
+        [SerializeField] private Key moveUpKey = Key.W;
+        [SerializeField] private Key moveDownKey = Key.S;
+        [SerializeField] private Key jumpKey = Key.Space;
+        [SerializeField] private Key castKey = Key.C;
+        [SerializeField] private MouseButtonBinding attackMouseButton = MouseButtonBinding.Left;
+        [SerializeField] private MouseButtonBinding dashMouseButton = MouseButtonBinding.Right;
+        [SerializeField] private bool loadSavedBindingsOnAwake = true;
+        [SerializeField] private bool saveBindingsOnRuntimeRebind = true;
+
         /// <summary>
         /// Horizontal movement intent in range [-1, 1].
         /// -1 = left, +1 = right, 0 = no horizontal intent.
@@ -58,6 +77,34 @@ namespace EndlessJourney.Player
         /// Used by spell systems for single-trigger casting actions.
         /// </summary>
         public bool CastPressedThisFrame { get; private set; }
+
+        public Key MoveLeftKey => moveLeftKey;
+        public Key MoveRightKey => moveRightKey;
+        public Key MoveUpKey => moveUpKey;
+        public Key MoveDownKey => moveDownKey;
+        public Key JumpKey => jumpKey;
+        public Key CastKey => castKey;
+        public MouseButtonBinding AttackMouseButton => attackMouseButton;
+        public MouseButtonBinding DashMouseButton => dashMouseButton;
+
+        private const string PrefMoveLeft = "input.moveLeftKey";
+        private const string PrefMoveRight = "input.moveRightKey";
+        private const string PrefMoveUp = "input.moveUpKey";
+        private const string PrefMoveDown = "input.moveDownKey";
+        private const string PrefJump = "input.jumpKey";
+        private const string PrefCast = "input.castKey";
+        private const string PrefAttackMouse = "input.attackMouseButton";
+        private const string PrefDashMouse = "input.dashMouseButton";
+
+        private void Awake()
+        {
+#if ENABLE_INPUT_SYSTEM
+            if (loadSavedBindingsOnAwake)
+            {
+                LoadBindingsFromPrefs();
+            }
+#endif
+        }
 
 #if ENABLE_LEGACY_INPUT_MANAGER
         [Header("Legacy Input Fallback")]
@@ -120,8 +167,8 @@ namespace EndlessJourney.Player
             if (keyboard != null)
             {
                 // Keyboard is treated as digital input, accumulating left/right intent.
-                if (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed) move -= 1f;
-                if (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed) move += 1f;
+                if (keyboard[moveLeftKey].isPressed || keyboard.leftArrowKey.isPressed) move -= 1f;
+                if (keyboard[moveRightKey].isPressed || keyboard.rightArrowKey.isPressed) move += 1f;
             }
 
             if (gamepad != null)
@@ -135,8 +182,8 @@ namespace EndlessJourney.Player
             float verticalIntent = 0f;
             if (keyboard != null)
             {
-                if (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed) verticalIntent += 1f;
-                if (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed) verticalIntent -= 1f;
+                if (keyboard[moveUpKey].isPressed || keyboard.upArrowKey.isPressed) verticalIntent += 1f;
+                if (keyboard[moveDownKey].isPressed || keyboard.downArrowKey.isPressed) verticalIntent -= 1f;
             }
 
             if (gamepad != null)
@@ -147,23 +194,23 @@ namespace EndlessJourney.Player
             VerticalIntent = Mathf.Clamp(verticalIntent, -1f, 1f);
 
             // "PressedThisFrame" is an edge trigger for actions that should happen once.
-            bool keyboardJumpPressed = keyboard != null && keyboard.spaceKey.wasPressedThisFrame;
+            bool keyboardJumpPressed = keyboard != null && keyboard[jumpKey].wasPressedThisFrame;
             bool gamepadJumpPressed = gamepad != null && gamepad.buttonSouth.wasPressedThisFrame;
 
             // "Held" is used for continuous state checks (example: variable jump height).
-            bool keyboardJumpHeld = keyboard != null && keyboard.spaceKey.isPressed;
+            bool keyboardJumpHeld = keyboard != null && keyboard[jumpKey].isPressed;
             bool gamepadJumpHeld = gamepad != null && gamepad.buttonSouth.isPressed;
 
             // Dash uses edge trigger so one press = one dash start attempt.
-            bool mouseDashPressed = mouse != null && mouse.rightButton.wasPressedThisFrame;
+            bool mouseDashPressed = IsMousePressedThisFrame(mouse, dashMouseButton);
             bool gamepadDashPressed = gamepad != null && gamepad.buttonEast.wasPressedThisFrame;
 
             // Melee attack uses left mouse button by default, with gamepad fallback.
-            bool mouseAttackPressed = mouse != null && mouse.leftButton.wasPressedThisFrame;
+            bool mouseAttackPressed = IsMousePressedThisFrame(mouse, attackMouseButton);
             bool gamepadAttackPressed = gamepad != null && gamepad.buttonWest.wasPressedThisFrame;
 
             // Spell cast key: C on keyboard, right shoulder on gamepad by default.
-            bool keyboardCastPressed = keyboard != null && keyboard.cKey.wasPressedThisFrame;
+            bool keyboardCastPressed = keyboard != null && keyboard[castKey].wasPressedThisFrame;
             bool gamepadCastPressed = gamepad != null && gamepad.rightShoulder.wasPressedThisFrame;
 
             JumpPressedThisFrame = keyboardJumpPressed || gamepadJumpPressed;
@@ -191,6 +238,126 @@ namespace EndlessJourney.Player
             DashPressedThisFrame = Input.GetButtonDown(dashButton);
             AttackPressedThisFrame = Input.GetButtonDown(attackButton);
             CastPressedThisFrame = Input.GetButtonDown(castButton);
+        }
+#endif
+
+#if ENABLE_INPUT_SYSTEM
+        private static bool IsMousePressedThisFrame(Mouse mouse, MouseButtonBinding button)
+        {
+            if (mouse == null)
+            {
+                return false;
+            }
+
+            switch (button)
+            {
+                case MouseButtonBinding.Left:
+                    return mouse.leftButton.wasPressedThisFrame;
+                case MouseButtonBinding.Right:
+                    return mouse.rightButton.wasPressedThisFrame;
+                case MouseButtonBinding.Middle:
+                    return mouse.middleButton.wasPressedThisFrame;
+                default:
+                    return false;
+            }
+        }
+
+        public bool SetKeyboardBinding(string actionId, Key key)
+        {
+            switch (actionId)
+            {
+                case "move_left":
+                    moveLeftKey = key;
+                    SaveBindingsIfNeeded();
+                    return true;
+                case "move_right":
+                    moveRightKey = key;
+                    SaveBindingsIfNeeded();
+                    return true;
+                case "move_up":
+                    moveUpKey = key;
+                    SaveBindingsIfNeeded();
+                    return true;
+                case "move_down":
+                    moveDownKey = key;
+                    SaveBindingsIfNeeded();
+                    return true;
+                case "jump":
+                    jumpKey = key;
+                    SaveBindingsIfNeeded();
+                    return true;
+                case "cast":
+                    castKey = key;
+                    SaveBindingsIfNeeded();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public bool SetMouseBinding(string actionId, MouseButtonBinding button)
+        {
+            switch (actionId)
+            {
+                case "attack":
+                    attackMouseButton = button;
+                    SaveBindingsIfNeeded();
+                    return true;
+                case "dash":
+                    dashMouseButton = button;
+                    SaveBindingsIfNeeded();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public void SaveBindingsToPrefs()
+        {
+            PlayerPrefs.SetInt(PrefMoveLeft, (int)moveLeftKey);
+            PlayerPrefs.SetInt(PrefMoveRight, (int)moveRightKey);
+            PlayerPrefs.SetInt(PrefMoveUp, (int)moveUpKey);
+            PlayerPrefs.SetInt(PrefMoveDown, (int)moveDownKey);
+            PlayerPrefs.SetInt(PrefJump, (int)jumpKey);
+            PlayerPrefs.SetInt(PrefCast, (int)castKey);
+            PlayerPrefs.SetInt(PrefAttackMouse, (int)attackMouseButton);
+            PlayerPrefs.SetInt(PrefDashMouse, (int)dashMouseButton);
+            PlayerPrefs.Save();
+        }
+
+        public void LoadBindingsFromPrefs()
+        {
+            if (PlayerPrefs.HasKey(PrefMoveLeft)) moveLeftKey = (Key)PlayerPrefs.GetInt(PrefMoveLeft);
+            if (PlayerPrefs.HasKey(PrefMoveRight)) moveRightKey = (Key)PlayerPrefs.GetInt(PrefMoveRight);
+            if (PlayerPrefs.HasKey(PrefMoveUp)) moveUpKey = (Key)PlayerPrefs.GetInt(PrefMoveUp);
+            if (PlayerPrefs.HasKey(PrefMoveDown)) moveDownKey = (Key)PlayerPrefs.GetInt(PrefMoveDown);
+            if (PlayerPrefs.HasKey(PrefJump)) jumpKey = (Key)PlayerPrefs.GetInt(PrefJump);
+            if (PlayerPrefs.HasKey(PrefCast)) castKey = (Key)PlayerPrefs.GetInt(PrefCast);
+            if (PlayerPrefs.HasKey(PrefAttackMouse)) attackMouseButton = (MouseButtonBinding)PlayerPrefs.GetInt(PrefAttackMouse);
+            if (PlayerPrefs.HasKey(PrefDashMouse)) dashMouseButton = (MouseButtonBinding)PlayerPrefs.GetInt(PrefDashMouse);
+        }
+
+        public void ResetBindingsToDefault()
+        {
+            moveLeftKey = Key.A;
+            moveRightKey = Key.D;
+            moveUpKey = Key.W;
+            moveDownKey = Key.S;
+            jumpKey = Key.Space;
+            castKey = Key.C;
+            attackMouseButton = MouseButtonBinding.Left;
+            dashMouseButton = MouseButtonBinding.Right;
+            SaveBindingsIfNeeded();
+        }
+
+        private void SaveBindingsIfNeeded()
+        {
+            if (!saveBindingsOnRuntimeRebind)
+            {
+                return;
+            }
+
+            SaveBindingsToPrefs();
         }
 #endif
     }
