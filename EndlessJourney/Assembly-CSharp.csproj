@@ -64,6 +64,7 @@
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyBlackboard2D.cs" />
     <Compile Include="Assets\Scripts\Player\Movement\GroundCheck2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\Basic\EnemyHitReaction2D.cs" />
+    <Compile Include="Assets\Scripts\Enemy\AI\EnemyFloatingWanderer2D.cs" />
     <Compile Include="Assets\Scripts\Player\Movement\PlayerCore2D.cs" />
     <Compile Include="Assets\Scripts\Player\Properties\PlayerHealth2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat\PlayerHitKnockback2D.cs" />
