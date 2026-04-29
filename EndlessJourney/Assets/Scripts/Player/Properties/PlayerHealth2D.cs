@@ -73,6 +73,7 @@ namespace EndlessJourney.Player
 
         public event Action<float, float> OnHealthChanged;
         public event Action<float> OnDamaged;
+        public event Action<float, GameObject> OnHarmDamaged;
         public event Action<float> OnNonHarmHealthLost;
         public event Action<float> OnHealed;
         public event Action OnDied;
@@ -166,12 +167,15 @@ namespace EndlessJourney.Player
             }
 
             bool applied = TakeHarmDamage(amount);
-            if (applied && source != null)
+            if (!applied)
             {
-                LastHarmSource = source;
+                return false;
             }
 
-            return applied;
+            LastHarmSource = source;
+            OnHarmDamaged?.Invoke(amount, source);
+
+            return true;
         }
 
         /// <summary>

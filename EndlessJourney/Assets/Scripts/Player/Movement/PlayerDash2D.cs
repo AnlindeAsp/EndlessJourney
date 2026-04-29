@@ -30,6 +30,7 @@ namespace EndlessJourney.Player
 
         private bool _isDashing;
         private bool _airDashAvailable = true;
+        private int _dashDirection = 1;
         private float _dashTimer;
         private float _cooldownTimer;
 
@@ -93,7 +94,7 @@ namespace EndlessJourney.Player
             }
 
             float y = preserveVerticalVelocity ? core.Body.linearVelocity.y : 0f;
-            core.Body.linearVelocity = new Vector2(core.FacingDirection * dashSpeed, y);
+            core.Body.linearVelocity = new Vector2(_dashDirection * dashSpeed, y);
         }
 
         private void TryStartDash()
@@ -116,6 +117,7 @@ namespace EndlessJourney.Player
             _isDashing = true;
             _dashTimer = dashDuration;
             _cooldownTimer = dashCooldown;
+            _dashDirection = core.FacingDirection >= 0 ? 1 : -1;
 
             if (oneDashPerAirborne && !core.IsGrounded)
             {
@@ -126,7 +128,7 @@ namespace EndlessJourney.Player
             core.SetGravityMultiplier(dashGravityMultiplier);
 
             float y = preserveVerticalVelocity ? core.Body.linearVelocity.y : 0f;
-            core.Body.linearVelocity = new Vector2(core.FacingDirection * dashSpeed, y);
+            core.Body.linearVelocity = new Vector2(_dashDirection * dashSpeed, y);
         }
 
         private void EndDash()
@@ -136,7 +138,7 @@ namespace EndlessJourney.Player
             core.RestoreDefaultGravity();
 
             core.Body.linearVelocity = new Vector2(
-                core.FacingDirection * dashSpeed * postDashSpeedMultiplier,
+                _dashDirection * dashSpeed * postDashSpeedMultiplier,
                 core.Body.linearVelocity.y
             );
         }
