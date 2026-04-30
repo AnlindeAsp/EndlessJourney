@@ -52,6 +52,21 @@ namespace EndlessJourney.Player
             }
         }
 
+        private void OnDisable()
+        {
+            if (core == null)
+            {
+                return;
+            }
+
+            if (_isDashing)
+            {
+                _isDashing = false;
+                core.SetMovementLocked(false);
+                core.RestoreDefaultGravity();
+            }
+        }
+
         private void Update()
         {
             if (!enableDash)
