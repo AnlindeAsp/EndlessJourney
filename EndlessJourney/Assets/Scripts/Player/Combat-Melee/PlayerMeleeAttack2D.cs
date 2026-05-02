@@ -160,6 +160,11 @@ namespace EndlessJourney.Player
                 return;
             }
 
+            if (core.IsActionLocked)
+            {
+                return;
+            }
+
             if (!core.Input.AttackPressedThisFrame)
             {
                 return;

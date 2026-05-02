@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10af6e07e0a394b48944d8db2cae42ff, type: 3}
+  m_Name: small_heal
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.SpellData2D
+  spellId: small_heal
+  displayName: small_heal
+  kind: 1
+  manaCost: 20
+  singingTime: 2.5
+  castTime: 0.2
+  castCooldown: 0.35
+  allowCastWhileMovementLocked: 1
+  effectData: {fileID: 11400000, guid: a172cecc58cf27e489b51de79a633b6c, type: 2}
+  castEffectPrefab: {fileID: 0}
+  castEffectLifetime: 1.5
+  defaultCastOffset: {x: 0.8, y: 0.2, z: 0}

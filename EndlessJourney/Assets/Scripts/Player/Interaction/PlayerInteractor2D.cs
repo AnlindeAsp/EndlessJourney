@@ -14,6 +14,9 @@ namespace EndlessJourney.Player
     /// </summary>
     public class PlayerInteractor2D : MonoBehaviour
     {
+        [Header("References")]
+        [SerializeField] private PlayerCore2D core;
+
         [Header("Input")]
 #if ENABLE_INPUT_SYSTEM
         [SerializeField] private Key interactKey = Key.E;
@@ -36,11 +39,24 @@ namespace EndlessJourney.Player
         /// </summary>
         public event Action<string> OnPromptChanged;
 
+        private void Awake()
+        {
+            if (core == null)
+            {
+                core = GetComponent<PlayerCore2D>();
+            }
+        }
+
         private void Update()
         {
             if (_cooldownTimer > 0f)
             {
                 _cooldownTimer = Mathf.Max(0f, _cooldownTimer - Time.deltaTime);
+            }
+
+            if (core != null && core.IsActionLocked)
+            {
+                return;
             }
 
             IInteractable best = SelectBestInteractable();

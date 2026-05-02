@@ -95,6 +95,11 @@ namespace EndlessJourney.Player
                 return;
             }
 
+            if (core.IsActionLocked)
+            {
+                return;
+            }
+
             if (core.Input.DashPressedThisFrame)
             {
                 TryStartDash();
@@ -115,6 +120,11 @@ namespace EndlessJourney.Player
         private void TryStartDash()
         {
             if (_isDashing || _cooldownTimer > 0f)
+            {
+                return;
+            }
+
+            if (core.IsActionLocked || core.IsMovementLocked)
             {
                 return;
             }

@@ -115,43 +115,16 @@ namespace EndlessJourney.Enemy
 
             Vector2 pos = body.position;
             Vector2 delta = pos - _originPosition;
-            bool flipped = false;
-
-            if (delta.x > boundsHalfSize.x && _moveDirection.x > 0f)
-            {
-                _moveDirection.x = -_moveDirection.x;
-                flipped = true;
-            }
-            else if (delta.x < -boundsHalfSize.x && _moveDirection.x < 0f)
-            {
-                _moveDirection.x = -_moveDirection.x;
-                flipped = true;
-            }
-
-            if (delta.y > boundsHalfSize.y && _moveDirection.y > 0f)
-            {
-                _moveDirection.y = -_moveDirection.y;
-                flipped = true;
-            }
-            else if (delta.y < -boundsHalfSize.y && _moveDirection.y < 0f)
-            {
-                _moveDirection.y = -_moveDirection.y;
-                flipped = true;
-            }
-
-            if (!flipped)
+            bool outOfBoundsX = Mathf.Abs(delta.x) > boundsHalfSize.x;
+            bool outOfBoundsY = Mathf.Abs(delta.y) > boundsHalfSize.y;
+            if (!outOfBoundsX && !outOfBoundsY)
             {
                 return;
             }
 
-            _moveDirection = NormalizeOrFallback(_moveDirection);
-            _directionTimer = Mathf.Min(_directionTimer, 0.2f);
-
-            // Clamp inside bounds to avoid sitting outside and jittering.
-            Vector2 clamped = new Vector2(
-                Mathf.Clamp(pos.x, _originPosition.x - boundsHalfSize.x, _originPosition.x + boundsHalfSize.x),
-                Mathf.Clamp(pos.y, _originPosition.y - boundsHalfSize.y, _originPosition.y + boundsHalfSize.y));
-            body.position = clamped;
+            Vector2 toOrigin = _originPosition - pos;
+            _moveDirection = NormalizeOrFallback(toOrigin);
+            _directionTimer = Mathf.Min(_directionTimer, 0.15f);
         }
 
         private void BounceByObstacleIfNeeded(float deltaTime)

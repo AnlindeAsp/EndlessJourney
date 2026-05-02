@@ -393,6 +393,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 93043561}
   m_CullTransparentMesh: 1
+--- !u!1 &141132398
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 141132400}
+  - component: {fileID: 141132399}
+  m_Layer: 0
+  m_Name: PlayerSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &141132399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 141132398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd99895b79c22c04588c7fcf53c97330, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.SpellLibrary2D
+  allSpells:
+  - {fileID: 11400000, guid: 4897f084135db89419a280a4b7dd4c88, type: 2}
+  - {fileID: 11400000, guid: 04a83c80372bd0948b26058a31900420, type: 2}
+  initialUnlockedEntries:
+  - spellId: fireball
+    unlocked: 1
+  - spellId: small_heal
+    unlocked: 0
+  loadFromRecordOnAwake: 1
+  saveToRecordOnChange: 1
+  recordFileName: record.json
+  prettyPrintRecordJson: 1
+--- !u!4 &141132400
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 141132398}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -36.19004, y: 10.12684, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &150870319
 GameObject:
   m_ObjectHideFlags: 0
@@ -804,6 +860,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &363429767 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8000269224358899114, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+  m_PrefabInstance: {fileID: 5903865926210940453}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &379145309
 GameObject:
   m_ObjectHideFlags: 0
@@ -3340,7 +3401,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerAbilityCore2D
   allowDoubleJump: 0
   allowDash: 0
-  allowSpellCast: 0
+  allowSpellCast: 1
   doubleJumpModule: {fileID: 1154967007}
   dashModule: {fileID: 1154967008}
   spellCastModule: {fileID: 1691613980}
@@ -3356,6 +3417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 748c5e0bbcc627c47b567eaaee8a9f9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerInteractor2D
+  core: {fileID: 0}
   interactKey: 32
   interactCooldown: 0.5
   logInteract: 1
@@ -5326,7 +5388,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1529881304310386240, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
   m_PrefabInstance: {fileID: 5903865926210940453}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 363429767}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ddc6c178ca445ff42b892fa17c300b4a, type: 3}
@@ -5337,12 +5399,75 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7763378053031815786, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
   m_PrefabInstance: {fileID: 5903865926210940453}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 363429767}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9cbad4677b2dfd4482ffff7c8fad76f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.SpellCastSystem
+--- !u!4 &1691613981 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5182785428808535044, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+  m_PrefabInstance: {fileID: 5903865926210940453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1691613982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363429767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96d6762ce0d2c3b4c8aaa636efd8a0a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerProjectileLauncher2D
+  ownerCore: {fileID: 1154966999}
+  firePoint: {fileID: 1691613981}
+  localSpawnOffset: {x: 0.8, y: 0.2}
+  faceByOwnerFacingDirection: 1
+  logLaunch: 1
+--- !u!114 &1691613983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363429767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 054ff3b9b2107b249ad59e6c1211f0e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.SpellSlotCaster2D
+  playerInput: {fileID: 1154967013}
+  spellBook: {fileID: 1691613984}
+  spellCastSystem: {fileID: 1691613980}
+  logCastRouting: 1
+--- !u!114 &1691613984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363429767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fa07f96b1bcd347b5befdd1610d7ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.SpellBook2D
+  spellLibrary: {fileID: 141132399}
+  slotCount: 3
+  availableSlotCount: 3
+  allowDuplicateSpells: 0
+  requireSpellUnlockedForEquip: 1
+  equippedSpellIds:
+  - fireball
+  - small_heal
+  - 
+  loadFromRecordOnAwake: 1
+  saveToRecordOnChange: 1
+  recordFileName: record.json
+  prettyPrintRecordJson: 1
 --- !u!1 &1702270769
 GameObject:
   m_ObjectHideFlags: 0
@@ -7329,7 +7454,7 @@ GameObject:
   - component: {fileID: 2120150334}
   - component: {fileID: 2120150333}
   m_Layer: 0
-  m_Name: Triangle
+  m_Name: chat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8060,6 +8185,58 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4222912145336697446, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222912145336697446, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222912145336697446, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222912145336697446, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222912145336697446, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222912145336697446, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222912145336697446, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222912145336697446, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].x
+      value: -1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222912145336697446, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].y
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222912145336697446, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[4].x
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222912145336697446, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[4].y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222912145336697446, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[5].x
+      value: -1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222912145336697446, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[5].y
+      value: -0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 5291405591989393297, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
       propertyPath: m_Name
       value: player
@@ -8075,6 +8252,22 @@ PrefabInstance:
     - target: {fileID: 7741198615458781599, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
       propertyPath: attackDamagePerHit
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7763378053031815786, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: health
+      value: 
+      objectReference: {fileID: 496806215}
+    - target: {fileID: 7763378053031815786, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: castPoint
+      value: 
+      objectReference: {fileID: 1691613981}
+    - target: {fileID: 7763378053031815786, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: projectileLauncher
+      value: 
+      objectReference: {fileID: 1691613982}
+    - target: {fileID: 7763378053031815786, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      propertyPath: allowSingingWhileMovingUnlocked
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8482411088612786084, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8129,6 +8322,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5291405591989393297, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1154967024}
+    - targetCorrespondingSourceObject: {fileID: 8000269224358899114, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1691613982}
+    - targetCorrespondingSourceObject: {fileID: 8000269224358899114, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1691613984}
+    - targetCorrespondingSourceObject: {fileID: 8000269224358899114, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1691613983}
   m_SourcePrefab: {fileID: 100100000, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -8164,3 +8366,4 @@ SceneRoots:
   - {fileID: 674452838}
   - {fileID: 605544284}
   - {fileID: 2120150336}
+  - {fileID: 141132400}

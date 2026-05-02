@@ -39,6 +39,7 @@ namespace EndlessJourney.Player
 
         private float _currentMana;
         private float _currentPotentialMana;
+        private bool _externalNaturalRegenBlocked;
 
         /// <summary>Current normal mana value.</summary>
         public float CurrentMana => _currentMana;
@@ -104,6 +105,11 @@ namespace EndlessJourney.Player
         }
 
         /// <summary>
+        /// True when external systems are temporarily blocking natural regeneration.
+        /// </summary>
+        public bool IsNaturalRegenBlockedExternally => _externalNaturalRegenBlocked;
+
+        /// <summary>
         /// Raised whenever normal mana changes. Args: current, max.
         /// </summary>
         public event Action<float, float> OnManaChanged;
@@ -132,6 +138,14 @@ namespace EndlessJourney.Player
         /// Raised when ManaOut state changes. Arg: current ManaOut state.
         /// </summary>
         public event Action<bool> OnManaOutChanged;
+
+        /// <summary>
+        /// Temporarily enables/disables natural mana regeneration from external systems.
+        /// </summary>
+        public void SetNaturalRegenBlocked(bool blocked)
+        {
+            _externalNaturalRegenBlocked = blocked;
+        }
 
         /// <summary>
         /// Initializes pool values and auto-finds PlayerHealth2D for mana-out damage.
@@ -325,6 +339,11 @@ namespace EndlessJourney.Player
         private void ApplyNaturalRegen(float deltaTime)
         {
             if (deltaTime <= 0f)
+            {
+                return;
+            }
+
+            if (_externalNaturalRegenBlocked)
             {
                 return;
             }

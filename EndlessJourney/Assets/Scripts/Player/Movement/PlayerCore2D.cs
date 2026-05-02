@@ -24,6 +24,7 @@ namespace EndlessJourney.Player
         private bool _justLanded;
         private int _facingDirection = 1;
         private bool _movementLocked;
+        private bool _actionLocked;
 
         /// <summary>Cached Rigidbody2D used by movement abilities.</summary>
         public Rigidbody2D Body => body;
@@ -51,6 +52,9 @@ namespace EndlessJourney.Player
 
         /// <summary>When true, movement abilities should pause their own control.</summary>
         public bool IsMovementLocked => _movementLocked;
+
+        /// <summary>When true, ability modules should block action starts.</summary>
+        public bool IsActionLocked => _actionLocked;
 
         /// <summary>Optional spell system reference for higher-level coordination.</summary>
         public SpellCastSystem SpellCast => spellCastSystem;
@@ -124,6 +128,14 @@ namespace EndlessJourney.Player
         public void SetMovementLocked(bool locked)
         {
             _movementLocked = locked;
+        }
+
+        /// <summary>
+        /// Locks or unlocks action starts (dash, attack, interact, spell key routing, etc.).
+        /// </summary>
+        public void SetActionLocked(bool locked)
+        {
+            _actionLocked = locked;
         }
 
         /// <summary>

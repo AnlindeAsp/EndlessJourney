@@ -25,7 +25,11 @@ namespace EndlessJourney.UI
         public const string ActionMoveUp = "move_up";
         public const string ActionMoveDown = "move_down";
         public const string ActionJump = "jump";
-        public const string ActionCast = "cast";
+        public const string ActionSpellSlot1 = "spell_slot_1";
+        public const string ActionSpellSlot2 = "spell_slot_2";
+        public const string ActionSpellSlot3 = "spell_slot_3";
+        public const string ActionSpellSlot4 = "spell_slot_4";
+        public const string ActionSpellSlot5 = "spell_slot_5";
         public const string ActionAttack = "attack";
         public const string ActionDash = "dash";
 
@@ -122,7 +126,11 @@ namespace EndlessJourney.UI
         public void BeginRebindMoveUp() => BeginRebind(ActionMoveUp);
         public void BeginRebindMoveDown() => BeginRebind(ActionMoveDown);
         public void BeginRebindJump() => BeginRebind(ActionJump);
-        public void BeginRebindCast() => BeginRebind(ActionCast);
+        public void BeginRebindSpellSlot1() => BeginRebind(ActionSpellSlot1);
+        public void BeginRebindSpellSlot2() => BeginRebind(ActionSpellSlot2);
+        public void BeginRebindSpellSlot3() => BeginRebind(ActionSpellSlot3);
+        public void BeginRebindSpellSlot4() => BeginRebind(ActionSpellSlot4);
+        public void BeginRebindSpellSlot5() => BeginRebind(ActionSpellSlot5);
         public void BeginRebindAttack() => BeginRebind(ActionAttack);
         public void BeginRebindDash() => BeginRebind(ActionDash);
 
@@ -267,8 +275,16 @@ namespace EndlessJourney.UI
                     return playerInput.MoveDownKey.ToString();
                 case ActionJump:
                     return playerInput.JumpKey.ToString();
-                case ActionCast:
-                    return playerInput.CastKey.ToString();
+                case ActionSpellSlot1:
+                    return playerInput.SpellSlot1Key.ToString();
+                case ActionSpellSlot2:
+                    return playerInput.SpellSlot2Key.ToString();
+                case ActionSpellSlot3:
+                    return playerInput.SpellSlot3Key.ToString();
+                case ActionSpellSlot4:
+                    return playerInput.SpellSlot4Key.ToString();
+                case ActionSpellSlot5:
+                    return playerInput.SpellSlot5Key.ToString();
                 case ActionAttack:
                     return playerInput.AttackMouseButton.ToString();
                 case ActionDash:
@@ -292,8 +308,16 @@ namespace EndlessJourney.UI
                     return "Move Down";
                 case ActionJump:
                     return "Jump";
-                case ActionCast:
-                    return "Cast";
+                case ActionSpellSlot1:
+                    return "Spell Slot 1";
+                case ActionSpellSlot2:
+                    return "Spell Slot 2";
+                case ActionSpellSlot3:
+                    return "Spell Slot 3";
+                case ActionSpellSlot4:
+                    return "Spell Slot 4";
+                case ActionSpellSlot5:
+                    return "Spell Slot 5";
                 case ActionAttack:
                     return "Attack";
                 case ActionDash:

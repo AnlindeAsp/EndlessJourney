@@ -54,7 +54,7 @@ namespace EndlessJourney.Player
                 _remainingExtraJumps = extraJumps;
             }
 
-            if (core.IsMovementLocked)
+            if (IsJumpInputLocked())
             {
                 return;
             }
@@ -92,6 +92,22 @@ namespace EndlessJourney.Player
         public void ResetExtraJumps()
         {
             _remainingExtraJumps = extraJumps;
+        }
+
+        private bool IsJumpInputLocked()
+        {
+            if (core.IsMovementLocked)
+            {
+                return true;
+            }
+
+            if (!core.IsActionLocked)
+            {
+                return false;
+            }
+
+            SpellCastSystem spellCast = core.SpellCast;
+            return spellCast == null || !spellCast.IsSinging || !spellCast.IsSingingMovementUnlocked;
         }
     }
 }

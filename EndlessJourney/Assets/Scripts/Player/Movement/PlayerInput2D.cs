@@ -29,7 +29,11 @@ namespace EndlessJourney.Player
         [SerializeField] private Key moveUpKey = Key.W;
         [SerializeField] private Key moveDownKey = Key.S;
         [SerializeField] private Key jumpKey = Key.Space;
-        [SerializeField] private Key castKey = Key.C;
+        [SerializeField] private Key spellSlot1Key = Key.Digit1;
+        [SerializeField] private Key spellSlot2Key = Key.Digit2;
+        [SerializeField] private Key spellSlot3Key = Key.Digit3;
+        [SerializeField] private Key spellSlot4Key = Key.Digit4;
+        [SerializeField] private Key spellSlot5Key = Key.Digit5;
         [SerializeField] private MouseButtonBinding attackMouseButton = MouseButtonBinding.Left;
         [SerializeField] private MouseButtonBinding dashMouseButton = MouseButtonBinding.Right;
         [SerializeField] private bool loadSavedBindingsOnAwake = true;
@@ -72,18 +76,22 @@ namespace EndlessJourney.Player
         /// </summary>
         public float VerticalIntent { get; private set; }
 
-        /// <summary>
-        /// True only on the frame cast key was pressed.
-        /// Used by spell systems for single-trigger casting actions.
-        /// </summary>
-        public bool CastPressedThisFrame { get; private set; }
+        public bool SpellSlot1PressedThisFrame { get; private set; }
+        public bool SpellSlot2PressedThisFrame { get; private set; }
+        public bool SpellSlot3PressedThisFrame { get; private set; }
+        public bool SpellSlot4PressedThisFrame { get; private set; }
+        public bool SpellSlot5PressedThisFrame { get; private set; }
 
         public Key MoveLeftKey => moveLeftKey;
         public Key MoveRightKey => moveRightKey;
         public Key MoveUpKey => moveUpKey;
         public Key MoveDownKey => moveDownKey;
         public Key JumpKey => jumpKey;
-        public Key CastKey => castKey;
+        public Key SpellSlot1Key => spellSlot1Key;
+        public Key SpellSlot2Key => spellSlot2Key;
+        public Key SpellSlot3Key => spellSlot3Key;
+        public Key SpellSlot4Key => spellSlot4Key;
+        public Key SpellSlot5Key => spellSlot5Key;
         public MouseButtonBinding AttackMouseButton => attackMouseButton;
         public MouseButtonBinding DashMouseButton => dashMouseButton;
 
@@ -92,7 +100,11 @@ namespace EndlessJourney.Player
         private const string PrefMoveUp = "input.moveUpKey";
         private const string PrefMoveDown = "input.moveDownKey";
         private const string PrefJump = "input.jumpKey";
-        private const string PrefCast = "input.castKey";
+        private const string PrefSpellSlot1 = "input.spellSlot1Key";
+        private const string PrefSpellSlot2 = "input.spellSlot2Key";
+        private const string PrefSpellSlot3 = "input.spellSlot3Key";
+        private const string PrefSpellSlot4 = "input.spellSlot4Key";
+        private const string PrefSpellSlot5 = "input.spellSlot5Key";
         private const string PrefAttackMouse = "input.attackMouseButton";
         private const string PrefDashMouse = "input.dashMouseButton";
 
@@ -115,7 +127,11 @@ namespace EndlessJourney.Player
         [SerializeField] private string jumpButton = "Jump";
         [SerializeField] private string dashButton = "Fire3";
         [SerializeField] private string attackButton = "Fire1";
-        [SerializeField] private string castButton = "Fire2";
+        [SerializeField] private KeyCode spellSlot1KeyLegacy = KeyCode.Alpha1;
+        [SerializeField] private KeyCode spellSlot2KeyLegacy = KeyCode.Alpha2;
+        [SerializeField] private KeyCode spellSlot3KeyLegacy = KeyCode.Alpha3;
+        [SerializeField] private KeyCode spellSlot4KeyLegacy = KeyCode.Alpha4;
+        [SerializeField] private KeyCode spellSlot5KeyLegacy = KeyCode.Alpha5;
 #endif
 
         private void Update()
@@ -145,7 +161,11 @@ namespace EndlessJourney.Player
                 JumpHeld = false;
                 DashPressedThisFrame = false;
                 AttackPressedThisFrame = false;
-                CastPressedThisFrame = false;
+                SpellSlot1PressedThisFrame = false;
+                SpellSlot2PressedThisFrame = false;
+                SpellSlot3PressedThisFrame = false;
+                SpellSlot4PressedThisFrame = false;
+                SpellSlot5PressedThisFrame = false;
             }
         }
 
@@ -209,15 +229,21 @@ namespace EndlessJourney.Player
             bool mouseAttackPressed = IsMousePressedThisFrame(mouse, attackMouseButton);
             bool gamepadAttackPressed = gamepad != null && gamepad.buttonWest.wasPressedThisFrame;
 
-            // Spell cast key: C on keyboard, right shoulder on gamepad by default.
-            bool keyboardCastPressed = keyboard != null && keyboard[castKey].wasPressedThisFrame;
-            bool gamepadCastPressed = gamepad != null && gamepad.rightShoulder.wasPressedThisFrame;
+            bool keyboardSlot1Pressed = keyboard != null && keyboard[spellSlot1Key].wasPressedThisFrame;
+            bool keyboardSlot2Pressed = keyboard != null && keyboard[spellSlot2Key].wasPressedThisFrame;
+            bool keyboardSlot3Pressed = keyboard != null && keyboard[spellSlot3Key].wasPressedThisFrame;
+            bool keyboardSlot4Pressed = keyboard != null && keyboard[spellSlot4Key].wasPressedThisFrame;
+            bool keyboardSlot5Pressed = keyboard != null && keyboard[spellSlot5Key].wasPressedThisFrame;
 
             JumpPressedThisFrame = keyboardJumpPressed || gamepadJumpPressed;
             JumpHeld = keyboardJumpHeld || gamepadJumpHeld;
             DashPressedThisFrame = mouseDashPressed || gamepadDashPressed;
             AttackPressedThisFrame = mouseAttackPressed || gamepadAttackPressed;
-            CastPressedThisFrame = keyboardCastPressed || gamepadCastPressed;
+            SpellSlot1PressedThisFrame = keyboardSlot1Pressed;
+            SpellSlot2PressedThisFrame = keyboardSlot2Pressed;
+            SpellSlot3PressedThisFrame = keyboardSlot3Pressed;
+            SpellSlot4PressedThisFrame = keyboardSlot4Pressed;
+            SpellSlot5PressedThisFrame = keyboardSlot5Pressed;
 
             return true;
         }
@@ -237,7 +263,11 @@ namespace EndlessJourney.Player
             JumpHeld = Input.GetButton(jumpButton);
             DashPressedThisFrame = Input.GetButtonDown(dashButton);
             AttackPressedThisFrame = Input.GetButtonDown(attackButton);
-            CastPressedThisFrame = Input.GetButtonDown(castButton);
+            SpellSlot1PressedThisFrame = Input.GetKeyDown(spellSlot1KeyLegacy);
+            SpellSlot2PressedThisFrame = Input.GetKeyDown(spellSlot2KeyLegacy);
+            SpellSlot3PressedThisFrame = Input.GetKeyDown(spellSlot3KeyLegacy);
+            SpellSlot4PressedThisFrame = Input.GetKeyDown(spellSlot4KeyLegacy);
+            SpellSlot5PressedThisFrame = Input.GetKeyDown(spellSlot5KeyLegacy);
         }
 #endif
 
@@ -286,8 +316,24 @@ namespace EndlessJourney.Player
                     jumpKey = key;
                     SaveBindingsIfNeeded();
                     return true;
-                case "cast":
-                    castKey = key;
+                case "spell_slot_1":
+                    spellSlot1Key = key;
+                    SaveBindingsIfNeeded();
+                    return true;
+                case "spell_slot_2":
+                    spellSlot2Key = key;
+                    SaveBindingsIfNeeded();
+                    return true;
+                case "spell_slot_3":
+                    spellSlot3Key = key;
+                    SaveBindingsIfNeeded();
+                    return true;
+                case "spell_slot_4":
+                    spellSlot4Key = key;
+                    SaveBindingsIfNeeded();
+                    return true;
+                case "spell_slot_5":
+                    spellSlot5Key = key;
                     SaveBindingsIfNeeded();
                     return true;
                 default:
@@ -319,7 +365,11 @@ namespace EndlessJourney.Player
             PlayerPrefs.SetInt(PrefMoveUp, (int)moveUpKey);
             PlayerPrefs.SetInt(PrefMoveDown, (int)moveDownKey);
             PlayerPrefs.SetInt(PrefJump, (int)jumpKey);
-            PlayerPrefs.SetInt(PrefCast, (int)castKey);
+            PlayerPrefs.SetInt(PrefSpellSlot1, (int)spellSlot1Key);
+            PlayerPrefs.SetInt(PrefSpellSlot2, (int)spellSlot2Key);
+            PlayerPrefs.SetInt(PrefSpellSlot3, (int)spellSlot3Key);
+            PlayerPrefs.SetInt(PrefSpellSlot4, (int)spellSlot4Key);
+            PlayerPrefs.SetInt(PrefSpellSlot5, (int)spellSlot5Key);
             PlayerPrefs.SetInt(PrefAttackMouse, (int)attackMouseButton);
             PlayerPrefs.SetInt(PrefDashMouse, (int)dashMouseButton);
             PlayerPrefs.Save();
@@ -332,7 +382,11 @@ namespace EndlessJourney.Player
             if (PlayerPrefs.HasKey(PrefMoveUp)) moveUpKey = (Key)PlayerPrefs.GetInt(PrefMoveUp);
             if (PlayerPrefs.HasKey(PrefMoveDown)) moveDownKey = (Key)PlayerPrefs.GetInt(PrefMoveDown);
             if (PlayerPrefs.HasKey(PrefJump)) jumpKey = (Key)PlayerPrefs.GetInt(PrefJump);
-            if (PlayerPrefs.HasKey(PrefCast)) castKey = (Key)PlayerPrefs.GetInt(PrefCast);
+            if (PlayerPrefs.HasKey(PrefSpellSlot1)) spellSlot1Key = (Key)PlayerPrefs.GetInt(PrefSpellSlot1);
+            if (PlayerPrefs.HasKey(PrefSpellSlot2)) spellSlot2Key = (Key)PlayerPrefs.GetInt(PrefSpellSlot2);
+            if (PlayerPrefs.HasKey(PrefSpellSlot3)) spellSlot3Key = (Key)PlayerPrefs.GetInt(PrefSpellSlot3);
+            if (PlayerPrefs.HasKey(PrefSpellSlot4)) spellSlot4Key = (Key)PlayerPrefs.GetInt(PrefSpellSlot4);
+            if (PlayerPrefs.HasKey(PrefSpellSlot5)) spellSlot5Key = (Key)PlayerPrefs.GetInt(PrefSpellSlot5);
             if (PlayerPrefs.HasKey(PrefAttackMouse)) attackMouseButton = (MouseButtonBinding)PlayerPrefs.GetInt(PrefAttackMouse);
             if (PlayerPrefs.HasKey(PrefDashMouse)) dashMouseButton = (MouseButtonBinding)PlayerPrefs.GetInt(PrefDashMouse);
         }
@@ -344,7 +398,11 @@ namespace EndlessJourney.Player
             moveUpKey = Key.W;
             moveDownKey = Key.S;
             jumpKey = Key.Space;
-            castKey = Key.C;
+            spellSlot1Key = Key.Digit1;
+            spellSlot2Key = Key.Digit2;
+            spellSlot3Key = Key.Digit3;
+            spellSlot4Key = Key.Digit4;
+            spellSlot5Key = Key.Digit5;
             attackMouseButton = MouseButtonBinding.Left;
             dashMouseButton = MouseButtonBinding.Right;
             SaveBindingsIfNeeded();
@@ -360,5 +418,24 @@ namespace EndlessJourney.Player
             SaveBindingsToPrefs();
         }
 #endif
+
+        public bool WasSpellSlotPressedThisFrame(int slotIndex)
+        {
+            switch (slotIndex)
+            {
+                case 0:
+                    return SpellSlot1PressedThisFrame;
+                case 1:
+                    return SpellSlot2PressedThisFrame;
+                case 2:
+                    return SpellSlot3PressedThisFrame;
+                case 3:
+                    return SpellSlot4PressedThisFrame;
+                case 4:
+                    return SpellSlot5PressedThisFrame;
+                default:
+                    return false;
+            }
+        }
     }
 }

@@ -1,0 +1,19 @@
+{
+  "unlockedSpellIds": [
+    {
+      "spellId": "fireball",
+      "unlocked": true
+    },
+    {
+      "spellId": "small_heal",
+      "unlocked": true
+    }
+  ],
+  "equippedSpellIds": [
+    "fireball",
+    "small_heal",
+    "",
+    "",
+    ""
+  ]
+}

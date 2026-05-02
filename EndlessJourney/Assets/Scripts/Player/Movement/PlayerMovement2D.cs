@@ -84,7 +84,7 @@ namespace EndlessJourney.Player
 
         private void FixedUpdate()
         {
-            if (core.IsMovementLocked)
+            if (IsMovementControlLocked())
             {
                 return;
             }
@@ -102,7 +102,7 @@ namespace EndlessJourney.Player
             _coyoteTimer = core.IsGrounded ? coyoteTime : _coyoteTimer - dt;
 
             // While locked, drop buffered jump input to avoid surprise jump after dash.
-            if (core.IsMovementLocked)
+            if (IsMovementControlLocked())
             {
                 _jumpBufferTimer = 0f;
                 return;
@@ -114,7 +114,7 @@ namespace EndlessJourney.Player
 
         private void TryHandleJump()
         {
-            if (core.IsMovementLocked)
+            if (IsMovementControlLocked())
             {
                 return;
             }
@@ -221,7 +221,7 @@ namespace EndlessJourney.Player
         /// </summary>
         public void PerformAbilityJump()
         {
-            if (core.IsMovementLocked)
+            if (IsMovementControlLocked())
             {
                 return;
             }
@@ -235,6 +235,22 @@ namespace EndlessJourney.Player
             velocity.x *= abilityJumpHorizontalDamping;
             velocity.y = jumpVelocity;
             core.Body.linearVelocity = velocity;
+        }
+
+        private bool IsMovementControlLocked()
+        {
+            if (core.IsMovementLocked)
+            {
+                return true;
+            }
+
+            if (!core.IsActionLocked)
+            {
+                return false;
+            }
+
+            SpellCastSystem spellCast = core.SpellCast;
+            return spellCast == null || !spellCast.IsSinging || !spellCast.IsSingingMovementUnlocked;
         }
     }
 }

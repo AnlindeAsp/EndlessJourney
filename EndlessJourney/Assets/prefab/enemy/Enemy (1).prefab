@@ -306,8 +306,8 @@ MonoBehaviour:
   useRootTriggerCallbacks: 0
   useRootCollisionCallbacks: 1
   requireAssignedDamageZoneForForwardedHits: 1
-  contactDamage: 10
-  attackCooldown: 0.6
+  contactDamage: 8
+  attackCooldown: 1
   targetLayers:
     serializedVersion: 2
     m_Bits: 256
@@ -331,11 +331,11 @@ MonoBehaviour:
   damageToHitStun: 0.01
   maxHitStunDuration: 0.28
   stunHorizontalDamping: 18
-  baseKnockbackX: 8
-  damageToKnockbackXRatio: 0.04
+  baseKnockbackX: 5
+  damageToKnockbackXRatio: 0.05
   enableVerticalKnockback: 1
-  baseKnockbackY: 8
-  damageToKnockbackYRatio: 0.1
+  baseKnockbackY: 5
+  damageToKnockbackYRatio: 0.05
   knockResistance: 0
   logHitReaction: 0
 --- !u!114 &3406843231726277600
@@ -370,7 +370,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Enemy.EnemyFloatingWanderer2D
   core: {fileID: 5542511908661937984}
-  moveSpeed: 2.2
+  moveSpeed: 1
   minDirectionChangeInterval: 0.45
   maxDirectionChangeInterval: 1.15
   useMovementBounds: 1

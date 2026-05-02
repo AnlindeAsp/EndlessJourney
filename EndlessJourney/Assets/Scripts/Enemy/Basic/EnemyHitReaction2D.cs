@@ -138,12 +138,13 @@ namespace EndlessJourney.Enemy
             float knockbackY = (baseKnockbackY + Mathf.Max(0f, context.Damage) * damageToKnockbackYRatio) * knockbackScale;
 
             float dirX = ResolveHorizontalKnockbackDirection(context);
+            float dirY = ResolveVerticalKnockbackDirection(context);
 
             Vector2 velocity = core.Body.linearVelocity;
             velocity.x = dirX * knockbackX;
             if (enableVerticalKnockback)
             {
-                velocity.y = knockbackY;
+                velocity.y = dirY * knockbackY;
             }
             core.Body.linearVelocity = velocity;
 
@@ -166,6 +167,21 @@ namespace EndlessJourney.Enemy
             }
 
             return core != null ? core.FacingDirection : 1f;
+        }
+
+        private float ResolveVerticalKnockbackDirection(HitContext context)
+        {
+            if (Mathf.Abs(context.HitDirection.y) > 0.01f)
+            {
+                return Mathf.Sign(context.HitDirection.y);
+            }
+
+            if (context.Source != null)
+            {
+                return transform.position.y >= context.Source.transform.position.y ? 1f : -1f;
+            }
+
+            return 1f;
         }
 
         private void OnValidate()

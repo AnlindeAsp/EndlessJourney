@@ -16,7 +16,7 @@ namespace EndlessJourney.Combat
     /// ScriptableObject data container for weapon definitions.
     /// Keep this asset focused on weapon configuration data.
     /// </summary>
-    [CreateAssetMenu(fileName = "Weapon_", menuName = "EndlessJourney/Combat/Weapon")]
+    [CreateAssetMenu(fileName = "Weapon_", menuName = "EndlessJourney/Scriptable/Weapon/Weapon Data")]
     public class WeaponData : ScriptableObject
     {
         [Header("Basic Info")]
