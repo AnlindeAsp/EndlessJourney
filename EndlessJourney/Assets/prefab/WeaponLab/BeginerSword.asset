@@ -19,5 +19,3 @@ MonoBehaviour:
   length: 1.5
   sharpness: 1.5
   weight: 2
-  isOwned: 1
-  canUse: 1

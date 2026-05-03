@@ -33,6 +33,11 @@ namespace EndlessJourney.UI
 
         public bool IsPaused => _isPaused;
 
+        public void SetEscapeToggleEnabled(bool enabled)
+        {
+            toggleByEscape = enabled;
+        }
+
         private void Awake()
         {
             if (pauseMenuRoot != null)

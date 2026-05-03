@@ -59,13 +59,13 @@
     <Compile Include="Assets\Scripts\Combat\HitResult.cs" />
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyPerception2D.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IPlayerHarmful.cs" />
+    <Compile Include="Assets\Scripts\System\GameCanvasManager2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\Basic\EnemyDeathBehaviour2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Melee\PlayerWeaponSystem.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IHittable.cs" />
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyBlackboard2D.cs" />
     <Compile Include="Assets\Scripts\Scriptables\WeaponData.cs" />
     <Compile Include="Assets\Scripts\Scriptables\DamageSpellEffectData2D.cs" />
-    <Compile Include="Assets\Scripts\Player\Combat-Spell\SpellRecordStore2D.cs" />
     <Compile Include="Assets\Scripts\Interaction\OpenSavingLibrary2D.cs" />
     <Compile Include="Assets\Scripts\Player\Movement\GroundCheck2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\Basic\EnemyHitReaction2D.cs" />
@@ -86,6 +86,7 @@
     <Compile Include="Assets\Scripts\Player\Combat-Core\AttackDirection2D.cs" />
     <Compile Include="Assets\Scripts\System\KeybindSettingsController2D.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IInteractable.cs" />
+    <Compile Include="Assets\Scripts\Player\Libraries\PlayerRecordStore2D.cs" />
     <Compile Include="Assets\Scripts\Player\Interaction\PlayerInteractor2D.cs" />
     <Compile Include="Assets\Scripts\Interfaces\ISpellBuffReceiver2D.cs" />
     <Compile Include="Assets\Scripts\Interaction\ReadInteractable2D.cs" />
@@ -93,7 +94,9 @@
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyStabler2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\Properties\EnemyHittable.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Core\PlayerAttackRecoil2D.cs" />
+    <Compile Include="Assets\Scripts\UI\Storage\WeaponPageDisplayer2D.cs" />
     <Compile Include="Assets\Scripts\Player\Abilities\PlayerAbilityCore2D.cs" />
+    <Compile Include="Assets\Scripts\UI\Storage\WeaponPageController2D.cs" />
     <Compile Include="Assets\Scripts\Player\Movement\PlayerDoubleJump2D.cs" />
     <Compile Include="Assets\Scripts\UI\HealthDisplayer.cs" />
     <Compile Include="Assets\Scripts\Enemy\Basic\EnemyCore2D.cs" />
@@ -111,9 +114,11 @@
     <Compile Include="Assets\Scripts\Player\Movement\PlayerDash2D.cs" />
     <Compile Include="Assets\Scripts\Items\AllowDashPickup2D.cs" />
     <Compile Include="Assets\Scripts\Combat\HitType.cs" />
+    <Compile Include="Assets\Scripts\UI\Storage\WeaponPageRow2D.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IPickable.cs" />
     <Compile Include="Assets\Scripts\Combat\HitContext.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IDamageable2D.cs" />
+    <Compile Include="Assets\Scripts\UI\Storage\StorageCanvasController2D.cs" />
     <Compile Include="Assets\Scripts\Scriptables\BuffSpellEffectData2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Spell\SpellSlotCaster2D.cs" />
     <Compile Include="Assets\Scripts\Interaction\TriggerInteractable2D.cs" />

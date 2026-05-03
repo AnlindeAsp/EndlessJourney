@@ -30,7 +30,7 @@ namespace EndlessJourney.Player
 
         private void Awake()
         {
-            _recordPath = SpellRecordStore2D.GetRecordPath(recordFileName);
+            _recordPath = PlayerRecordStore2D.GetRecordPath(recordFileName);
             EnsureSlotArraySize();
             TryLoadEquippedStateFromRecord();
         }
@@ -198,7 +198,7 @@ namespace EndlessJourney.Player
                 return;
             }
 
-            if (!SpellRecordStore2D.TryLoad(_recordPath, out SpellRecordData2D recordData) || recordData == null)
+            if (!PlayerRecordStore2D.TryLoad(_recordPath, out PlayerRecordData2D recordData) || recordData == null)
             {
                 return;
             }
@@ -227,14 +227,14 @@ namespace EndlessJourney.Player
                 return;
             }
 
-            SpellRecordData2D recordData;
-            if (!SpellRecordStore2D.TryLoad(_recordPath, out recordData) || recordData == null)
+            PlayerRecordData2D recordData;
+            if (!PlayerRecordStore2D.TryLoad(_recordPath, out recordData) || recordData == null)
             {
-                recordData = new SpellRecordData2D();
+                recordData = new PlayerRecordData2D();
             }
 
             recordData.equippedSpellIds = CopyEquippedSpellIds();
-            SpellRecordStore2D.Save(_recordPath, recordData, prettyPrintRecordJson);
+            PlayerRecordStore2D.Save(_recordPath, recordData, prettyPrintRecordJson);
         }
 
         private string[] CopyEquippedSpellIds()

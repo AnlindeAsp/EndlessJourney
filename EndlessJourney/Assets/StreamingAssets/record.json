@@ -9,6 +9,16 @@
       "unlocked": true
     }
   ],
+  "unlockedWeaponIds": [
+    {
+      "weaponId": "beginner_sword",
+      "unlocked": true
+    },
+    {
+      "weaponId": "dragon_will",
+      "unlocked": true
+    }
+  ],
   "equippedSpellIds": [
     "fireball",
     "small_heal",

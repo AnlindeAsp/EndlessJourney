@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10af6e07e0a394b48944d8db2cae42ff, type: 3}
-  m_Name: small_heal
+  m_Name: recovery
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.SpellData2D
-  spellId: small_heal
-  displayName: small_heal
+  spellId: recovery
+  displayName: Recovery
   kind: 1
-  manaCost: 20
-  singingTime: 2
+  manaCost: 40
+  singingTime: 4
   castTime: 0.2
   castCooldown: 0.35
   allowCastWhileMovementLocked: 1
-  effectData: {fileID: 11400000, guid: a172cecc58cf27e489b51de79a633b6c, type: 2}
+  effectData: {fileID: 0}
   castEffectPrefab: {fileID: 0}
   castEffectLifetime: 1.5
   defaultCastOffset: {x: 0.8, y: 0.2, z: 0}

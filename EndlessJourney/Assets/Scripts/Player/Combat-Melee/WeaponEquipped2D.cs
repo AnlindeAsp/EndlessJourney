@@ -15,6 +15,7 @@ namespace EndlessJourney.Player
         [Header("Equipped Weapon")]
         [SerializeField] private string equippedWeaponId = string.Empty;
         [SerializeField] private bool requireWeaponKnownForEquip = true;
+        [SerializeField] private bool requireWeaponUnlockedForEquip = true;
 
         [Header("Record")]
         [SerializeField] private bool loadFromRecordOnAwake = true;
@@ -30,7 +31,7 @@ namespace EndlessJourney.Player
 
         private void Awake()
         {
-            _recordPath = SpellRecordStore2D.GetRecordPath(recordFileName);
+            _recordPath = PlayerRecordStore2D.GetRecordPath(recordFileName);
             TryLoadEquippedStateFromRecord();
         }
 
@@ -45,7 +46,23 @@ namespace EndlessJourney.Player
 
             if (!ignoreKnownCheck && requireWeaponKnownForEquip && !string.IsNullOrEmpty(normalizedId))
             {
-                if (weaponLibrary != null && !weaponLibrary.HasWeapon(normalizedId))
+                if (weaponLibrary == null)
+                {
+                    Debug.LogError("WeaponEquipped2D requires WeaponLibrary2D for known-weapon validation, but none is assigned.", this);
+                }
+                else if (!weaponLibrary.HasWeapon(normalizedId))
+                {
+                    return false;
+                }
+            }
+
+            if (!ignoreKnownCheck && requireWeaponUnlockedForEquip && !string.IsNullOrEmpty(normalizedId))
+            {
+                if (weaponLibrary == null)
+                {
+                    Debug.LogError("WeaponEquipped2D requires WeaponLibrary2D for unlock validation, but none is assigned.", this);
+                }
+                else if (!weaponLibrary.IsUnlocked(normalizedId))
                 {
                     return false;
                 }
@@ -77,6 +94,16 @@ namespace EndlessJourney.Player
             return weaponLibrary.GetWeaponData(equippedWeaponId);
         }
 
+        public bool IsEquippedWeaponUnlocked()
+        {
+            if (weaponLibrary == null || string.IsNullOrWhiteSpace(equippedWeaponId))
+            {
+                return false;
+            }
+
+            return weaponLibrary.IsUnlocked(equippedWeaponId);
+        }
+
         private void TryLoadEquippedStateFromRecord()
         {
             if (!loadFromRecordOnAwake)
@@ -84,7 +111,7 @@ namespace EndlessJourney.Player
                 return;
             }
 
-            if (!SpellRecordStore2D.TryLoad(_recordPath, out SpellRecordData2D recordData) || recordData == null)
+            if (!PlayerRecordStore2D.TryLoad(_recordPath, out PlayerRecordData2D recordData) || recordData == null)
             {
                 return;
             }
@@ -99,14 +126,14 @@ namespace EndlessJourney.Player
                 return;
             }
 
-            SpellRecordData2D recordData;
-            if (!SpellRecordStore2D.TryLoad(_recordPath, out recordData) || recordData == null)
+            PlayerRecordData2D recordData;
+            if (!PlayerRecordStore2D.TryLoad(_recordPath, out recordData) || recordData == null)
             {
-                recordData = new SpellRecordData2D();
+                recordData = new PlayerRecordData2D();
             }
 
             recordData.equippedWeaponId = equippedWeaponId ?? string.Empty;
-            SpellRecordStore2D.Save(_recordPath, recordData, prettyPrintRecordJson);
+            PlayerRecordStore2D.Save(_recordPath, recordData, prettyPrintRecordJson);
         }
 
         private void OnValidate()

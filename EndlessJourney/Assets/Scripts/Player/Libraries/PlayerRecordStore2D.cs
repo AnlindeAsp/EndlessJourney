@@ -13,17 +13,25 @@ namespace EndlessJourney.Player
     }
 
     [Serializable]
-    public class SpellRecordData2D
+    public struct WeaponUnlockStateEntry2D
+    {
+        public string weaponId;
+        public bool unlocked;
+    }
+
+    [Serializable]
+    public class PlayerRecordData2D
     {
         public SpellUnlockStateEntry2D[] unlockedSpellIds = Array.Empty<SpellUnlockStateEntry2D>();
+        public WeaponUnlockStateEntry2D[] unlockedWeaponIds = Array.Empty<WeaponUnlockStateEntry2D>();
         public string[] equippedSpellIds = Array.Empty<string>();
         public string equippedWeaponId = string.Empty;
     }
 
     /// <summary>
-    /// Shared JSON record reader/writer for spell unlock/equip and lightweight equipment state.
+    /// Shared JSON record reader/writer for unlock/equip and lightweight equipment state.
     /// </summary>
-    public static class SpellRecordStore2D
+    public static class PlayerRecordStore2D
     {
         public static string GetRecordPath(string fileName)
         {
@@ -37,7 +45,7 @@ namespace EndlessJourney.Player
             return Path.Combine(Application.streamingAssetsPath, safeFileName);
         }
 
-        public static bool TryLoad(string recordPath, out SpellRecordData2D data)
+        public static bool TryLoad(string recordPath, out PlayerRecordData2D data)
         {
             data = null;
 
@@ -63,7 +71,7 @@ namespace EndlessJourney.Player
             return false;
         }
 
-        private static bool TryReadRecordFromPath(string path, out SpellRecordData2D data)
+        private static bool TryReadRecordFromPath(string path, out PlayerRecordData2D data)
         {
             data = null;
             if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
@@ -79,25 +87,26 @@ namespace EndlessJourney.Player
                     return false;
                 }
 
-                data = JsonUtility.FromJson<SpellRecordData2D>(json);
+                data = JsonUtility.FromJson<PlayerRecordData2D>(json);
                 if (data == null)
                 {
                     return false;
                 }
 
                 data.unlockedSpellIds ??= Array.Empty<SpellUnlockStateEntry2D>();
+                data.unlockedWeaponIds ??= Array.Empty<WeaponUnlockStateEntry2D>();
                 data.equippedSpellIds ??= Array.Empty<string>();
                 data.equippedWeaponId ??= string.Empty;
                 return true;
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"Failed to load spell record at '{path}'. {ex.Message}");
+                Debug.LogWarning($"Failed to load player record at '{path}'. {ex.Message}");
                 return false;
             }
         }
 
-        public static bool Save(string recordPath, SpellRecordData2D data, bool prettyPrint)
+        public static bool Save(string recordPath, PlayerRecordData2D data, bool prettyPrint)
         {
             if (string.IsNullOrWhiteSpace(recordPath) || data == null)
             {
@@ -113,6 +122,7 @@ namespace EndlessJourney.Player
                 }
 
                 data.unlockedSpellIds ??= Array.Empty<SpellUnlockStateEntry2D>();
+                data.unlockedWeaponIds ??= Array.Empty<WeaponUnlockStateEntry2D>();
                 data.equippedSpellIds ??= Array.Empty<string>();
                 data.equippedWeaponId ??= string.Empty;
 
@@ -122,7 +132,7 @@ namespace EndlessJourney.Player
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"Failed to save spell record at '{recordPath}'. {ex.Message}");
+                Debug.LogWarning($"Failed to save player record at '{recordPath}'. {ex.Message}");
                 return false;
             }
         }
@@ -141,6 +151,27 @@ namespace EndlessJourney.Player
                 entries[index++] = new SpellUnlockStateEntry2D
                 {
                     spellId = pair.Key,
+                    unlocked = pair.Value
+                };
+            }
+
+            return entries;
+        }
+
+        public static WeaponUnlockStateEntry2D[] BuildWeaponUnlockEntries(Dictionary<string, bool> unlockedById)
+        {
+            if (unlockedById == null || unlockedById.Count == 0)
+            {
+                return Array.Empty<WeaponUnlockStateEntry2D>();
+            }
+
+            WeaponUnlockStateEntry2D[] entries = new WeaponUnlockStateEntry2D[unlockedById.Count];
+            int index = 0;
+            foreach (KeyValuePair<string, bool> pair in unlockedById)
+            {
+                entries[index++] = new WeaponUnlockStateEntry2D
+                {
+                    weaponId = pair.Key,
                     unlocked = pair.Value
                 };
             }

@@ -93,7 +93,12 @@ namespace EndlessJourney.Player
                 return false;
             }
 
-            return equippedWeapon.IsOwned && equippedWeapon.CanUse;
+            if (weaponEquipped != null)
+            {
+                return weaponEquipped.IsEquippedWeaponUnlocked();
+            }
+
+            return true;
         }
 
         /// <summary>

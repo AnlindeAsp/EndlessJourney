@@ -30,12 +30,6 @@ namespace EndlessJourney.Combat
         [SerializeField, Min(0f)] private float sharpness = 1f;
         [SerializeField, Min(0.01f)] private float weight = 1f;
 
-        [Header("State (Prototype)")]
-        [Tooltip("Prototype ownership flag. Runtime save/state systems can override this.")]
-        [SerializeField] private bool isOwned;
-        [Tooltip("Whether this weapon is currently allowed to be used.")]
-        [SerializeField] private bool canUse = true;
-
         public string WeaponId => weaponId;
         public string WeaponName => weaponName;
         public WeaponType Type => weaponType;
@@ -43,8 +37,6 @@ namespace EndlessJourney.Combat
         public float Length => length;
         public float Sharpness => sharpness;
         public float Weight => weight;
-        public bool IsOwned => isOwned;
-        public bool CanUse => canUse;
 
         private void OnValidate()
         {

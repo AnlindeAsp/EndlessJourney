@@ -1,5 +1,4 @@
-using System;
-using EndlessJourney.Player;
+using EndlessJourney.UI;
 using UnityEngine;
 
 namespace EndlessJourney.Interaction
@@ -10,54 +9,26 @@ namespace EndlessJourney.Interaction
     /// </summary>
     public class OpenSavingLibrary2D : TriggerInteractable2D
     {
-        [Header("Saving Library")]
-        [SerializeField] private GameObject savingLibraryRoot;
-        [SerializeField] private bool hideLibraryOnAwake = true;
-        [SerializeField] private bool toggleOnInteract = true;
+        [Header("Canvas Manager")]
+        [SerializeField] private GameCanvasManager2D canvasManager;
         [SerializeField] private bool closeWhenPlayerLeaves = true;
-        [SerializeField] private bool closeWhenDisabled = true;
-
-        [Header("Player State")]
-        [SerializeField] private bool lockPlayerMovementWhileOpen = true;
-        [SerializeField] private bool lockPlayerActionsWhileOpen;
-
-        [Header("Cursor")]
-        [SerializeField] private bool showCursorWhileOpen = true;
-        [SerializeField] private bool restoreCursorOnClose = true;
 
         [Header("Debug")]
         [SerializeField] private bool logStateChanges;
 
-        private PlayerCore2D _lockedPlayerCore;
-        private bool _isOpen;
-        private bool _cursorStateCaptured;
-        private bool _previousCursorVisible;
-        private CursorLockMode _previousCursorLockMode;
-
-        public bool IsOpen => _isOpen;
-
-        public event Action Opened;
-        public event Action Closed;
-
-        protected override void Awake()
+        private void OnEnable()
         {
-            base.Awake();
-
-            if (savingLibraryRoot != null && hideLibraryOnAwake)
+            if (canvasManager != null)
             {
-                SetLibraryVisible(false);
-            }
-            else if (savingLibraryRoot != null)
-            {
-                _isOpen = savingLibraryRoot.activeSelf;
+                canvasManager.OnStateChanged += HandleCanvasStateChanged;
             }
         }
 
         protected override void OnDisable()
         {
-            if (closeWhenDisabled && _isOpen)
+            if (canvasManager != null)
             {
-                CloseLibrary();
+                canvasManager.OnStateChanged -= HandleCanvasStateChanged;
             }
 
             base.OnDisable();
@@ -67,15 +38,21 @@ namespace EndlessJourney.Interaction
         {
             base.OnTriggerExit2D(other);
 
-            if (closeWhenPlayerLeaves && _isOpen && !HasInsideInteractors)
+            if (closeWhenPlayerLeaves
+                && canvasManager != null
+                && canvasManager.CurrentState == GameCanvasState2D.SavingLibrary
+                && !HasInsideInteractors)
             {
-                CloseLibrary();
+                canvasManager.CloseSavingLibrary();
+                RefreshPromptDisplay();
             }
         }
 
         public override bool CanInteract(GameObject interactor)
         {
-            return base.CanInteract(interactor) && savingLibraryRoot != null;
+            return base.CanInteract(interactor)
+                && canvasManager != null
+                && canvasManager.CurrentState == GameCanvasState2D.Gameplay;
         }
 
         public override void Interact(GameObject interactor)
@@ -85,123 +62,26 @@ namespace EndlessJourney.Interaction
                 return;
             }
 
-            if (_isOpen && toggleOnInteract)
+            if (canvasManager.TryOpenSavingLibrary(interactor))
             {
-                CloseLibrary();
-                return;
-            }
+                HidePromptDisplay();
 
-            if (!_isOpen)
-            {
-                OpenLibrary(interactor);
+                if (logStateChanges)
+                {
+                    Debug.Log("Saving library open requested.", this);
+                }
             }
         }
 
-        public void OpenLibrary(GameObject interactor)
+        private void HandleCanvasStateChanged(GameCanvasState2D previousState, GameCanvasState2D currentState)
         {
-            if (savingLibraryRoot == null || _isOpen)
+            if (currentState == GameCanvasState2D.Gameplay)
             {
+                RefreshPromptDisplay();
                 return;
             }
 
-            _lockedPlayerCore = ResolvePlayerCore(interactor);
-            SetLibraryVisible(true);
-            SetPlayerLocked(true);
-            ApplyCursorOpenState();
-            Opened?.Invoke();
             HidePromptDisplay();
-
-            if (logStateChanges)
-            {
-                Debug.Log("Saving library opened.", this);
-            }
-        }
-
-        public void CloseLibrary()
-        {
-            if (savingLibraryRoot == null || !_isOpen)
-            {
-                return;
-            }
-
-            SetLibraryVisible(false);
-            SetPlayerLocked(false);
-            RestoreCursorState();
-            _lockedPlayerCore = null;
-            Closed?.Invoke();
-            RefreshPromptDisplay();
-
-            if (logStateChanges)
-            {
-                Debug.Log("Saving library closed.", this);
-            }
-        }
-
-        private void SetLibraryVisible(bool visible)
-        {
-            savingLibraryRoot.SetActive(visible);
-            _isOpen = visible;
-        }
-
-        private void SetPlayerLocked(bool locked)
-        {
-            if (_lockedPlayerCore == null)
-            {
-                return;
-            }
-
-            if (lockPlayerMovementWhileOpen)
-            {
-                _lockedPlayerCore.SetMovementLocked(locked);
-            }
-
-            if (lockPlayerActionsWhileOpen)
-            {
-                _lockedPlayerCore.SetActionLocked(locked);
-            }
-        }
-
-        private void ApplyCursorOpenState()
-        {
-            if (!showCursorWhileOpen || _cursorStateCaptured)
-            {
-                return;
-            }
-
-            _previousCursorVisible = Cursor.visible;
-            _previousCursorLockMode = Cursor.lockState;
-            _cursorStateCaptured = true;
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
-
-        private void RestoreCursorState()
-        {
-            if (!restoreCursorOnClose || !_cursorStateCaptured)
-            {
-                _cursorStateCaptured = false;
-                return;
-            }
-
-            Cursor.visible = _previousCursorVisible;
-            Cursor.lockState = _previousCursorLockMode;
-            _cursorStateCaptured = false;
-        }
-
-        private static PlayerCore2D ResolvePlayerCore(GameObject interactor)
-        {
-            if (interactor == null)
-            {
-                return null;
-            }
-
-            PlayerCore2D core = interactor.GetComponent<PlayerCore2D>();
-            if (core != null)
-            {
-                return core;
-            }
-
-            return interactor.GetComponentInParent<PlayerCore2D>();
         }
     }
 }
