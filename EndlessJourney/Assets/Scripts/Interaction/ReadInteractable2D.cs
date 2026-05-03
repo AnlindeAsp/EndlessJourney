@@ -34,6 +34,7 @@ namespace EndlessJourney.Interaction
             }
 
             _hasRead = true;
+            RefreshPromptDisplay();
 
             if (logRead)
             {

@@ -83,7 +83,7 @@ namespace EndlessJourney.Player
             {
                 int facing = attackFacingDirection >= 0 ? 1 : -1;
                 float weight = equippedWeapon != null ? equippedWeapon.Weight : unarmedWeight;
-                float horizontalRecoil = baseHorizontalRecoil - weight * 1.5f;
+                float horizontalRecoil = Mathf.Max(0f, baseHorizontalRecoil - weight * 1.5f);
                 velocity.x += -facing * horizontalRecoil;
                 //Debug.Log($"Applying melee hit recoil: direction={attackDirection}, facing={facing}, weight={weight}, horizontalRecoil={horizontalRecoil}");
             }

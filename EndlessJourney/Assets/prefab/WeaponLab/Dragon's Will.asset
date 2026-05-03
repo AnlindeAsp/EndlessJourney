@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e39201b56e0dfa479138ac1e6896661, type: 3}
-  m_Name: BeginerSword
+  m_Name: Dragon's Will
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Combat.WeaponData
-  weaponId: beginner_sword
-  weaponName: TheSword
+  weaponName: Dragon'sWill
   weaponType: 0
   icon: {fileID: 0}
   length: 1.5
-  sharpness: 1.5
-  weight: 2
+  sharpness: 1.6
+  weight: 4
   isOwned: 1
   canUse: 1

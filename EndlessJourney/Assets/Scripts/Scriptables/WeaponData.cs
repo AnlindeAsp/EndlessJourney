@@ -20,6 +20,7 @@ namespace EndlessJourney.Combat
     public class WeaponData : ScriptableObject
     {
         [Header("Basic Info")]
+        [SerializeField] private string weaponId = "weapon_default";
         [SerializeField] private string weaponName = "New Weapon";
         [SerializeField] private WeaponType weaponType = WeaponType.Sword;
         [SerializeField] private Sprite icon;
@@ -35,6 +36,7 @@ namespace EndlessJourney.Combat
         [Tooltip("Whether this weapon is currently allowed to be used.")]
         [SerializeField] private bool canUse = true;
 
+        public string WeaponId => weaponId;
         public string WeaponName => weaponName;
         public WeaponType Type => weaponType;
         public Sprite Icon => icon;
@@ -49,6 +51,7 @@ namespace EndlessJourney.Combat
             length = Mathf.Max(0.1f, length);
             sharpness = Mathf.Max(0f, sharpness);
             weight = Mathf.Max(0.01f, weight);
+            weaponId = string.IsNullOrWhiteSpace(weaponId) ? "weapon_default" : weaponId.Trim();
             weaponName = string.IsNullOrWhiteSpace(weaponName) ? "New Weapon" : weaponName.Trim();
         }
     }

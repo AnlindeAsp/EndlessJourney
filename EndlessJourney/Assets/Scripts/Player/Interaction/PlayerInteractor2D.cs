@@ -19,10 +19,10 @@ namespace EndlessJourney.Player
 
         [Header("Input")]
 #if ENABLE_INPUT_SYSTEM
-        [SerializeField] private Key interactKey = Key.E;
+        [SerializeField] private Key interactKey = Key.R;
 #endif
 #if ENABLE_LEGACY_INPUT_MANAGER
-        [SerializeField] private KeyCode legacyInteractKey = KeyCode.E;
+        [SerializeField] private KeyCode legacyInteractKey = KeyCode.R;
 #endif
 
         [Header("Behavior")]

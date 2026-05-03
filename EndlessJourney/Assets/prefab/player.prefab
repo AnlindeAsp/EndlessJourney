@@ -214,6 +214,7 @@ GameObject:
   - component: {fileID: 7741198615458781599}
   - component: {fileID: 6501664350919093948}
   - component: {fileID: 4338178603919138316}
+  - component: {fileID: 6103563392085714702}
   - component: {fileID: 3175653083070565143}
   - component: {fileID: 4905028868113081332}
   m_Layer: 8
@@ -392,6 +393,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 148f8249849c6794a8dda3b370527683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerInput2D
+  moveLeftKey: 15
+  moveRightKey: 18
+  moveUpKey: 37
+  moveDownKey: 33
+  jumpKey: 1
+  spellSlot1Key: 41
+  spellSlot2Key: 42
+  spellSlot3Key: 43
+  spellSlot4Key: 44
+  spellSlot5Key: 45
+  attackMouseButton: 0
+  dashMouseButton: 1
+  loadSavedBindingsOnAwake: 1
+  saveBindingsOnRuntimeRebind: 1
 --- !u!114 &1631929414116550797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,8 +579,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c92eca520ef8ee44797df24dd82dd607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerWeaponSystem
+  weaponEquipped: {fileID: 6103563392085714702}
   equippedWeapon: {fileID: 0}
   combatCore: {fileID: 7741198615458781599}
+--- !u!114 &6103563392085714702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5291405591989393297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1bb5267d7804a0488a8a3dca2d3719a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.WeaponEquipped2D
+  weaponLibrary: {fileID: 0}
+  equippedWeaponId: 
+  requireWeaponKnownForEquip: 1
+  loadFromRecordOnAwake: 1
+  saveToRecordOnChange: 1
+  recordFileName: record.json
+  prettyPrintRecordJson: 1
 --- !u!114 &3175653083070565143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -672,12 +707,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.SpellCastSystem
   core: {fileID: 2451793589184866735}
   mana: {fileID: 1529881304310386240}
-  manaCostPerCast: 30
-  castTime: 0.2
-  castCooldown: 0.1
-  allowCastWhileMovementLocked: 1
-  isSpellLearned: 1
+  health: {fileID: 0}
+  projectileLauncher: {fileID: 0}
   castPoint: {fileID: 0}
-  castEffectPrefab: {fileID: 0}
-  castEffectLifetime: 1.5
-  defaultCastOffset: {x: 0.8, y: 0.2, z: 0}
+  allowSingingWhileMovingUnlocked: 0
+  allowSingingWhileAirborneUnlocked: 0

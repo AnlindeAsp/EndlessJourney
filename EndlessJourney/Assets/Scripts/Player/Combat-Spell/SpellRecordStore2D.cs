@@ -17,10 +17,11 @@ namespace EndlessJourney.Player
     {
         public SpellUnlockStateEntry2D[] unlockedSpellIds = Array.Empty<SpellUnlockStateEntry2D>();
         public string[] equippedSpellIds = Array.Empty<string>();
+        public string equippedWeaponId = string.Empty;
     }
 
     /// <summary>
-    /// Shared JSON record reader/writer for spell unlock and equip state.
+    /// Shared JSON record reader/writer for spell unlock/equip and lightweight equipment state.
     /// </summary>
     public static class SpellRecordStore2D
     {
@@ -86,6 +87,7 @@ namespace EndlessJourney.Player
 
                 data.unlockedSpellIds ??= Array.Empty<SpellUnlockStateEntry2D>();
                 data.equippedSpellIds ??= Array.Empty<string>();
+                data.equippedWeaponId ??= string.Empty;
                 return true;
             }
             catch (Exception ex)
@@ -112,6 +114,7 @@ namespace EndlessJourney.Player
 
                 data.unlockedSpellIds ??= Array.Empty<SpellUnlockStateEntry2D>();
                 data.equippedSpellIds ??= Array.Empty<string>();
+                data.equippedWeaponId ??= string.Empty;
 
                 string json = JsonUtility.ToJson(data, prettyPrint);
                 File.WriteAllText(recordPath, json);

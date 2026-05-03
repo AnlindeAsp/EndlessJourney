@@ -12,6 +12,7 @@ namespace EndlessJourney.Player
     public class PlayerWeaponSystem : MonoBehaviour
     {
         [Header("Weapon")]
+        [SerializeField] private WeaponEquipped2D weaponEquipped;
         [SerializeField] private WeaponData equippedWeapon;
         [SerializeField] private PlayerCombatCore combatCore;
 
@@ -22,6 +23,7 @@ namespace EndlessJourney.Player
         private void Reset()
         {
             combatCore = GetComponent<PlayerCombatCore>();
+            weaponEquipped = GetComponent<WeaponEquipped2D>();
         }
 
         private void Awake()
@@ -29,6 +31,32 @@ namespace EndlessJourney.Player
             if (combatCore == null)
             {
                 combatCore = GetComponent<PlayerCombatCore>();
+            }
+
+            if (weaponEquipped == null)
+            {
+                weaponEquipped = GetComponent<WeaponEquipped2D>();
+            }
+        }
+
+        private void OnEnable()
+        {
+            if (weaponEquipped != null)
+            {
+                weaponEquipped.OnEquippedWeaponChanged += HandleEquippedWeaponChanged;
+            }
+        }
+
+        private void Start()
+        {
+            SyncFromEquippedState();
+        }
+
+        private void OnDisable()
+        {
+            if (weaponEquipped != null)
+            {
+                weaponEquipped.OnEquippedWeaponChanged -= HandleEquippedWeaponChanged;
             }
         }
 
@@ -40,6 +68,19 @@ namespace EndlessJourney.Player
             equippedWeapon = weapon;
             RecalculateCombatSnapshot();
             OnWeaponEquipped?.Invoke(equippedWeapon);
+        }
+
+        /// <summary>
+        /// Equips a weapon id through WeaponEquipped2D when available.
+        /// </summary>
+        public bool EquipWeaponById(string weaponId)
+        {
+            if (weaponEquipped == null)
+            {
+                return false;
+            }
+
+            return weaponEquipped.EquipWeapon(weaponId);
         }
 
         /// <summary>
@@ -91,8 +132,10 @@ namespace EndlessJourney.Player
                     hitCount = 1;
                     break;
             }
-
-            float attackSpeed = equippedWeapon.Weight / strength;
+            // Developer notes, 0.1 is the fastest possible attack speed
+            // 10 weight: 1.2s, 1s
+            // 1 weight: 0.3s, 0.25s
+            float attackSpeed = (equippedWeapon.Weight + 1f)/ (strength - 0f);
 
             combatCore.ApplyWeaponSnapshot(
                 equippedWeapon.WeaponName,
@@ -101,6 +144,26 @@ namespace EndlessJourney.Player
                 hitCount,
                 attackSpeed
             );
+        }
+
+        private void HandleEquippedWeaponChanged(string weaponId)
+        {
+            SyncFromEquippedState();
+        }
+
+        private void SyncFromEquippedState()
+        {
+            if (weaponEquipped == null)
+            {
+                if (equippedWeapon != null)
+                {
+                    RecalculateCombatSnapshot();
+                }
+
+                return;
+            }
+
+            EquipWeapon(weaponEquipped.GetEquippedWeaponData());
         }
     }
 }
