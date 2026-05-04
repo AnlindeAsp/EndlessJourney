@@ -14,12 +14,13 @@ namespace EndlessJourney.UI
     public class StorageCanvasController2D : MonoBehaviour
     {
         [Header("Pages")]
-        [SerializeField] private StoragePageType2D defaultPage = StoragePageType2D.Weapon;
+        [SerializeField] private StoragePageType2D defaultPage = StoragePageType2D.Spell;
         [SerializeField] private GameObject weaponPageRoot;
         [SerializeField] private GameObject spellPageRoot;
 
         [Header("Page Controllers")]
         [SerializeField] private WeaponPageController2D weaponPageController;
+        [SerializeField] private SpellPageController2D spellPageController;
 
         [Header("Behavior")]
         [SerializeField] private bool openDefaultPageOnEnable = true;
@@ -65,6 +66,10 @@ namespace EndlessJourney.UI
             if (page == StoragePageType2D.Weapon && weaponPageController != null)
             {
                 weaponPageController.RefreshPage();
+            }
+            else if (page == StoragePageType2D.Spell && spellPageController != null)
+            {
+                spellPageController.RefreshPage();
             }
         }
 

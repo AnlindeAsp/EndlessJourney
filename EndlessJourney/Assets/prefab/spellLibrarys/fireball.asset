@@ -15,6 +15,17 @@ MonoBehaviour:
   spellId: fireball
   displayName: fireball
   kind: 0
+  description: 'The initial of human
+
+    break through then darkness
+
+    expel
+    the danger
+
+    the fire last thousand years
+
+    be my side and purify my enemy'
+  supplementaryNote: 
   manaCost: 30
   singingTime: 0.2
   castTime: 0.3

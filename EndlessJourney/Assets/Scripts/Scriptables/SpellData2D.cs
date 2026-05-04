@@ -23,6 +23,10 @@ namespace EndlessJourney.Player
         [SerializeField] private string displayName = "New Spell";
         [SerializeField] private SpellKind2D kind = SpellKind2D.Damage;
 
+        [Header("Book Text")]
+        [SerializeField, TextArea(3, 8)] private string description = string.Empty;
+        [SerializeField, TextArea(1, 4)] private string supplementaryNote = string.Empty;
+
         [Header("Cast Rule")]
         [SerializeField, Min(0f)] private float manaCost = 30f;
         [FormerlySerializedAs("castTime")]
@@ -42,6 +46,8 @@ namespace EndlessJourney.Player
         public string SpellId => spellId;
         public string DisplayName => displayName;
         public SpellKind2D Kind => kind;
+        public string Description => description;
+        public string SupplementaryNote => supplementaryNote;
         public float ManaCost => manaCost;
         public float SingingTime => singingTime;
         public float CastTime => castTime;

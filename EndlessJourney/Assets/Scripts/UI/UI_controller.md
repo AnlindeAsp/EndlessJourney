@@ -144,6 +144,71 @@ Responsibilities:
 
 It should not know about `WeaponLibrary2D` or `WeaponEquipped2D`.
 
+## SpellPageController2D
+
+Location: `Assets/Scripts/UI/Storage/SpellPageController2D.cs`
+
+Handles player operations on the spell book page.
+
+Responsibilities:
+
+- Read available spell definitions and unlock state from `SpellLibrary2D`.
+- Read written page state from `SpellBook2D`.
+- Treat spell slots as spell book pages.
+- Let number keys `1-5` turn to available pages.
+- Let mouse wheel or `A/D` move through the spell name list.
+- Write the selected preview spell to the current page.
+- Erase the current page, allowing spell pages to stay blank.
+- Ask `SpellPageDisplayer2D` to render updated UI.
+
+It should not directly create UI rows or edit display text.
+
+## SpellPageDisplayer2D
+
+Location: `Assets/Scripts/UI/Storage/SpellPageDisplayer2D.cs`
+
+Renders the spell book page.
+
+Responsibilities:
+
+- Spawn page button prefabs.
+- Spawn spell name row prefabs.
+- Render current page number and written spell state.
+- Render left-side spell data and right-side spell description.
+- Slowly blink the description area when showing an unwritten preview spell.
+- Bind Write and Erase buttons to controller-provided callbacks.
+
+It should not directly save records or change `SpellBook2D`.
+
+## SpellPageSpellNameRow2D
+
+Location: `Assets/Scripts/UI/Storage/SpellPageSpellNameRow2D.cs`
+
+Represents one selectable spell name in the spell list.
+
+Responsibilities:
+
+- Display only the spell name.
+- Show selected, written-on-current-page, written-elsewhere, and locked indicators.
+- Invoke the provided selection callback when clicked.
+
+It should not know about `SpellLibrary2D` or `SpellBook2D`.
+
+## SpellPageSlotButton2D
+
+Location: `Assets/Scripts/UI/Storage/SpellPageSlotButton2D.cs`
+
+Represents one spell book page button. Each page maps to one `SpellBook2D` slot.
+
+Responsibilities:
+
+- Display page number.
+- Display the spell currently written on that page, or `Blank`.
+- Show selected and unavailable states.
+- Invoke the provided page-selection callback when clicked.
+
+It should not write or erase spells by itself.
+
 ## Data Responsibility
 
 Weapon-related state is split like this:
@@ -172,3 +237,30 @@ WeaponPageDisplayer2D
 ```
 
 Library classes should not know about UI pages. Display classes should not write gameplay state.
+
+Spell-related state is split like this:
+
+```text
+SpellData2D
+-> static spell configuration
+-> book description and supplementary note
+
+SpellLibrary2D
+-> all spell assets
+-> unlock state
+
+SpellBook2D
+-> spell book pages / spell slots
+-> written spell ids
+-> save written spell ids to record
+-> pages may be blank
+
+SpellCastSystem / SpellSlotCaster2D
+-> cast spells from written spell slots
+
+SpellPageController2D
+-> UI operations
+
+SpellPageDisplayer2D
+-> UI rendering
+```

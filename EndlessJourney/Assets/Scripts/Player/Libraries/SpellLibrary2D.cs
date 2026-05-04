@@ -32,6 +32,8 @@ namespace EndlessJourney.Player
         private readonly Dictionary<string, bool> _unlockedById = new Dictionary<string, bool>(32);
         private string _recordPath;
 
+        public int SpellCount => allSpells != null ? allSpells.Length : 0;
+
         public event Action<string, bool> OnSpellUnlockStateChanged;
 
         private void Awake()
@@ -67,6 +69,16 @@ namespace EndlessJourney.Player
         {
             TryGetSpellData(spellId, out SpellData2D spellData);
             return spellData;
+        }
+
+        public SpellData2D GetSpellAt(int index)
+        {
+            if (allSpells == null || index < 0 || index >= allSpells.Length)
+            {
+                return null;
+            }
+
+            return allSpells[index];
         }
 
         public bool IsUnlocked(string spellId)

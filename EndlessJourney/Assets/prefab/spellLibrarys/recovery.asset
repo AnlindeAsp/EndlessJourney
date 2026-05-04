@@ -15,12 +15,14 @@ MonoBehaviour:
   spellId: recovery
   displayName: Recovery
   kind: 1
+  description: massive healing
+  supplementaryNote: 
   manaCost: 40
   singingTime: 4
   castTime: 0.2
   castCooldown: 0.35
   allowCastWhileMovementLocked: 1
-  effectData: {fileID: 0}
+  effectData: {fileID: 11400000, guid: cbaccb7eeee0baa4a867bc0291d19665, type: 2}
   castEffectPrefab: {fileID: 0}
   castEffectLifetime: 1.5
   defaultCastOffset: {x: 0.8, y: 0.2, z: 0}
