@@ -24,6 +24,9 @@ namespace EndlessJourney.Combat
         [SerializeField] private string weaponName = "New Weapon";
         [SerializeField] private WeaponType weaponType = WeaponType.Sword;
         [SerializeField] private Sprite icon;
+        [SerializeField] private Sprite detailImage;
+        [TextArea(2, 6)]
+        [SerializeField] private string description = string.Empty;
 
         [Header("Core Stats")]
         [SerializeField, Min(0.1f)] private float length = 1.5f;
@@ -34,6 +37,8 @@ namespace EndlessJourney.Combat
         public string WeaponName => weaponName;
         public WeaponType Type => weaponType;
         public Sprite Icon => icon;
+        public Sprite DetailImage => detailImage;
+        public string Description => description ?? string.Empty;
         public float Length => length;
         public float Sharpness => sharpness;
         public float Weight => weight;
@@ -45,6 +50,7 @@ namespace EndlessJourney.Combat
             weight = Mathf.Max(0.01f, weight);
             weaponId = string.IsNullOrWhiteSpace(weaponId) ? "weapon_default" : weaponId.Trim();
             weaponName = string.IsNullOrWhiteSpace(weaponName) ? "New Weapon" : weaponName.Trim();
+            description ??= string.Empty;
         }
     }
 }

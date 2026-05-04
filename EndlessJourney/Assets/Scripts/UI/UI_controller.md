@@ -111,7 +111,6 @@ Responsibilities:
 - Read equipped state from `WeaponEquipped2D`.
 - Track selected weapon id.
 - Equip selected weapon.
-- Unequip current weapon.
 - Ask `WeaponPageDisplayer2D` to render updated UI.
 
 It should not directly create UI rows or write visual text.
@@ -127,7 +126,7 @@ Responsibilities:
 - Spawn weapon row prefabs.
 - Render selected weapon details.
 - Update weapon icon, stats, locked/unlocked/equipped state.
-- Bind equip and unequip buttons to controller-provided callbacks.
+- Bind the equip button to a controller-provided callback.
 
 It should not directly save records or change equipped weapon state.
 
@@ -160,6 +159,7 @@ WeaponLibrary2D
 WeaponEquipped2D
 -> currently equipped weapon id
 -> save equipped weapon id to record
+-> does not clear equipment; the player should always keep one weapon equipped
 
 PlayerWeaponSystem
 -> convert equipped WeaponData into PlayerCombatCore stats

@@ -19,6 +19,14 @@ namespace EndlessJourney.UI
         [SerializeField] private GameObject equippedIndicator;
         [SerializeField] private GameObject lockedIndicator;
 
+        [Header("Visual State")]
+        [SerializeField] private CanvasGroup rowCanvasGroup;
+        [SerializeField, Range(0f, 1f)] private float selectedAlpha = 1f;
+        [SerializeField, Range(0f, 1f)] private float unselectedAlpha = 0.55f;
+        [SerializeField] private Color normalNameColor = Color.white;
+        [SerializeField] private Color equippedNameColor = new Color(1f, 0.78f, 0.18f, 1f);
+        [SerializeField] private Color lockedNameColor = new Color(0.55f, 0.55f, 0.55f, 1f);
+
         private string _weaponId = string.Empty;
 
         private void OnDisable()
@@ -44,11 +52,36 @@ namespace EndlessJourney.UI
             SetIndicator(equippedIndicator, item.Equipped);
             SetIndicator(lockedIndicator, !item.Unlocked);
             SetIcon(item.WeaponData.Icon);
+            ApplyVisualState(item);
 
             if (selectButton != null)
             {
                 selectButton.onClick.RemoveAllListeners();
                 selectButton.onClick.AddListener(() => onSelected?.Invoke(_weaponId));
+            }
+        }
+
+        private void ApplyVisualState(WeaponPageItemViewData2D item)
+        {
+            if (rowCanvasGroup != null)
+            {
+                rowCanvasGroup.alpha = item.Selected ? selectedAlpha : unselectedAlpha;
+            }
+
+            if (nameText != null)
+            {
+                if (item.Equipped)
+                {
+                    nameText.color = equippedNameColor;
+                }
+                else if (!item.Unlocked)
+                {
+                    nameText.color = lockedNameColor;
+                }
+                else
+                {
+                    nameText.color = normalNameColor;
+                }
             }
         }
 

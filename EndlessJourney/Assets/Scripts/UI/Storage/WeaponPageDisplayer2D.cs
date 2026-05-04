@@ -39,13 +39,13 @@ namespace EndlessJourney.UI
         [SerializeField] private TMP_Text weaponTypeText;
         [SerializeField] private TMP_Text weaponStatsText;
         [SerializeField] private TMP_Text weaponStateText;
+        [SerializeField] private TMP_Text weaponDescriptionText;
         [SerializeField] private Image weaponIconImage;
+        [SerializeField] private Image weaponDetailImage;
 
         [Header("Actions")]
         [SerializeField] private Button equipButton;
-        [SerializeField] private Button unequipButton;
         [SerializeField] private TMP_Text equipButtonText;
-        [SerializeField] private TMP_Text unequipButtonText;
 
         private readonly List<WeaponPageRow2D> _spawnedRows = new List<WeaponPageRow2D>(16);
 
@@ -60,12 +60,11 @@ namespace EndlessJourney.UI
             string selectedWeaponId,
             string equippedWeaponId,
             Action<string> onSelectWeapon,
-            Action onEquipSelected,
-            Action onUnequipCurrent)
+            Action onEquipSelected)
         {
             RenderList(weapons, onSelectWeapon);
             RenderDetails(selectedWeapon, selectedWeaponId, equippedWeaponId, weapons);
-            BindActionButtons(selectedWeapon, selectedWeaponId, equippedWeaponId, weapons, onEquipSelected, onUnequipCurrent);
+            BindActionButtons(selectedWeapon, selectedWeaponId, equippedWeaponId, weapons, onEquipSelected);
         }
 
         private void RenderList(IReadOnlyList<WeaponPageItemViewData2D> weapons, Action<string> onSelectWeapon)
@@ -104,7 +103,9 @@ namespace EndlessJourney.UI
                 SetText(weaponTypeText, string.Empty);
                 SetText(weaponStatsText, string.Empty);
                 SetText(weaponStateText, string.Empty);
-                SetIcon(null);
+                SetText(weaponDescriptionText, string.Empty);
+                SetImage(weaponIconImage, null);
+                SetImage(weaponDetailImage, null);
                 return;
             }
 
@@ -116,7 +117,9 @@ namespace EndlessJourney.UI
             SetText(weaponTypeText, selectedWeapon.Type.ToString());
             SetText(weaponStatsText, $"Length {selectedWeapon.Length:0.##}\nSharpness {selectedWeapon.Sharpness:0.##}\nWeight {selectedWeapon.Weight:0.##}");
             SetText(weaponStateText, equipped ? "Equipped" : unlocked ? "Unlocked" : "Locked");
-            SetIcon(selectedWeapon.Icon);
+            SetText(weaponDescriptionText, selectedWeapon.Description);
+            SetImage(weaponIconImage, selectedWeapon.Icon);
+            SetImage(weaponDetailImage, selectedWeapon.DetailImage);
         }
 
         private void BindActionButtons(
@@ -124,15 +127,13 @@ namespace EndlessJourney.UI
             string selectedWeaponId,
             string equippedWeaponId,
             IReadOnlyList<WeaponPageItemViewData2D> weapons,
-            Action onEquipSelected,
-            Action onUnequipCurrent)
+            Action onEquipSelected)
         {
             ClearActionButtons();
 
             bool hasSelection = selectedWeapon != null && !string.IsNullOrWhiteSpace(selectedWeaponId);
             bool unlocked = TryFindItem(weapons, selectedWeaponId, out WeaponPageItemViewData2D item) && item.Unlocked;
             bool equipped = hasSelection && string.Equals(selectedWeaponId, equippedWeaponId, StringComparison.Ordinal);
-            bool hasEquippedWeapon = !string.IsNullOrWhiteSpace(equippedWeaponId);
 
             if (equipButton != null)
             {
@@ -140,14 +141,7 @@ namespace EndlessJourney.UI
                 equipButton.onClick.AddListener(() => onEquipSelected?.Invoke());
             }
 
-            if (unequipButton != null)
-            {
-                unequipButton.interactable = hasEquippedWeapon;
-                unequipButton.onClick.AddListener(() => onUnequipCurrent?.Invoke());
-            }
-
             SetText(equipButtonText, equipped ? "Equipped" : "Equip");
-            SetText(unequipButtonText, "Unequip");
         }
 
         private void ClearRows()
@@ -170,22 +164,17 @@ namespace EndlessJourney.UI
             {
                 equipButton.onClick.RemoveAllListeners();
             }
-
-            if (unequipButton != null)
-            {
-                unequipButton.onClick.RemoveAllListeners();
-            }
         }
 
-        private void SetIcon(Sprite icon)
+        private static void SetImage(Image image, Sprite sprite)
         {
-            if (weaponIconImage == null)
+            if (image == null)
             {
                 return;
             }
 
-            weaponIconImage.sprite = icon;
-            weaponIconImage.enabled = icon != null;
+            image.sprite = sprite;
+            image.enabled = sprite != null;
         }
 
         private static void SetText(TMP_Text text, string value)

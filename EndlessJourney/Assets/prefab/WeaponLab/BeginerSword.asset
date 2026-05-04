@@ -16,6 +16,8 @@ MonoBehaviour:
   weaponName: TheSword
   weaponType: 0
   icon: {fileID: 0}
+  detailImage: {fileID: 0}
+  description: 
   length: 1.5
   sharpness: 1.5
   weight: 2

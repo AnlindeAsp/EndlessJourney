@@ -43,6 +43,11 @@ namespace EndlessJourney.Player
         public bool EquipWeapon(string weaponId, bool ignoreKnownCheck)
         {
             string normalizedId = string.IsNullOrWhiteSpace(weaponId) ? string.Empty : weaponId.Trim();
+            if (string.IsNullOrEmpty(normalizedId))
+            {
+                Debug.LogWarning("WeaponEquipped2D cannot equip an empty weapon id. Player should always keep one weapon equipped.", this);
+                return false;
+            }
 
             if (!ignoreKnownCheck && requireWeaponKnownForEquip && !string.IsNullOrEmpty(normalizedId))
             {
@@ -77,11 +82,6 @@ namespace EndlessJourney.Player
             SaveEquippedStateToRecord();
             OnEquippedWeaponChanged?.Invoke(equippedWeaponId);
             return true;
-        }
-
-        public void UnequipWeapon()
-        {
-            EquipWeapon(string.Empty, true);
         }
 
         public WeaponData GetEquippedWeaponData()
