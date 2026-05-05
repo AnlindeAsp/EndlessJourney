@@ -80,7 +80,7 @@ namespace EndlessJourney.Player
         public event Action<float> OnDamaged;
         public event Action<float, GameObject> OnHarmDamaged;
         public event Action<float, float, float, GameObject> OnHarmDamageResolved;
-        public event Action<float> OnNonHarmHealthLost;
+        public event Action<float> OnDirectHealthLost;
         public event Action<float> OnHealed;
         public event Action OnDied;
 
@@ -104,21 +104,12 @@ namespace EndlessJourney.Player
         }
 
         /// <summary>
-        /// Compatibility API.
-        /// Treated as harm damage (triggers invincibility rules).
-        /// </summary>
-        public bool TakeDamage(float amount)
-        {
-            return TakeHarmDamage(amount);
-        }
-
-        /// <summary>
-        /// Harm damage path.
+        /// Internal harm damage path.
         /// - Respects invincibility
         /// - Can enter combat
         /// - Triggers post-hit invincibility when still alive
         /// </summary>
-        public bool TakeHarmDamage(float amount)
+        private bool ApplyHarmDamage(float amount)
         {
             if (_isDead || amount <= 0f || IsInvincible)
             {
@@ -152,12 +143,13 @@ namespace EndlessJourney.Player
         }
 
         /// <summary>
-        /// Non-harm health loss path (for mana-out, poison, scripted drain, etc.).
+        /// Direct health loss path (for mana-out, poison, scripted drain, etc.).
         /// - Ignores invincibility
         /// - Does NOT start invincibility
+        /// - Does NOT apply armor
         /// - Optional combat entry (default false)
         /// </summary>
-        public bool ApplyNonHarmHealthLoss(float amount, bool enterCombat = false)
+        public bool ReceiveDirectHealthLoss(float amount, bool enterCombat = false)
         {
             if (_isDead || amount <= 0f)
             {
@@ -170,7 +162,7 @@ namespace EndlessJourney.Player
                 return false;
             }
 
-            OnNonHarmHealthLost?.Invoke(appliedAmount);
+            OnDirectHealthLost?.Invoke(appliedAmount);
             return true;
         }
 
@@ -184,7 +176,7 @@ namespace EndlessJourney.Player
                 return false;
             }
 
-            bool applied = TakeHarmDamage(amount);
+            bool applied = ApplyHarmDamage(amount);
             if (!applied)
             {
                 return false;
@@ -476,7 +468,7 @@ namespace EndlessJourney.Player
         }
 
         /// <summary>
-        /// Shared health deduction core used by both harm and non-harm paths.
+        /// Shared health deduction core used by both harm and direct health loss paths.
         /// </summary>
         private bool ApplyHealthLossCore(float amount, bool enterCombat, out float appliedDamage)
         {

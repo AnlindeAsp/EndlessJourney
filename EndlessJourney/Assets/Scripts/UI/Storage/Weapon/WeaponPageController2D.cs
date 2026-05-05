@@ -89,10 +89,7 @@ namespace EndlessJourney.UI
                 return;
             }
 
-            if (weaponEquipped.EquipWeapon(selectedWeaponId))
-            {
-                RefreshPage();
-            }
+            weaponEquipped.EquipWeapon(selectedWeaponId);
         }
 
         public void RefreshPage()

@@ -143,6 +143,7 @@ namespace EndlessJourney.UI
             SpellData2D previewSpell,
             int selectedPageIndex,
             bool previewingUnwrittenSpell,
+            bool canWriteSelectedSpell,
             Action<string> onSelectSpell,
             Action<int> onSelectPage,
             Action onWriteSelected,
@@ -154,7 +155,7 @@ namespace EndlessJourney.UI
             RenderSpellNameList(spells, onSelectSpell);
             RenderCurrentPage(selectedPageIndex, writtenSpell, previewSpell, previewingUnwrittenSpell);
             RenderSpellDetails(displayedSpell, previewingUnwrittenSpell);
-            BindActionButtons(displayedSpell, writtenSpell, pages, selectedPageIndex, onWriteSelected, onEraseCurrentPage);
+            BindActionButtons(displayedSpell, writtenSpell, pages, selectedPageIndex, canWriteSelectedSpell, onWriteSelected, onEraseCurrentPage);
         }
 
         private void RenderPageButtons(IReadOnlyList<SpellPageSlotViewData2D> pages, Action<int> onSelectPage)
@@ -289,13 +290,13 @@ namespace EndlessJourney.UI
             SpellData2D writtenSpell,
             IReadOnlyList<SpellPageSlotViewData2D> pages,
             int selectedPageIndex,
+            bool canWriteSelectedSpell,
             Action onWriteSelected,
             Action onEraseCurrentPage)
         {
             ClearActionButtons();
 
             bool pageAvailable = TryFindPage(pages, selectedPageIndex, out SpellPageSlotViewData2D page) && page.Available;
-            bool hasPreviewSpell = displayedSpell != null;
             bool hasWrittenSpell = writtenSpell != null;
             bool displayedSpellAlreadyWritten = displayedSpell != null
                 && writtenSpell != null
@@ -303,7 +304,7 @@ namespace EndlessJourney.UI
 
             if (writeButton != null)
             {
-                writeButton.interactable = pageAvailable && hasPreviewSpell && !displayedSpellAlreadyWritten;
+                writeButton.interactable = pageAvailable && canWriteSelectedSpell;
                 writeButton.onClick.AddListener(() => onWriteSelected?.Invoke());
             }
 

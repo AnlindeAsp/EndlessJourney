@@ -15,4 +15,4 @@ MonoBehaviour:
   useProjectile: 1
   projectilePrefab: {fileID: -5542741468855288465, guid: 4104b71f3a02d014cb301ebaf7f1aa50, type: 3}
   projectileDamage: 15
-  projectileLifeTime: 6
+  projectileLifeTime: 4

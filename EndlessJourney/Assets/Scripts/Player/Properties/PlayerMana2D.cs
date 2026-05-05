@@ -397,8 +397,8 @@ namespace EndlessJourney.Player
                 return;
             }
 
-            // Mana-out drain is non-harm health loss: it should not trigger hit invincibility.
-            health.ApplyNonHarmHealthLoss(manaOutDamagePerSecond * deltaTime);
+            // Mana-out drain is direct health loss: it should not trigger hit invincibility.
+            health.ReceiveDirectHealthLoss(manaOutDamagePerSecond * deltaTime);
         }
 
         /// <summary>

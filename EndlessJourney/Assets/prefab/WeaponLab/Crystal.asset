@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Crystal
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Combat.WeaponData
   weaponId: crystal
-  weaponName: Crystal_Melody
+  weaponName: CrystalLen
   weaponType: 0
   icon: {fileID: 0}
   detailImage: {fileID: 0}
   description: Lightest Weapon possible in this world
-  length: 1.5
+  length: 1.2
   sharpness: 1
   weight: 1

@@ -25,4 +25,4 @@ MonoBehaviour:
   effectData: {fileID: 11400000, guid: 5ce323e4c03351f48b0964e022e9ab7c, type: 2}
   castEffectPrefab: {fileID: 0}
   castEffectLifetime: 1.5
-  defaultCastOffset: {x: 0.8, y: -0.6, z: 0}
+  defaultCastOffset: {x: 0.8, y: -0.5, z: 0}

@@ -344,7 +344,7 @@ namespace EndlessJourney.Player
 
         private float TryApplyDamage(Collider2D col, GameObject targetRoot)
         {
-            ResolveReceivers(targetRoot, out IHittable hittable, out IDamageable2D damageable, out PlayerHealth2D health);
+            ResolveReceivers(targetRoot, out IHittable hittable, out IDamageable2D damageable);
             int hitRepeats = Mathf.Max(1, combatCore.AttackHitCount);
             float damagePerHit = Mathf.Max(0f, combatCore.AttackDamagePerHit);
             float totalApplied = 0f;
@@ -387,20 +387,7 @@ namespace EndlessJourney.Player
                 return totalApplied;
             }
 
-            if (health == null || health.gameObject == gameObject)
-            {
-                return 0f;
-            }
-
-            for (int i = 0; i < hitRepeats; i++)
-            {
-                if (health.TakeDamage(damagePerHit))
-                {
-                    totalApplied += damagePerHit;
-                }
-            }
-
-            return totalApplied;
+            return 0f;
         }
 
         private void TryApplyHitRecoilOnce()
@@ -442,12 +429,10 @@ namespace EndlessJourney.Player
         private static void ResolveReceivers(
             GameObject targetRoot,
             out IHittable hittable,
-            out IDamageable2D damageable,
-            out PlayerHealth2D health)
+            out IDamageable2D damageable)
         {
             hittable = targetRoot.GetComponent(typeof(IHittable)) as IHittable;
             damageable = targetRoot.GetComponent(typeof(IDamageable2D)) as IDamageable2D;
-            health = targetRoot.GetComponent<PlayerHealth2D>();
 
             // Compatibility fallback for targets whose combat receiver lives on parent.
             if (hittable == null)
@@ -458,11 +443,6 @@ namespace EndlessJourney.Player
             if (damageable == null)
             {
                 damageable = targetRoot.GetComponentInParent(typeof(IDamageable2D)) as IDamageable2D;
-            }
-
-            if (health == null)
-            {
-                health = targetRoot.GetComponentInParent<PlayerHealth2D>();
             }
         }
 

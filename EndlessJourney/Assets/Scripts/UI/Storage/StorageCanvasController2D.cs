@@ -91,15 +91,31 @@ namespace EndlessJourney.UI
 
         public void OpenPage(StoragePageType2D page)
         {
+            bool pageChanged = _currentPage != page;
+            bool targetPageAlreadyActive = IsPageRootActive(page);
             _currentPage = page;
             SetPageRootVisible(weaponPageRoot, page == StoragePageType2D.Weapon);
             SetPageRootVisible(spellPageRoot, page == StoragePageType2D.Spell);
 
-            if (page == StoragePageType2D.Weapon && weaponPageController != null)
+            if (!pageChanged && targetPageAlreadyActive)
+            {
+                RefreshCurrentPage();
+            }
+        }
+
+        private bool IsPageRootActive(StoragePageType2D page)
+        {
+            GameObject pageRoot = page == StoragePageType2D.Weapon ? weaponPageRoot : spellPageRoot;
+            return pageRoot != null && pageRoot.activeSelf;
+        }
+
+        private void RefreshCurrentPage()
+        {
+            if (_currentPage == StoragePageType2D.Weapon && weaponPageController != null)
             {
                 weaponPageController.RefreshPage();
             }
-            else if (page == StoragePageType2D.Spell && spellPageController != null)
+            else if (_currentPage == StoragePageType2D.Spell && spellPageController != null)
             {
                 spellPageController.RefreshPage();
             }

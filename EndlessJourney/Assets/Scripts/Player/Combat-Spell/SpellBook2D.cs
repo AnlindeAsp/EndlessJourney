@@ -14,9 +14,14 @@ namespace EndlessJourney.Player
         [Header("Slots")]
         [SerializeField, Range(1, 5)] private int slotCount = 5;
         [SerializeField, Range(1, 5)] private int availableSlotCount = 5;
-        [SerializeField] private bool allowDuplicateSpells = false;
         [SerializeField] private bool requireSpellUnlockedForEquip = true;
         [SerializeField] private string[] equippedSpellIds = new string[5];
+
+        [Header("Player Data")]
+        [SerializeField] private bool loadSlotCountFromPlayerDataOnAwake = true;
+        [SerializeField] private bool saveSlotCountToPlayerDataOnChange = true;
+        [SerializeField] private string playerDataFileName = "PlayerData.json";
+        [SerializeField] private bool prettyPrintPlayerDataJson = true;
 
         [Header("Record")]
         [SerializeField] private bool loadFromRecordOnAwake = true;
@@ -25,13 +30,17 @@ namespace EndlessJourney.Player
         [SerializeField] private bool prettyPrintRecordJson = true;
 
         private string _recordPath;
+        private string _playerDataPath;
 
         public event Action<int, string> OnSlotChanged;
+        public event Action<int> OnAvailableSlotCountChanged;
 
         private void Awake()
         {
             _recordPath = PlayerRecordStore2D.GetRecordPath(recordFileName);
+            _playerDataPath = PlayerDataStore2D.GetPlayerDataPath(playerDataFileName);
             EnsureSlotArraySize();
+            TryLoadSlotCountFromPlayerData();
             TryLoadEquippedStateFromRecord();
         }
 
@@ -75,13 +84,19 @@ namespace EndlessJourney.Player
                 return false;
             }
 
-            if (!allowDuplicateSpells && IsSpellEquipped(spellId))
+            int previousSlotIndex = FindEquippedSpellSlot(spellId, slotIndex);
+            if (previousSlotIndex >= 0)
             {
-                return false;
+                equippedSpellIds[previousSlotIndex] = string.Empty;
             }
 
             equippedSpellIds[slotIndex] = spellId;
             SaveEquippedStateToRecord();
+            if (previousSlotIndex >= 0)
+            {
+                OnSlotChanged?.Invoke(previousSlotIndex, string.Empty);
+            }
+
             OnSlotChanged?.Invoke(slotIndex, spellId);
             return true;
         }
@@ -109,6 +124,11 @@ namespace EndlessJourney.Player
 
         public void SetAvailableSlotCount(int newAvailableCount, bool clearNowUnavailableSlots = false)
         {
+            SetAvailableSlotCount(newAvailableCount, clearNowUnavailableSlots, true);
+        }
+
+        private void SetAvailableSlotCount(int newAvailableCount, bool clearNowUnavailableSlots, bool saveToPlayerData)
+        {
             int clamped = Mathf.Clamp(newAvailableCount, 1, slotCount);
             if (availableSlotCount == clamped)
             {
@@ -120,6 +140,13 @@ namespace EndlessJourney.Player
             {
                 ClearUnavailableSlots();
             }
+
+            if (saveToPlayerData)
+            {
+                SaveSlotCountToPlayerData();
+            }
+
+            OnAvailableSlotCountChanged?.Invoke(availableSlotCount);
         }
 
         public bool UnlockNextSlot()
@@ -162,6 +189,34 @@ namespace EndlessJourney.Player
             }
 
             return false;
+        }
+
+        public bool IsSpellEquippedInOtherSlot(string spellId, int slotIndex)
+        {
+            return FindEquippedSpellSlot(spellId, slotIndex) >= 0;
+        }
+
+        private int FindEquippedSpellSlot(string spellId, int ignoredSlotIndex)
+        {
+            if (string.IsNullOrWhiteSpace(spellId) || equippedSpellIds == null)
+            {
+                return -1;
+            }
+
+            for (int i = 0; i < equippedSpellIds.Length; i++)
+            {
+                if (i == ignoredSlotIndex)
+                {
+                    continue;
+                }
+
+                if (equippedSpellIds[i] == spellId)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
 
         private bool IsSlotIndexValid(int slotIndex)
@@ -218,6 +273,38 @@ namespace EndlessJourney.Player
             {
                 equippedSpellIds[i] = string.Empty;
             }
+        }
+
+        private void TryLoadSlotCountFromPlayerData()
+        {
+            if (!loadSlotCountFromPlayerDataOnAwake)
+            {
+                return;
+            }
+
+            if (!PlayerDataStore2D.TryLoad(_playerDataPath, out PlayerData2D playerData) || playerData == null)
+            {
+                return;
+            }
+
+            SetAvailableSlotCount(playerData.SpellSlotNum, false, false);
+        }
+
+        private void SaveSlotCountToPlayerData()
+        {
+            if (!saveSlotCountToPlayerDataOnChange)
+            {
+                return;
+            }
+
+            PlayerData2D playerData;
+            if (!PlayerDataStore2D.TryLoad(_playerDataPath, out playerData) || playerData == null)
+            {
+                playerData = new PlayerData2D();
+            }
+
+            playerData.SpellSlotNum = AvailableSlotCount;
+            PlayerDataStore2D.Save(_playerDataPath, playerData, prettyPrintPlayerDataJson);
         }
 
         private void SaveEquippedStateToRecord()

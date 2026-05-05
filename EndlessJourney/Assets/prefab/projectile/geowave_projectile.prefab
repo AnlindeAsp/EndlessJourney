@@ -182,7 +182,7 @@ MonoBehaviour:
   includeTriggerTargets: 1
   preventRepeatHitOnSameTarget: 1
   lifeTime: 6
-  destroyOnHit: 1
+  destroyOnHit: 0
   destroyOnTargetCollision: 0
-  maxSuccessfulHits: 1
+  maxSuccessfulHits: 25
   logHitDebug: 0

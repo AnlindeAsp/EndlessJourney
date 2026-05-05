@@ -78,7 +78,7 @@ namespace EndlessJourney.UI
 
                 if (WasWritePressedThisFrame())
                 {
-                    WriteSelectedSpellToCurrentPage();
+                    SubmitCurrentPageAction();
                     return;
                 }
             }
@@ -140,10 +140,18 @@ namespace EndlessJourney.UI
                 return;
             }
 
-            if (spellBook.EquipSpellToSlot(selectedPageIndex, selectedSpellId))
+            spellBook.EquipSpellToSlot(selectedPageIndex, selectedSpellId);
+        }
+
+        public void SubmitCurrentPageAction()
+        {
+            if (IsSelectedSpellWrittenOnCurrentPage())
             {
-                RefreshPage();
+                EraseCurrentPage();
+                return;
             }
+
+            WriteSelectedSpellToCurrentPage();
         }
 
         public void EraseCurrentPage()
@@ -154,7 +162,6 @@ namespace EndlessJourney.UI
             }
 
             spellBook.UnequipSlot(selectedPageIndex);
-            RefreshPage();
         }
 
         public void RefreshPage()
@@ -186,6 +193,7 @@ namespace EndlessJourney.UI
                     previewSpell,
                     selectedPageIndex,
                     previewingUnwrittenSpell,
+                    CanWriteSelectedSpellToCurrentPage(),
                     SelectSpell,
                     SelectPage,
                     WriteSelectedSpellToCurrentPage,
@@ -396,6 +404,39 @@ namespace EndlessJourney.UI
             return !string.Equals(writtenSpell.SpellId, previewSpell.SpellId, StringComparison.Ordinal);
         }
 
+        private bool IsSelectedSpellWrittenOnCurrentPage()
+        {
+            if (string.IsNullOrWhiteSpace(selectedSpellId))
+            {
+                return false;
+            }
+
+            string writtenSpellId = GetWrittenSpellIdOnCurrentPage();
+            return string.Equals(writtenSpellId, selectedSpellId, StringComparison.Ordinal);
+        }
+
+        private bool CanWriteSelectedSpellToCurrentPage()
+        {
+            if (spellBook == null || string.IsNullOrWhiteSpace(selectedSpellId) || !spellBook.IsSlotAvailable(selectedPageIndex))
+            {
+                return false;
+            }
+
+            SpellData2D selectedSpell = GetSelectedSpell();
+            if (selectedSpell == null)
+            {
+                return false;
+            }
+
+            string writtenSpellId = GetWrittenSpellIdOnCurrentPage();
+            if (string.Equals(writtenSpellId, selectedSpellId, StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            return spellLibrary == null || spellLibrary.IsUnlocked(selectedSpellId);
+        }
+
         private int FindSelectableSpellIndex(string spellId)
         {
             if (string.IsNullOrWhiteSpace(spellId))
@@ -425,6 +466,7 @@ namespace EndlessJourney.UI
             if (spellBook != null)
             {
                 spellBook.OnSlotChanged += HandleSlotChanged;
+                spellBook.OnAvailableSlotCountChanged += HandleAvailableSlotCountChanged;
             }
         }
 
@@ -438,6 +480,7 @@ namespace EndlessJourney.UI
             if (spellBook != null)
             {
                 spellBook.OnSlotChanged -= HandleSlotChanged;
+                spellBook.OnAvailableSlotCountChanged -= HandleAvailableSlotCountChanged;
             }
         }
 
@@ -447,6 +490,11 @@ namespace EndlessJourney.UI
         }
 
         private void HandleSlotChanged(int pageIndex, string spellId)
+        {
+            RefreshPage();
+        }
+
+        private void HandleAvailableSlotCountChanged(int availableSlotCount)
         {
             RefreshPage();
         }
