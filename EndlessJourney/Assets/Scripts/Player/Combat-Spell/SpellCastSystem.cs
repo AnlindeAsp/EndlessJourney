@@ -182,6 +182,11 @@ namespace EndlessJourney.Player
             return true;
         }
 
+        public Vector3 GetSpellCastPosition(SpellData2D spellData)
+        {
+            return GetCastPosition(spellData);
+        }
+
         public float GetCooldownRemaining(string spellId)
         {
             if (string.IsNullOrWhiteSpace(spellId))
@@ -574,14 +579,11 @@ namespace EndlessJourney.Player
 
         private Vector3 GetCastPosition(SpellData2D spellData)
         {
-            if (castPoint != null)
-            {
-                return castPoint.position;
-            }
-
+            Vector3 basePosition = castPoint != null ? castPoint.position : transform.position;
             Vector3 offset = spellData != null ? spellData.DefaultCastOffset : Vector3.zero;
-            Vector3 directionalOffset = new Vector3(offset.x * core.FacingDirection, offset.y, offset.z);
-            return transform.position + directionalOffset;
+            int facingDirection = core != null ? core.FacingDirection : 1;
+            Vector3 directionalOffset = new Vector3(offset.x * facingDirection, offset.y, offset.z);
+            return basePosition + directionalOffset;
         }
 
         public void NotifyBuffEffectRequested(string buffId, float duration, SpellData2D sourceSpell)

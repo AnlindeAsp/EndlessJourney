@@ -331,11 +331,11 @@ MonoBehaviour:
   damageToHitStun: 0.01
   maxHitStunDuration: 0.28
   stunHorizontalDamping: 18
-  baseKnockbackX: 5
-  damageToKnockbackXRatio: 0.05
+  baseKnockbackX: 4
+  damageToKnockbackXRatio: 0.02
   enableVerticalKnockback: 1
-  baseKnockbackY: 5
-  damageToKnockbackYRatio: 0.05
+  baseKnockbackY: 4
+  damageToKnockbackYRatio: 0.02
   knockResistance: 0
   logHitReaction: 0
 --- !u!114 &3406843231726277600

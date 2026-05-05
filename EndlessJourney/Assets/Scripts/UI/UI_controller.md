@@ -91,6 +91,7 @@ Responsibilities:
 - Choose the default storage page.
 - Show one storage page root at a time.
 - Call the active page controller to refresh.
+- Let `A/D` or left/right arrows switch storage pages.
 
 Current pages:
 
@@ -101,7 +102,7 @@ It should not directly edit weapon or spell data.
 
 ## WeaponPageController2D
 
-Location: `Assets/Scripts/UI/Storage/WeaponPageController2D.cs`
+Location: `Assets/Scripts/UI/Storage/Weapon/WeaponPageController2D.cs`
 
 Handles player operations on the weapon page.
 
@@ -117,7 +118,7 @@ It should not directly create UI rows or write visual text.
 
 ## WeaponPageDisplayer2D
 
-Location: `Assets/Scripts/UI/Storage/WeaponPageDisplayer2D.cs`
+Location: `Assets/Scripts/UI/Storage/Weapon/WeaponPageDisplayer2D.cs`
 
 Renders the weapon page.
 
@@ -132,7 +133,7 @@ It should not directly save records or change equipped weapon state.
 
 ## WeaponPageRow2D
 
-Location: `Assets/Scripts/UI/Storage/WeaponPageRow2D.cs`
+Location: `Assets/Scripts/UI/Storage/Weapon/WeaponPageRow2D.cs`
 
 Represents one weapon row in the weapon list.
 
@@ -146,7 +147,7 @@ It should not know about `WeaponLibrary2D` or `WeaponEquipped2D`.
 
 ## SpellPageController2D
 
-Location: `Assets/Scripts/UI/Storage/SpellPageController2D.cs`
+Location: `Assets/Scripts/UI/Storage/Spell/SpellPageController2D.cs`
 
 Handles player operations on the spell book page.
 
@@ -156,7 +157,7 @@ Responsibilities:
 - Read written page state from `SpellBook2D`.
 - Treat spell slots as spell book pages.
 - Let number keys `1-5` turn to available pages.
-- Let mouse wheel or `A/D` move through the spell name list.
+- Let mouse wheel or `W/S` move through the spell name list.
 - Write the selected preview spell to the current page.
 - Erase the current page, allowing spell pages to stay blank.
 - Ask `SpellPageDisplayer2D` to render updated UI.
@@ -165,7 +166,7 @@ It should not directly create UI rows or edit display text.
 
 ## SpellPageDisplayer2D
 
-Location: `Assets/Scripts/UI/Storage/SpellPageDisplayer2D.cs`
+Location: `Assets/Scripts/UI/Storage/Spell/SpellPageDisplayer2D.cs`
 
 Renders the spell book page.
 
@@ -182,7 +183,7 @@ It should not directly save records or change `SpellBook2D`.
 
 ## SpellPageSpellNameRow2D
 
-Location: `Assets/Scripts/UI/Storage/SpellPageSpellNameRow2D.cs`
+Location: `Assets/Scripts/UI/Storage/Spell/SpellPageSpellNameRow2D.cs`
 
 Represents one selectable spell name in the spell list.
 
@@ -196,7 +197,7 @@ It should not know about `SpellLibrary2D` or `SpellBook2D`.
 
 ## SpellPageSlotButton2D
 
-Location: `Assets/Scripts/UI/Storage/SpellPageSlotButton2D.cs`
+Location: `Assets/Scripts/UI/Storage/Spell/SpellPageSlotButton2D.cs`
 
 Represents one spell book page button. Each page maps to one `SpellBook2D` slot.
 

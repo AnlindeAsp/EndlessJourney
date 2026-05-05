@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844933df530495e4b972097d003564ac, type: 3}
+  m_Name: pyroblast_effect
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.DamageSpellEffectData2D
+  useProjectile: 1
+  projectilePrefab: {fileID: 7605414517248931756, guid: cd0be9196988868469e3d616f32a3f9e, type: 3}
+  projectileDamage: 60
+  projectileLifeTime: 5

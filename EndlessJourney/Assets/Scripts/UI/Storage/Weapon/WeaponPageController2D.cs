@@ -57,6 +57,12 @@ namespace EndlessJourney.UI
             if (WasSelectNextPressedThisFrame())
             {
                 SelectNextWeapon();
+                return;
+            }
+
+            if (WasEquipPressedThisFrame())
+            {
+                EquipSelectedWeapon();
             }
         }
 
@@ -310,6 +316,23 @@ namespace EndlessJourney.UI
 
 #if ENABLE_LEGACY_INPUT_MANAGER
             return Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow);
+#else
+            return false;
+#endif
+        }
+
+        private bool WasEquipPressedThisFrame()
+        {
+#if ENABLE_INPUT_SYSTEM
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard != null && keyboard.spaceKey.wasPressedThisFrame)
+            {
+                return true;
+            }
+#endif
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+            return Input.GetKeyDown(KeyCode.Space);
 #else
             return false;
 #endif

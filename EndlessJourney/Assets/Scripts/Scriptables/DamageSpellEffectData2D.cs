@@ -21,10 +21,15 @@ namespace EndlessJourney.Player
                 return false;
             }
 
+            Vector3 spawnPosition = context.CastSystem != null
+                ? context.CastSystem.GetSpellCastPosition(context.SpellData)
+                : context.Caster.transform.position;
+
             return context.ProjectileLauncher.TryLaunchByFacing(
                 projectilePrefab,
                 projectileDamage,
-                projectileLifeTime);
+                projectileLifeTime,
+                spawnPosition);
         }
     }
 }

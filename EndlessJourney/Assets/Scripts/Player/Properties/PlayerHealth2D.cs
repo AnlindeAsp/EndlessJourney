@@ -20,6 +20,11 @@ namespace EndlessJourney.Player
         [SerializeField, Min(0f)] private float startingHealth = 100f;
         [SerializeField] private bool allowHealingWhenDead = false;
 
+        [Header("Armor")]
+        [Tooltip("Optional armor module. Assign manually when this health should receive armor reduction.")]
+        [SerializeField] private PlayerArmor2D armorSource;
+        [SerializeField] private bool applyArmorToHarmDamage = true;
+
         [Header("Damage Invincibility")]
         [SerializeField] private bool enableHitInvincibility = true;
         [SerializeField, Min(0f)] private float invincibilityDuration = 0.45f;
@@ -74,6 +79,7 @@ namespace EndlessJourney.Player
         public event Action<float, float> OnHealthChanged;
         public event Action<float> OnDamaged;
         public event Action<float, GameObject> OnHarmDamaged;
+        public event Action<float, float, float, GameObject> OnHarmDamageResolved;
         public event Action<float> OnNonHarmHealthLost;
         public event Action<float> OnHealed;
         public event Action OnDied;
@@ -119,7 +125,19 @@ namespace EndlessJourney.Player
                 return false;
             }
 
-            bool applied = ApplyHealthLossCore(amount, autoEnterCombatOnDamage, out _);
+            float finalDamage = ResolveHarmDamageAfterArmor(amount);
+            if (finalDamage <= 0f)
+            {
+                if (autoEnterCombatOnDamage)
+                {
+                    EnterCombat();
+                }
+
+                StartInvincibility();
+                return true;
+            }
+
+            bool applied = ApplyHealthLossCore(finalDamage, autoEnterCombatOnDamage, out _);
             if (!applied)
             {
                 return false;
@@ -174,6 +192,7 @@ namespace EndlessJourney.Player
 
             LastHarmSource = source;
             OnHarmDamaged?.Invoke(amount, source);
+            OnHarmDamageResolved?.Invoke(amount, GetLastResolvedHarmDamage(amount), GetLastResolvedArmorAbsorption(amount), source);
 
             return true;
         }
@@ -419,6 +438,41 @@ namespace EndlessJourney.Player
 
             _isDead = true;
             OnDied?.Invoke();
+        }
+
+        private float _lastIncomingHarmDamage;
+        private float _lastFinalHarmDamage;
+        private float _lastArmorAbsorbedDamage;
+
+        private float ResolveHarmDamageAfterArmor(float incomingDamage)
+        {
+            _lastIncomingHarmDamage = incomingDamage;
+            _lastFinalHarmDamage = incomingDamage;
+            _lastArmorAbsorbedDamage = 0f;
+
+            if (!applyArmorToHarmDamage || armorSource == null)
+            {
+                return incomingDamage;
+            }
+
+            float finalDamage = armorSource.ApplyToIncomingHarm(incomingDamage);
+            _lastFinalHarmDamage = Mathf.Max(0f, finalDamage);
+            _lastArmorAbsorbedDamage = Mathf.Max(0f, incomingDamage - _lastFinalHarmDamage);
+            return _lastFinalHarmDamage;
+        }
+
+        private float GetLastResolvedHarmDamage(float fallbackIncomingDamage)
+        {
+            return Mathf.Approximately(_lastIncomingHarmDamage, fallbackIncomingDamage)
+                ? _lastFinalHarmDamage
+                : fallbackIncomingDamage;
+        }
+
+        private float GetLastResolvedArmorAbsorption(float fallbackIncomingDamage)
+        {
+            return Mathf.Approximately(_lastIncomingHarmDamage, fallbackIncomingDamage)
+                ? _lastArmorAbsorbedDamage
+                : 0f;
         }
 
         /// <summary>

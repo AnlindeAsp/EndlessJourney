@@ -70,6 +70,8 @@ namespace EndlessJourney.UI
         [SerializeField] private SpellPageSpellNameRow2D spellNameRowPrefab;
         [FormerlySerializedAs("visibleSideCardCount")]
         [SerializeField, Min(0)] private int visibleSideNameCount = 4;
+        [SerializeField] private bool keepSelectedNameRowCentered = true;
+        [SerializeField] private bool resetNameParentAnchoredPosition = true;
         [SerializeField] private GameObject emptySpellStateRoot;
 
         [Header("Current Page")]
@@ -175,6 +177,7 @@ namespace EndlessJourney.UI
         private void RenderSpellNameList(IReadOnlyList<SpellPageSpellViewData2D> spells, Action<string> onSelectSpell)
         {
             ClearNameRows();
+            ResetNameParentPositionIfNeeded();
 
             bool hasSpells = spells != null && spells.Count > 0;
             if (emptySpellStateRoot != null)
@@ -184,6 +187,12 @@ namespace EndlessJourney.UI
 
             if (!hasSpells || spellNameParent == null || spellNameRowPrefab == null)
             {
+                return;
+            }
+
+            if (keepSelectedNameRowCentered)
+            {
+                RenderCenteredSpellNameWindow(spells, onSelectSpell);
                 return;
             }
 
@@ -204,6 +213,38 @@ namespace EndlessJourney.UI
                 SpellPageSpellNameRow2D row = Instantiate(spellNameRowPrefab, spellNameParent);
                 row.Bind(visibleSpells[i], onSelectSpell);
                 _spawnedNameRows.Add(row);
+            }
+        }
+
+        private void RenderCenteredSpellNameWindow(IReadOnlyList<SpellPageSpellViewData2D> spells, Action<string> onSelectSpell)
+        {
+            int sideCount = Mathf.Max(0, visibleSideNameCount);
+            for (int offset = -sideCount; offset <= sideCount; offset++)
+            {
+                SpellPageSpellNameRow2D row = Instantiate(spellNameRowPrefab, spellNameParent);
+                if (TryFindSpellByOffset(spells, offset, out SpellPageSpellViewData2D item))
+                {
+                    row.Bind(item, onSelectSpell);
+                }
+                else
+                {
+                    row.BindSpacer();
+                }
+
+                _spawnedNameRows.Add(row);
+            }
+        }
+
+        private void ResetNameParentPositionIfNeeded()
+        {
+            if (!resetNameParentAnchoredPosition || spellNameParent == null)
+            {
+                return;
+            }
+
+            if (spellNameParent is RectTransform rectTransform)
+            {
+                rectTransform.anchoredPosition = Vector2.zero;
             }
         }
 
@@ -333,6 +374,25 @@ namespace EndlessJourney.UI
             }
 
             page = default;
+            return false;
+        }
+
+        private static bool TryFindSpellByOffset(IReadOnlyList<SpellPageSpellViewData2D> spells, int offset, out SpellPageSpellViewData2D spell)
+        {
+            if (spells != null)
+            {
+                for (int i = 0; i < spells.Count; i++)
+                {
+                    SpellPageSpellViewData2D candidate = spells[i];
+                    if (candidate.SignedOffsetFromSelected == offset)
+                    {
+                        spell = candidate;
+                        return true;
+                    }
+                }
+            }
+
+            spell = default;
             return false;
         }
 

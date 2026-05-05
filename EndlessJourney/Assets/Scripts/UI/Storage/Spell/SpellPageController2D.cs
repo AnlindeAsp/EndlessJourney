@@ -505,14 +505,14 @@ namespace EndlessJourney.UI
         {
 #if ENABLE_INPUT_SYSTEM
             Keyboard keyboard = Keyboard.current;
-            if (keyboard != null && keyboard.aKey.wasPressedThisFrame)
+            if (keyboard != null && (keyboard.wKey.wasPressedThisFrame || keyboard.upArrowKey.wasPressedThisFrame))
             {
                 return true;
             }
 #endif
 
 #if ENABLE_LEGACY_INPUT_MANAGER
-            return Input.GetKeyDown(KeyCode.A);
+            return Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow);
 #else
             return false;
 #endif
@@ -522,14 +522,14 @@ namespace EndlessJourney.UI
         {
 #if ENABLE_INPUT_SYSTEM
             Keyboard keyboard = Keyboard.current;
-            if (keyboard != null && keyboard.dKey.wasPressedThisFrame)
+            if (keyboard != null && (keyboard.sKey.wasPressedThisFrame || keyboard.downArrowKey.wasPressedThisFrame))
             {
                 return true;
             }
 #endif
 
 #if ENABLE_LEGACY_INPUT_MANAGER
-            return Input.GetKeyDown(KeyCode.D);
+            return Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow);
 #else
             return false;
 #endif

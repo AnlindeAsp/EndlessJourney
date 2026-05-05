@@ -50,9 +50,29 @@ namespace EndlessJourney.Player
         }
 
         /// <summary>
+        /// Launches projectile using owner facing direction from an explicit world spawn position.
+        /// </summary>
+        public bool TryLaunchByFacing(PlayerProjectile2D projectilePrefab, float projectileDamage, float projectileLifeTime, Vector3 spawnPosition)
+        {
+            int facing = ownerCore != null ? ownerCore.FacingDirection : 1;
+            Vector2 direction = facing >= 0 ? Vector2.right : Vector2.left;
+            return TryLaunch(projectilePrefab, direction, projectileDamage, projectileLifeTime, spawnPosition);
+        }
+
+        /// <summary>
         /// Launches projectile in provided normalized direction.
         /// </summary>
         public bool TryLaunch(PlayerProjectile2D projectilePrefab, Vector2 direction, float projectileDamage, float projectileLifeTime)
+        {
+            Vector2 launchDirection = direction.sqrMagnitude <= 0.0001f ? Vector2.right : direction.normalized;
+            Vector3 spawnPosition = ResolveSpawnPosition(launchDirection);
+            return TryLaunch(projectilePrefab, launchDirection, projectileDamage, projectileLifeTime, spawnPosition);
+        }
+
+        /// <summary>
+        /// Launches projectile in provided normalized direction from an explicit world spawn position.
+        /// </summary>
+        public bool TryLaunch(PlayerProjectile2D projectilePrefab, Vector2 direction, float projectileDamage, float projectileLifeTime, Vector3 spawnPosition)
         {
             if (projectilePrefab == null)
             {
@@ -60,7 +80,6 @@ namespace EndlessJourney.Player
             }
 
             Vector2 launchDirection = direction.sqrMagnitude <= 0.0001f ? Vector2.right : direction.normalized;
-            Vector3 spawnPosition = ResolveSpawnPosition(launchDirection);
             Quaternion rotation = Quaternion.FromToRotation(Vector3.right, launchDirection);
 
             PlayerProjectile2D projectile = Instantiate(projectilePrefab, spawnPosition, rotation);

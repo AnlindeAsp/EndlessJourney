@@ -63,6 +63,27 @@ namespace EndlessJourney.UI
             }
         }
 
+        public void BindSpacer()
+        {
+            _spellId = string.Empty;
+            SetText(nameText, string.Empty);
+            SetIndicator(selectedIndicator, false);
+            SetIndicator(writtenOnCurrentPageIndicator, false);
+            SetIndicator(writtenAnywhereIndicator, false);
+            SetIndicator(lockedIndicator, false);
+
+            if (rowCanvasGroup != null)
+            {
+                rowCanvasGroup.alpha = 0f;
+            }
+
+            if (selectButton != null)
+            {
+                selectButton.onClick.RemoveAllListeners();
+                selectButton.interactable = false;
+            }
+        }
+
         private void ApplyVisualState(SpellPageSpellViewData2D item)
         {
             int distance = Mathf.Abs(item.SignedOffsetFromSelected);

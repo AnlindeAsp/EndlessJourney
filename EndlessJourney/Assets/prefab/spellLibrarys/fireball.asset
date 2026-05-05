@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: fireball
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.SpellData2D
   spellId: fireball
-  displayName: fireball
+  displayName: Fireball
   kind: 0
   description: 'The initial of human
 
