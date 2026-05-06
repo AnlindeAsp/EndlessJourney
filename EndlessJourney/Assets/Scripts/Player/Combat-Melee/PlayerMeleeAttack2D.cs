@@ -90,6 +90,9 @@ namespace EndlessJourney.Player
         /// <summary>Raised when one melee attack action starts.</summary>
         public event Action OnAttackStarted;
 
+        /// <summary>Raised when one melee attack action starts, with the resolved attack direction and facing snapshot.</summary>
+        public event Action<AttackDirection2D, int> OnAttackStartedWithDirection;
+
         /// <summary>Raised when a target takes damage from this melee attack.</summary>
         public event Action<GameObject, float> OnTargetHit;
         private Quaternion _hitboxBaseLocalRotation;
@@ -220,6 +223,7 @@ namespace EndlessJourney.Player
             StartAttackWindow();
             _cooldownTimer = ResolveAttackInterval();
             OnAttackStarted?.Invoke();
+            OnAttackStartedWithDirection?.Invoke(_attackDirection, _attackFacingDirection);
         }
 
         private void StartAttackWindow()

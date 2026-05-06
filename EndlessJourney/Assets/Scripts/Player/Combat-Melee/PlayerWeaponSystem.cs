@@ -129,7 +129,7 @@ namespace EndlessJourney.Player
                     hitCount = 2;
                     break;
                 case WeaponType.Heavy:
-                    damagePerHit = (strength + equippedWeapon.Weight) * 1.5f;
+                    damagePerHit = (strength + equippedWeapon.Weight) * equippedWeapon.Sharpness;
                     hitCount = 1;
                     break;
                 default:

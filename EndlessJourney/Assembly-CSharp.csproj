@@ -92,6 +92,7 @@
     <Compile Include="Assets\Scripts\System\KeybindSettingsController2D.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IInteractable.cs" />
     <Compile Include="Assets\Scripts\Player\Libraries\PlayerRecordStore2D.cs" />
+    <Compile Include="Assets\Scripts\Player\Combat-Melee\PlayerMeleeAttackAnimator2D.cs" />
     <Compile Include="Assets\Scripts\Player\Interaction\PlayerInteractor2D.cs" />
     <Compile Include="Assets\Scripts\Interfaces\ISpellBuffReceiver2D.cs" />
     <Compile Include="Assets\Scripts\Interaction\ReadInteractable2D.cs" />
