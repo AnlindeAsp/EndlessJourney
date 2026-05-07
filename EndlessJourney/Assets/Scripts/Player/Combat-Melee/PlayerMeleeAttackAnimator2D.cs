@@ -61,6 +61,7 @@ namespace EndlessJourney.Player
         private Vector3 _baseMirrorPivotScale = Vector3.one;
         private Vector3 _baseMirrorTargetLocalPosition;
         private Vector3 _baseMirrorTargetWorldPosition;
+        private bool _warnedUnsafePivotMirror;
 
         private void Awake()
         {
@@ -167,6 +168,17 @@ namespace EndlessJourney.Player
         private void ApplyPivotMirror(int facingDirection)
         {
             Transform targetPivot = mirrorPivotTransform != null ? mirrorPivotTransform : transform;
+            if (IsUnsafePivotMirrorTarget(targetPivot))
+            {
+                if (!_warnedUnsafePivotMirror)
+                {
+                    Debug.LogWarning("PlayerMeleeAttackAnimator2D PivotScaleX mirror is targeting the player/root hierarchy. Use a visual-only pivot child or PositionAroundPivotX to avoid changing melee hitbox space.", this);
+                    _warnedUnsafePivotMirror = true;
+                }
+
+                return;
+            }
+
             bool facingRight = facingDirection >= 0;
             bool shouldMirror = sourceArtFacesLeft ? facingRight : !facingRight;
             float sign = shouldMirror ? -1f : 1f;
@@ -174,6 +186,17 @@ namespace EndlessJourney.Player
             Vector3 scale = _baseMirrorPivotScale;
             scale.x = Mathf.Abs(scale.x) * sign;
             targetPivot.localScale = scale;
+        }
+
+        private bool IsUnsafePivotMirrorTarget(Transform targetPivot)
+        {
+            if (targetPivot == null || meleeAttack == null)
+            {
+                return false;
+            }
+
+            Transform meleeRoot = meleeAttack.transform;
+            return targetPivot == meleeRoot || meleeRoot.IsChildOf(targetPivot);
         }
 
         private void ApplyPositionMirror(int facingDirection)

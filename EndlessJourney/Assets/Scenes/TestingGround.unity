@@ -4168,6 +4168,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 731875260}
   m_CullTransparentMesh: 1
+--- !u!1 &734883623
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 734883624}
+  m_Layer: 8
+  m_Name: animRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &734883624
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 734883623}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1909001548}
+  m_Father: {fileID: 496806208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &755043420
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10617,12 +10649,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1909001547}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.052335896, w: 0.9986295}
-  m_LocalPosition: {x: -1.379, y: 0.398, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.052335896, w: 0.9986295}
+  m_LocalPosition: {x: -1.3789997, y: 0.398, z: 0}
+  m_LocalScale: {x: 0.30000004, y: 0.30000004, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 496806208}
+  m_Father: {fileID: 734883624}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 6}
 --- !u!212 &1909001549
 SpriteRenderer:
@@ -10731,9 +10763,9 @@ MonoBehaviour:
   mirrorWithAttackFacing: 1
   mirrorMode: 1
   mirroredSpriteRenderer: {fileID: 0}
-  mirrorPivotTransform: {fileID: 496806208}
+  mirrorPivotTransform: {fileID: 734883624}
   sourceArtFacesLeft: 1
-  mirrorVerticalAttacks: 0
+  mirrorVerticalAttacks: 1
   scaleWithAttackRange: 1
   scaledTransform: {fileID: 1909001548}
   referenceAttackRange: 1
@@ -12873,7 +12905,7 @@ PrefabInstance:
       addedObject: {fileID: 1885931442}
     - targetCorrespondingSourceObject: {fileID: 8482411088612786084, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1909001548}
+      addedObject: {fileID: 734883624}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5291405591989393297, guid: 76ec182b9c4667d48aac212deda6e9e4, type: 3}
       insertIndex: -1
