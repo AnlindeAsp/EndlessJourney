@@ -41,6 +41,21 @@ namespace EndlessJourney.Player
         [SerializeField] private bool sourceArtFacesLeft = true;
         [SerializeField] private bool mirrorVerticalAttacks = true;
 
+        [Header("Forward Attack Transform Change")]
+        [SerializeField] private bool applyForwardAttackTransformChange;
+        [SerializeField] private Transform forwardAttackTransform;
+        [SerializeField] private Vector2 forwardAttackPositionOffset;
+        [SerializeField] private float forwardAttackRotationZ;
+        [SerializeField] private Vector2 forwardAttackScale = Vector2.one;
+
+        [Header("Up Attack Transform Change")]
+        [SerializeField] private bool applyUpAttackTransformChange;
+        [SerializeField] private Transform upAttackTransform;
+        [SerializeField] private Vector2 upAttackPositionOffset;
+        [SerializeField] private float upAttackRotationZ;
+        [SerializeField] private Vector2 upAttackScale = Vector2.one;
+        [SerializeField] private bool mirrorUpDownAttackOverYAxis = true;
+
         [Header("Range Scaling")]
         [SerializeField] private bool scaleWithAttackRange;
         [SerializeField] private Transform scaledTransform;
@@ -65,6 +80,8 @@ namespace EndlessJourney.Player
         private Vector3 _baseMirrorPivotScale = Vector3.one;
         private Vector3 _baseMirrorTargetLocalPosition;
         private Vector3 _baseMirrorTargetWorldPosition;
+        private Vector3 _attackBaseLocalPosition;
+        private Quaternion _attackBaseLocalRotation = Quaternion.identity;
         private bool _warnedUnsafePivotMirror;
 
         private void Awake()
@@ -72,6 +89,7 @@ namespace EndlessJourney.Player
             RebuildHashes();
             CaptureMirrorPivotScale();
             CaptureMirrorTargetPosition();
+            CaptureAttackBaseTransform();
             CaptureBaseScaleIfNeeded();
         }
 
@@ -116,7 +134,8 @@ namespace EndlessJourney.Player
             }
 
             ApplyFacingMirror(attackDirection, facingDirection);
-            ApplyAttackScale(attackDirection);
+            ApplyAttackTransformChange(attackDirection);
+            ApplyAttackScale(attackDirection, facingDirection);
 
             if (resetAttackTriggersBeforePlay)
             {
@@ -151,6 +170,55 @@ namespace EndlessJourney.Player
             }
 
             ApplySpriteMirror(facingDirection);
+        }
+
+        private void ApplyAttackTransformChange(AttackDirection2D attackDirection)
+        {
+            if (!HasAnyAttackTransformChange())
+            {
+                return;
+            }
+
+            Transform targetTransform = ResolveAttackTransformTarget();
+            if (targetTransform == null)
+            {
+                return;
+            }
+
+            targetTransform.localPosition = _attackBaseLocalPosition;
+            targetTransform.localRotation = _attackBaseLocalRotation;
+            switch (attackDirection)
+            {
+                case AttackDirection2D.Up:
+                    ApplyTransformOffset(targetTransform, applyUpAttackTransformChange, upAttackPositionOffset, upAttackRotationZ);
+                    break;
+                case AttackDirection2D.Down:
+                    ApplyMirroredUpAttackTransformOverXAxis(targetTransform);
+                    break;
+                default:
+                    ApplyTransformOffset(targetTransform, applyForwardAttackTransformChange, forwardAttackPositionOffset, forwardAttackRotationZ);
+                    break;
+            }
+        }
+
+        private void ApplyTransformOffset(Transform targetTransform, bool shouldApply, Vector2 positionOffset, float rotationZ)
+        {
+            if (!shouldApply || targetTransform == null)
+            {
+                return;
+            }
+
+            targetTransform.localPosition = _attackBaseLocalPosition + new Vector3(positionOffset.x, positionOffset.y, 0f);
+            targetTransform.localRotation = _attackBaseLocalRotation * Quaternion.Euler(0f, 0f, rotationZ);
+        }
+
+        private void ApplyMirroredUpAttackTransformOverXAxis(Transform targetTransform)
+        {
+            ApplyTransformOffset(
+                targetTransform,
+                applyUpAttackTransformChange,
+                MirrorPositionOffsetOverXAxis(upAttackPositionOffset),
+                -upAttackRotationZ);
         }
 
         private void ApplySpriteMirror(int facingDirection)
@@ -238,14 +306,19 @@ namespace EndlessJourney.Player
             return sourceArtFacesLeft ? facingRight : !facingRight;
         }
 
-        private void ApplyAttackScale(AttackDirection2D attackDirection)
+        private void ApplyAttackScale(AttackDirection2D attackDirection, int facingDirection)
         {
-            if (!scaleWithAttackRange && !scaleWithAttackDirection)
+            if (!scaleWithAttackRange && !scaleWithAttackDirection && !HasAnyAttackTransformChange() && !mirrorUpDownAttackOverYAxis)
             {
                 return;
             }
 
-            Transform targetTransform = scaledTransform != null ? scaledTransform : transform;
+            Transform targetTransform = ResolveAttackTransformTarget();
+            if (targetTransform == null)
+            {
+                return;
+            }
+
             float rangeMultiplier = 1f;
             if (scaleWithAttackRange && combatCore != null)
             {
@@ -254,11 +327,35 @@ namespace EndlessJourney.Player
             }
 
             Vector3 directionMultiplier = scaleWithAttackDirection ? GetDirectionScaleMultiplier(attackDirection) : Vector3.one;
-            float currentXSign = targetTransform.localScale.x < 0f ? -1f : 1f;
+            Vector3 transformMultiplier = GetAttackTransformScaleMultiplier(attackDirection);
+            float xSign = GetBaseScaleXSign(targetTransform, attackDirection, facingDirection);
             targetTransform.localScale = new Vector3(
-                Mathf.Abs(baseLocalScale.x) * rangeMultiplier * directionMultiplier.x * currentXSign,
-                baseLocalScale.y * rangeMultiplier * directionMultiplier.y,
-                baseLocalScale.z * rangeMultiplier * directionMultiplier.z);
+                Mathf.Abs(baseLocalScale.x) * rangeMultiplier * directionMultiplier.x * transformMultiplier.x * xSign,
+                baseLocalScale.y * rangeMultiplier * directionMultiplier.y * transformMultiplier.y,
+                baseLocalScale.z * rangeMultiplier * directionMultiplier.z * transformMultiplier.z);
+        }
+
+        private float GetBaseScaleXSign(Transform targetTransform, AttackDirection2D attackDirection, int facingDirection)
+        {
+            float sign = baseLocalScale.x < 0f ? -1f : 1f;
+
+            if (!mirrorWithAttackFacing || mirrorMode != AttackAnimationMirrorMode2D.PivotScaleX)
+            {
+                return sign;
+            }
+
+            if (!mirrorVerticalAttacks && attackDirection != AttackDirection2D.Forward)
+            {
+                return sign;
+            }
+
+            Transform mirrorTarget = mirrorPivotTransform != null ? mirrorPivotTransform : transform;
+            if (targetTransform != mirrorTarget)
+            {
+                return sign;
+            }
+
+            return ShouldMirrorForFacing(facingDirection) ? -sign : sign;
         }
 
         private Vector3 GetDirectionScaleMultiplier(AttackDirection2D attackDirection)
@@ -272,6 +369,59 @@ namespace EndlessJourney.Player
                 default:
                     return forwardScaleMultiplier;
             }
+        }
+
+        private Vector3 GetAttackTransformScaleMultiplier(AttackDirection2D attackDirection)
+        {
+            Vector3 multiplier;
+            switch (attackDirection)
+            {
+                case AttackDirection2D.Up:
+                    multiplier = applyUpAttackTransformChange
+                        ? new Vector3(upAttackScale.x, upAttackScale.y, 1f)
+                        : Vector3.one;
+                    return ApplyUpDownYAxisMirrorIfNeeded(attackDirection, multiplier);
+                case AttackDirection2D.Down:
+                    multiplier = GetUpAttackScaleMirroredOverXAxis();
+                    return ApplyUpDownYAxisMirrorIfNeeded(attackDirection, multiplier);
+                default:
+                    return applyForwardAttackTransformChange
+                        ? new Vector3(forwardAttackScale.x, forwardAttackScale.y, 1f)
+                        : Vector3.one;
+            }
+        }
+
+        private bool HasAnyAttackTransformChange()
+        {
+            return applyForwardAttackTransformChange || applyUpAttackTransformChange;
+        }
+
+        private static Vector2 MirrorPositionOffsetOverXAxis(Vector2 positionOffset)
+        {
+            return new Vector2(positionOffset.x, -positionOffset.y);
+        }
+
+        private Vector3 GetUpAttackScaleMirroredOverXAxis()
+        {
+            return applyUpAttackTransformChange
+                ? new Vector3(upAttackScale.x, -upAttackScale.y, 1f)
+                : Vector3.one;
+        }
+
+        private Vector3 ApplyUpDownYAxisMirrorIfNeeded(AttackDirection2D attackDirection, Vector3 multiplier)
+        {
+            if (!mirrorUpDownAttackOverYAxis)
+            {
+                return multiplier;
+            }
+
+            if (attackDirection != AttackDirection2D.Up && attackDirection != AttackDirection2D.Down)
+            {
+                return multiplier;
+            }
+
+            multiplier.x *= -1f;
+            return multiplier;
         }
 
         private void CaptureMirrorPivotScale()
@@ -307,6 +457,31 @@ namespace EndlessJourney.Player
             return transform;
         }
 
+        private Transform ResolveAttackTransformTarget()
+        {
+            if (scaledTransform != null)
+            {
+                return scaledTransform;
+            }
+
+            if (forwardAttackTransform != null)
+            {
+                return forwardAttackTransform;
+            }
+
+            if (upAttackTransform != null)
+            {
+                return upAttackTransform;
+            }
+
+            if (animator != null)
+            {
+                return animator.transform;
+            }
+
+            return transform;
+        }
+
         private void CaptureBaseScaleIfNeeded()
         {
             if (!captureBaseScaleOnAwake)
@@ -314,8 +489,20 @@ namespace EndlessJourney.Player
                 return;
             }
 
-            Transform targetTransform = scaledTransform != null ? scaledTransform : transform;
+            Transform targetTransform = ResolveAttackTransformTarget();
             baseLocalScale = targetTransform.localScale;
+        }
+
+        private void CaptureAttackBaseTransform()
+        {
+            Transform targetTransform = ResolveAttackTransformTarget();
+            if (targetTransform == null)
+            {
+                return;
+            }
+
+            _attackBaseLocalPosition = targetTransform.localPosition;
+            _attackBaseLocalRotation = targetTransform.localRotation;
         }
 
         private void ResetAttackTriggers()
@@ -381,7 +568,22 @@ namespace EndlessJourney.Player
             referenceAttackRange = Mathf.Max(0.01f, referenceAttackRange);
             minScaleMultiplier = Mathf.Max(0.01f, minScaleMultiplier);
             maxScaleMultiplier = Mathf.Max(minScaleMultiplier, maxScaleMultiplier);
+            ClampAttackScale(ref forwardAttackScale);
+            ClampAttackScale(ref upAttackScale);
             RebuildHashes();
+        }
+
+        private static void ClampAttackScale(ref Vector2 scale)
+        {
+            if (Mathf.Abs(scale.x) < 0.01f)
+            {
+                scale.x = 0.01f;
+            }
+
+            if (Mathf.Abs(scale.y) < 0.01f)
+            {
+                scale.y = 0.01f;
+            }
         }
     }
 }

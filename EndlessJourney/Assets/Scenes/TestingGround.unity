@@ -2872,6 +2872,7 @@ MonoBehaviour:
   interactionPriority: 0
   interactionPrompt: Prepare
   triggerCollider: {fileID: 516819148}
+  ignorePlayerAttackColliders: 1
   autoCreateWorldPrompt: 1
   promptAnchor: {fileID: 516819150}
   promptWorldOffset: {x: 0, y: 2, z: 0}
@@ -3301,6 +3302,7 @@ MonoBehaviour:
   pickupTargetLayers:
     serializedVersion: 2
     m_Bits: 256
+  ignorePlayerAttackColliders: 1
   destroyOnPicked: 1
   pickupTrigger: {fileID: 605544282}
   pickupEffectPrefab: {fileID: 0}
@@ -3660,6 +3662,7 @@ MonoBehaviour:
   pickupTargetLayers:
     serializedVersion: 2
     m_Bits: 256
+  ignorePlayerAttackColliders: 1
   destroyOnPicked: 1
   pickupTrigger: {fileID: 674452836}
   pickupEffectPrefab: {fileID: 0}
@@ -7190,6 +7193,7 @@ MonoBehaviour:
   targetLayers:
     serializedVersion: 2
     m_Bits: 256
+  filterByTouchedColliderLayer: 1
   logContactHit: 1
 --- !u!114 &1183805523
 MonoBehaviour:
@@ -10649,13 +10653,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1909001547}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.052335896, w: 0.9986295}
-  m_LocalPosition: {x: -1.3789997, y: 0.398, z: 0}
-  m_LocalScale: {x: 0.30000004, y: 0.30000004, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 734883624}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 6}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1909001549
 SpriteRenderer:
   serializedVersion: 2
@@ -10710,7 +10714,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 12.54, y: 2.5}
+  m_Size: {x: 2.5, y: 12.54}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -10766,6 +10770,17 @@ MonoBehaviour:
   mirrorPivotTransform: {fileID: 734883624}
   sourceArtFacesLeft: 1
   mirrorVerticalAttacks: 1
+  applyForwardAttackTransformChange: 1
+  forwardAttackTransform: {fileID: 0}
+  forwardAttackPositionOffset: {x: -1.379, y: 0.398}
+  forwardAttackRotationZ: 6
+  forwardAttackScale: {x: 0.3, y: 0.3}
+  applyUpAttackTransformChange: 1
+  upAttackTransform: {fileID: 0}
+  upAttackPositionOffset: {x: -0.8, y: -0.1}
+  upAttackRotationZ: -10
+  upAttackScale: {x: 0.8, y: 0.3}
+  mirrorUpDownAttackOverYAxis: 1
   scaleWithAttackRange: 1
   scaledTransform: {fileID: 1909001548}
   referenceAttackRange: 1
@@ -10773,6 +10788,10 @@ MonoBehaviour:
   baseLocalScale: {x: 1, y: 1, z: 1}
   minScaleMultiplier: 0.25
   maxScaleMultiplier: 3
+  scaleWithAttackDirection: 0
+  forwardScaleMultiplier: {x: 1, y: 1, z: 1}
+  upScaleMultiplier: {x: 1, y: 2, z: 1}
+  downScaleMultiplier: {x: 1, y: 2, z: 1}
   logMissingReferences: 1
 --- !u!1 &1920610434
 GameObject:
@@ -11957,6 +11976,7 @@ MonoBehaviour:
   interactionPriority: 0
   interactionPrompt: Interact
   triggerCollider: {fileID: 2120150334}
+  ignorePlayerAttackColliders: 1
   autoCreateWorldPrompt: 1
   promptAnchor: {fileID: 0}
   promptWorldOffset: {x: 0, y: 1.5, z: 0}
