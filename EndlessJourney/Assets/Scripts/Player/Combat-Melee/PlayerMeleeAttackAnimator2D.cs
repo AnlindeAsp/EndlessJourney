@@ -21,6 +21,10 @@ namespace EndlessJourney.Player
         [SerializeField] private Animator animator;
         [SerializeField] private PlayerCombatCore combatCore;
 
+        [Header("Event Source")]
+        [Tooltip("Disable this when a PlayerMeleeAttackAnimationController2D is responsible for calling this animator.")]
+        [SerializeField] private bool listenToMeleeAttackEvents = true;
+
         [Header("Triggers")]
         [SerializeField] private string forwardAttackTrigger = "AttackForward";
         [SerializeField] private string upAttackTrigger = "AttackUp";
@@ -54,7 +58,6 @@ namespace EndlessJourney.Player
         [SerializeField] private Vector2 upAttackPositionOffset;
         [SerializeField] private float upAttackRotationZ;
         [SerializeField] private Vector2 upAttackScale = Vector2.one;
-        [SerializeField] private bool mirrorUpDownAttackOverYAxis = true;
 
         [Header("Range Scaling")]
         [SerializeField] private bool scaleWithAttackRange;
@@ -84,6 +87,8 @@ namespace EndlessJourney.Player
         private Quaternion _attackBaseLocalRotation = Quaternion.identity;
         private bool _warnedUnsafePivotMirror;
 
+        public bool ListenToMeleeAttackEvents => listenToMeleeAttackEvents;
+
         private void Awake()
         {
             RebuildHashes();
@@ -95,6 +100,11 @@ namespace EndlessJourney.Player
 
         private void OnEnable()
         {
+            if (!listenToMeleeAttackEvents)
+            {
+                return;
+            }
+
             if (meleeAttack == null || animator == null)
             {
                 if (logMissingReferences)
@@ -116,7 +126,7 @@ namespace EndlessJourney.Player
             }
         }
 
-        private void HandleAttackStarted(AttackDirection2D attackDirection, int facingDirection)
+        public void PlayAttackAnimation(AttackDirection2D attackDirection, int facingDirection)
         {
             if (animator == null)
             {
@@ -143,6 +153,11 @@ namespace EndlessJourney.Player
             }
 
             animator.SetTrigger(GetTriggerHash(attackDirection));
+        }
+
+        private void HandleAttackStarted(AttackDirection2D attackDirection, int facingDirection)
+        {
+            PlayAttackAnimation(attackDirection, facingDirection);
         }
 
         private void ApplyFacingMirror(AttackDirection2D attackDirection, int facingDirection)
@@ -308,7 +323,7 @@ namespace EndlessJourney.Player
 
         private void ApplyAttackScale(AttackDirection2D attackDirection, int facingDirection)
         {
-            if (!scaleWithAttackRange && !scaleWithAttackDirection && !HasAnyAttackTransformChange() && !mirrorUpDownAttackOverYAxis)
+            if (!scaleWithAttackRange && !scaleWithAttackDirection && !HasAnyAttackTransformChange() && !IsUpDownAttack(attackDirection))
             {
                 return;
             }
@@ -410,18 +425,18 @@ namespace EndlessJourney.Player
 
         private Vector3 ApplyUpDownYAxisMirrorIfNeeded(AttackDirection2D attackDirection, Vector3 multiplier)
         {
-            if (!mirrorUpDownAttackOverYAxis)
-            {
-                return multiplier;
-            }
-
-            if (attackDirection != AttackDirection2D.Up && attackDirection != AttackDirection2D.Down)
+            if (!IsUpDownAttack(attackDirection))
             {
                 return multiplier;
             }
 
             multiplier.x *= -1f;
             return multiplier;
+        }
+
+        private static bool IsUpDownAttack(AttackDirection2D attackDirection)
+        {
+            return attackDirection == AttackDirection2D.Up || attackDirection == AttackDirection2D.Down;
         }
 
         private void CaptureMirrorPivotScale()
