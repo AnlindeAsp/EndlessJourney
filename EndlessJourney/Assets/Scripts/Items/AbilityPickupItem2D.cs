@@ -13,6 +13,7 @@ namespace EndlessJourney.Items
         [Header("Pickup Gate")]
         [Tooltip("Only objects on these layers can trigger pickup.")]
         [SerializeField] private LayerMask pickupTargetLayers = ~0;
+        [SerializeField] private bool ignorePlayerAttackColliders = true;
 
         [Header("Presentation")]
         [SerializeField] private bool destroyOnPicked = true;
@@ -43,6 +44,11 @@ namespace EndlessJourney.Items
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (_isPicked || other == null)
+            {
+                return;
+            }
+
+            if (ShouldIgnoreCollider(other))
             {
                 return;
             }
@@ -155,6 +161,17 @@ namespace EndlessJourney.Items
         private bool IsLayerAllowed(int layer)
         {
             return (pickupTargetLayers.value & (1 << layer)) != 0;
+        }
+
+        private bool ShouldIgnoreCollider(Collider2D other)
+        {
+            if (!ignorePlayerAttackColliders || other == null)
+            {
+                return false;
+            }
+
+            int playerAttackLayer = LayerMask.NameToLayer("PlayerAttack");
+            return playerAttackLayer >= 0 && other.gameObject.layer == playerAttackLayer;
         }
 
         private void SetRenderersVisible(bool visible)

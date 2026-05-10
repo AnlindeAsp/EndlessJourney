@@ -37,6 +37,8 @@ namespace EndlessJourney.Enemy
         [SerializeField, Min(0f)] private float contactDamage = 10f;
         [SerializeField, Min(0f)] private float attackCooldown = 0.6f;
         [SerializeField] private LayerMask targetLayers = ~0;
+        [Tooltip("Check targetLayers against the collider actually touched. This keeps child attack zones from being treated as the player body through the parent Rigidbody2D.")]
+        [SerializeField] private bool filterByTouchedColliderLayer = true;
 
         [Header("Debug")]
         [SerializeField] private bool logContactHit = false;
@@ -128,13 +130,17 @@ namespace EndlessJourney.Enemy
                 return false;
             }
 
+            if (filterByTouchedColliderLayer && !IsInTargetLayer(other.gameObject.layer))
+            {
+                return false;
+            }
+
             if (!TryResolveTargetRoot(other, out GameObject targetRoot))
             {
                 return false;
             }
 
-            // Layer filtering should be based on the target root object, not child component objects.
-            if (!IsInTargetLayer(targetRoot.layer))
+            if (!filterByTouchedColliderLayer && !IsInTargetLayer(targetRoot.layer))
             {
                 return false;
             }

@@ -17,6 +17,7 @@ namespace EndlessJourney.Interaction
         [SerializeField] private int interactionPriority;
         [SerializeField] private string interactionPrompt = "interact";
         [SerializeField] private Collider2D triggerCollider;
+        [SerializeField] private bool ignorePlayerAttackColliders = true;
 
         [Header("Prompt Display")]
         [SerializeField] private bool autoCreateWorldPrompt = true;
@@ -70,6 +71,11 @@ namespace EndlessJourney.Interaction
 
         protected virtual void OnTriggerEnter2D(Collider2D other)
         {
+            if (ShouldIgnoreCollider(other))
+            {
+                return;
+            }
+
             PlayerInteractor2D interactor = ResolveInteractor(other);
             if (interactor == null)
             {
@@ -91,6 +97,11 @@ namespace EndlessJourney.Interaction
 
         protected virtual void OnTriggerExit2D(Collider2D other)
         {
+            if (ShouldIgnoreCollider(other))
+            {
+                return;
+            }
+
             PlayerInteractor2D interactor = ResolveInteractor(other);
             if (interactor == null)
             {
@@ -253,6 +264,17 @@ namespace EndlessJourney.Interaction
             }
 
             return other.GetComponentInParent<PlayerInteractor2D>();
+        }
+
+        private bool ShouldIgnoreCollider(Collider2D other)
+        {
+            if (!ignorePlayerAttackColliders || other == null)
+            {
+                return false;
+            }
+
+            int playerAttackLayer = LayerMask.NameToLayer("PlayerAttack");
+            return playerAttackLayer >= 0 && other.gameObject.layer == playerAttackLayer;
         }
     }
 }

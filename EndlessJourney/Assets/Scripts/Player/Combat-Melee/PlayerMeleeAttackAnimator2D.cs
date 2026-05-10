@@ -49,6 +49,10 @@ namespace EndlessJourney.Player
         [SerializeField] private Vector3 baseLocalScale = Vector3.one;
         [SerializeField, Min(0.01f)] private float minScaleMultiplier = 0.25f;
         [SerializeField, Min(0.01f)] private float maxScaleMultiplier = 3f;
+        [SerializeField] private bool scaleWithAttackDirection;
+        [SerializeField] private Vector3 forwardScaleMultiplier = Vector3.one;
+        [SerializeField] private Vector3 upScaleMultiplier = Vector3.one;
+        [SerializeField] private Vector3 downScaleMultiplier = Vector3.one;
 
         [Header("Debug")]
         [SerializeField] private bool logMissingReferences = true;
@@ -112,7 +116,7 @@ namespace EndlessJourney.Player
             }
 
             ApplyFacingMirror(attackDirection, facingDirection);
-            ApplyAttackRangeScale();
+            ApplyAttackScale(attackDirection);
 
             if (resetAttackTriggersBeforePlay)
             {
@@ -161,8 +165,7 @@ namespace EndlessJourney.Player
                 return;
             }
 
-            bool facingRight = facingDirection >= 0;
-            targetRenderer.flipX = sourceArtFacesLeft ? facingRight : !facingRight;
+            targetRenderer.flipX = ShouldMirrorForFacing(facingDirection);
         }
 
         private void ApplyPivotMirror(int facingDirection)
@@ -179,8 +182,7 @@ namespace EndlessJourney.Player
                 return;
             }
 
-            bool facingRight = facingDirection >= 0;
-            bool shouldMirror = sourceArtFacesLeft ? facingRight : !facingRight;
+            bool shouldMirror = ShouldMirrorForFacing(facingDirection);
             float sign = shouldMirror ? -1f : 1f;
 
             Vector3 scale = _baseMirrorPivotScale;
@@ -208,8 +210,7 @@ namespace EndlessJourney.Player
                 return;
             }
 
-            bool facingRight = facingDirection >= 0;
-            bool shouldMirror = sourceArtFacesLeft ? facingRight : !facingRight;
+            bool shouldMirror = ShouldMirrorForFacing(facingDirection);
             if (targetTransform.parent == pivotTransform.parent)
             {
                 Vector3 position = _baseMirrorTargetLocalPosition;
@@ -231,21 +232,46 @@ namespace EndlessJourney.Player
             targetTransform.position = worldPosition;
         }
 
-        private void ApplyAttackRangeScale()
+        private bool ShouldMirrorForFacing(int facingDirection)
         {
-            if (!scaleWithAttackRange || combatCore == null)
+            bool facingRight = facingDirection >= 0;
+            return sourceArtFacesLeft ? facingRight : !facingRight;
+        }
+
+        private void ApplyAttackScale(AttackDirection2D attackDirection)
+        {
+            if (!scaleWithAttackRange && !scaleWithAttackDirection)
             {
                 return;
             }
 
             Transform targetTransform = scaledTransform != null ? scaledTransform : transform;
-            float multiplier = combatCore.AttackRange / Mathf.Max(0.01f, referenceAttackRange);
-            multiplier = Mathf.Clamp(multiplier, minScaleMultiplier, Mathf.Max(minScaleMultiplier, maxScaleMultiplier));
+            float rangeMultiplier = 1f;
+            if (scaleWithAttackRange && combatCore != null)
+            {
+                rangeMultiplier = combatCore.AttackRange / Mathf.Max(0.01f, referenceAttackRange);
+                rangeMultiplier = Mathf.Clamp(rangeMultiplier, minScaleMultiplier, Mathf.Max(minScaleMultiplier, maxScaleMultiplier));
+            }
+
+            Vector3 directionMultiplier = scaleWithAttackDirection ? GetDirectionScaleMultiplier(attackDirection) : Vector3.one;
             float currentXSign = targetTransform.localScale.x < 0f ? -1f : 1f;
             targetTransform.localScale = new Vector3(
-                Mathf.Abs(baseLocalScale.x) * multiplier * currentXSign,
-                baseLocalScale.y * multiplier,
-                baseLocalScale.z * multiplier);
+                Mathf.Abs(baseLocalScale.x) * rangeMultiplier * directionMultiplier.x * currentXSign,
+                baseLocalScale.y * rangeMultiplier * directionMultiplier.y,
+                baseLocalScale.z * rangeMultiplier * directionMultiplier.z);
+        }
+
+        private Vector3 GetDirectionScaleMultiplier(AttackDirection2D attackDirection)
+        {
+            switch (attackDirection)
+            {
+                case AttackDirection2D.Up:
+                    return upScaleMultiplier;
+                case AttackDirection2D.Down:
+                    return downScaleMultiplier;
+                default:
+                    return forwardScaleMultiplier;
+            }
         }
 
         private void CaptureMirrorPivotScale()
