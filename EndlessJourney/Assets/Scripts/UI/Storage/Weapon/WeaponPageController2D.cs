@@ -17,6 +17,7 @@ namespace EndlessJourney.UI
         [Header("References")]
         [SerializeField] private WeaponLibrary2D weaponLibrary;
         [SerializeField] private WeaponEquipped2D weaponEquipped;
+        [SerializeField] private PlayerAbilityCore2D abilityCore;
         [SerializeField] private WeaponPageDisplayer2D displayer;
 
         [Header("Selection")]
@@ -95,17 +96,43 @@ namespace EndlessJourney.UI
         public void RefreshPage()
         {
             BuildViewItems();
+            WeaponData selectedWeapon = GetSelectedWeapon();
 
             if (displayer != null)
             {
                 displayer.Render(
                     _viewItems,
-                    GetSelectedWeapon(),
+                    selectedWeapon,
                     SelectedWeaponId,
                     weaponEquipped != null ? weaponEquipped.EquippedWeaponId : string.Empty,
+                    ResolveSelectedEffectiveWeaponType(selectedWeapon),
+                    CanShowDualWieldingButton(selectedWeapon),
+                    weaponEquipped != null && weaponEquipped.DualWieldingModeEnabled,
                     SelectWeapon,
-                    EquipSelectedWeapon);
+                    EquipSelectedWeapon,
+                    ToggleDualWieldingMode);
             }
+        }
+
+        public void ToggleDualWieldingMode()
+        {
+            if (weaponEquipped == null)
+            {
+                return;
+            }
+
+            WeaponData selectedWeapon = GetSelectedWeapon();
+            if (!CanShowDualWieldingButton(selectedWeapon))
+            {
+                return;
+            }
+
+            if (!string.Equals(SelectedWeaponId, weaponEquipped.EquippedWeaponId, StringComparison.Ordinal))
+            {
+                return;
+            }
+
+            weaponEquipped.ToggleDualWieldingMode();
         }
 
         private void BuildViewItems()
@@ -253,6 +280,12 @@ namespace EndlessJourney.UI
             if (weaponEquipped != null)
             {
                 weaponEquipped.OnEquippedWeaponChanged += HandleEquippedWeaponChanged;
+                weaponEquipped.OnDualWieldingModeChanged += HandleDualWieldingModeChanged;
+            }
+
+            if (abilityCore != null)
+            {
+                abilityCore.OnAbilityStateChanged += HandleAbilityStateChanged;
             }
         }
 
@@ -266,6 +299,12 @@ namespace EndlessJourney.UI
             if (weaponEquipped != null)
             {
                 weaponEquipped.OnEquippedWeaponChanged -= HandleEquippedWeaponChanged;
+                weaponEquipped.OnDualWieldingModeChanged -= HandleDualWieldingModeChanged;
+            }
+
+            if (abilityCore != null)
+            {
+                abilityCore.OnAbilityStateChanged -= HandleAbilityStateChanged;
             }
         }
 
@@ -277,6 +316,45 @@ namespace EndlessJourney.UI
         private void HandleEquippedWeaponChanged(string weaponId)
         {
             RefreshPage();
+        }
+
+        private void HandleDualWieldingModeChanged(bool enabled)
+        {
+            RefreshPage();
+        }
+
+        private void HandleAbilityStateChanged()
+        {
+            RefreshPage();
+        }
+
+        private bool CanShowDualWieldingButton(WeaponData selectedWeapon)
+        {
+            if (abilityCore == null || !abilityCore.AllowDualWieldingEnabled)
+            {
+                return false;
+            }
+
+            if (selectedWeapon == null || !selectedWeapon.DualWieldable)
+            {
+                return false;
+            }
+
+            if (weaponLibrary == null || !weaponLibrary.IsUnlocked(selectedWeapon.WeaponId))
+            {
+                return false;
+            }
+
+            return string.Equals(SelectedWeaponId, weaponEquipped != null ? weaponEquipped.EquippedWeaponId : string.Empty, StringComparison.Ordinal);
+        }
+
+        private WeaponType ResolveSelectedEffectiveWeaponType(WeaponData selectedWeapon)
+        {
+            bool selectedIsEquipped = selectedWeapon != null
+                                      && weaponEquipped != null
+                                      && string.Equals(SelectedWeaponId, weaponEquipped.EquippedWeaponId, StringComparison.Ordinal);
+            bool useDualWieldingMode = selectedIsEquipped && weaponEquipped.DualWieldingModeEnabled;
+            return PlayerWeaponSystem.ResolveEffectiveWeaponType(selectedWeapon, useDualWieldingMode);
         }
 
         private void OnValidate()

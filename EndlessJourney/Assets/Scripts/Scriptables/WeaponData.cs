@@ -33,6 +33,10 @@ namespace EndlessJourney.Combat
         [SerializeField, Min(0f)] private float sharpness = 1f;
         [SerializeField, Min(0.01f)] private float weight = 1f;
 
+        [Header("Special Rules")]
+        [Tooltip("Only Sword weapons can use this. DualBlades and Heavy weapons are never dual wieldable.")]
+        [SerializeField] private bool dualWieldable = true;
+
         public string WeaponId => weaponId;
         public string WeaponName => weaponName;
         public WeaponType Type => weaponType;
@@ -42,6 +46,7 @@ namespace EndlessJourney.Combat
         public float Length => length;
         public float Sharpness => sharpness;
         public float Weight => weight;
+        public bool DualWieldable => weaponType == WeaponType.Sword && dualWieldable;
 
         private void OnValidate()
         {

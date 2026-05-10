@@ -26,6 +26,7 @@ namespace EndlessJourney.Player
         public WeaponUnlockStateEntry2D[] unlockedWeaponIds = Array.Empty<WeaponUnlockStateEntry2D>();
         public string[] equippedSpellIds = Array.Empty<string>();
         public string equippedWeaponId = string.Empty;
+        public bool equippedWeaponDualWielding;
     }
 
     /// <summary>

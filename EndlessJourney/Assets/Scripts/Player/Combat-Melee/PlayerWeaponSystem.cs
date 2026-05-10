@@ -17,6 +17,8 @@ namespace EndlessJourney.Player
         [SerializeField] private PlayerCombatCore combatCore;
 
         public WeaponData EquippedWeapon => equippedWeapon;
+        public bool IsDualWieldingModeEnabled => weaponEquipped != null && weaponEquipped.DualWieldingModeEnabled;
+        public WeaponType EffectiveWeaponType => ResolveEffectiveWeaponType(equippedWeapon, IsDualWieldingModeEnabled);
 
         public event Action<WeaponData> OnWeaponEquipped;
 
@@ -44,6 +46,7 @@ namespace EndlessJourney.Player
             if (weaponEquipped != null)
             {
                 weaponEquipped.OnEquippedWeaponChanged += HandleEquippedWeaponChanged;
+                weaponEquipped.OnDualWieldingModeChanged += HandleDualWieldingModeChanged;
             }
         }
 
@@ -57,6 +60,7 @@ namespace EndlessJourney.Player
             if (weaponEquipped != null)
             {
                 weaponEquipped.OnEquippedWeaponChanged -= HandleEquippedWeaponChanged;
+                weaponEquipped.OnDualWieldingModeChanged -= HandleDualWieldingModeChanged;
             }
         }
 
@@ -101,6 +105,21 @@ namespace EndlessJourney.Player
             return true;
         }
 
+        public static WeaponType ResolveEffectiveWeaponType(WeaponData weapon, bool dualWieldingModeEnabled)
+        {
+            if (weapon == null)
+            {
+                return WeaponType.Sword;
+            }
+
+            if (dualWieldingModeEnabled && weapon.Type == WeaponType.Sword && weapon.DualWieldable)
+            {
+                return WeaponType.DualBlades;
+            }
+
+            return weapon.Type;
+        }
+
         /// <summary>
         /// Recalculates combat values from the equipped weapon and writes them into combat core.
         /// </summary>
@@ -121,8 +140,9 @@ namespace EndlessJourney.Player
             float attackRange = equippedWeapon.Length + 0.25f;
             float damagePerHit;
             int hitCount;
+            WeaponType effectiveWeaponType = EffectiveWeaponType;
 
-            switch (equippedWeapon.Type)
+            switch (effectiveWeaponType)
             {
                 case WeaponType.DualBlades:
                     damagePerHit = strength * equippedWeapon.Sharpness * 0.7f;
@@ -154,6 +174,12 @@ namespace EndlessJourney.Player
         private void HandleEquippedWeaponChanged(string weaponId)
         {
             SyncFromEquippedState();
+        }
+
+        private void HandleDualWieldingModeChanged(bool enabled)
+        {
+            RecalculateCombatSnapshot();
+            OnWeaponEquipped?.Invoke(equippedWeapon);
         }
 
         private void SyncFromEquippedState()

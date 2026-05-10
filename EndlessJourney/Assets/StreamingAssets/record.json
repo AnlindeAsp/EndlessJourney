@@ -26,5 +26,6 @@
     "",
     ""
   ],
-  "equippedWeaponId": "beginner_sword"
+  "equippedWeaponId": "beginner_sword",
+  "equippedWeaponDualWielding": false
 }

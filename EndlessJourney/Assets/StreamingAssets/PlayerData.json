@@ -1,5 +1,10 @@
 {
     "SpellSlotNum": 5,
     "CharmSlotNum": 0,
-    "unlockedAbilityIds": []
+    "unlockedAbilityIds": [
+        "dash",
+        "double_jump",
+        "dual_wielding",
+        "spell_cast"
+    ]
 }

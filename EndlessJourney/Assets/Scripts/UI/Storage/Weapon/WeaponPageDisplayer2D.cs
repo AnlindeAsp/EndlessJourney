@@ -46,6 +46,8 @@ namespace EndlessJourney.UI
         [Header("Actions")]
         [SerializeField] private Button equipButton;
         [SerializeField] private TMP_Text equipButtonText;
+        [SerializeField] private Button dualWieldingButton;
+        [SerializeField] private TMP_Text dualWieldingButtonText;
 
         private readonly List<WeaponPageRow2D> _spawnedRows = new List<WeaponPageRow2D>(16);
 
@@ -59,12 +61,16 @@ namespace EndlessJourney.UI
             WeaponData selectedWeapon,
             string selectedWeaponId,
             string equippedWeaponId,
+            WeaponType selectedEffectiveWeaponType,
+            bool canShowDualWieldingButton,
+            bool dualWieldingModeEnabled,
             Action<string> onSelectWeapon,
-            Action onEquipSelected)
+            Action onEquipSelected,
+            Action onToggleDualWielding)
         {
             RenderList(weapons, onSelectWeapon);
-            RenderDetails(selectedWeapon, selectedWeaponId, equippedWeaponId, weapons);
-            BindActionButtons(selectedWeapon, selectedWeaponId, equippedWeaponId, weapons, onEquipSelected);
+            RenderDetails(selectedWeapon, selectedWeaponId, equippedWeaponId, selectedEffectiveWeaponType, dualWieldingModeEnabled, weapons);
+            BindActionButtons(selectedWeapon, selectedWeaponId, equippedWeaponId, canShowDualWieldingButton, dualWieldingModeEnabled, weapons, onEquipSelected, onToggleDualWielding);
         }
 
         private void RenderList(IReadOnlyList<WeaponPageItemViewData2D> weapons, Action<string> onSelectWeapon)
@@ -94,6 +100,8 @@ namespace EndlessJourney.UI
             WeaponData selectedWeapon,
             string selectedWeaponId,
             string equippedWeaponId,
+            WeaponType selectedEffectiveWeaponType,
+            bool dualWieldingModeEnabled,
             IReadOnlyList<WeaponPageItemViewData2D> weapons)
         {
             if (selectedWeapon == null)
@@ -114,9 +122,9 @@ namespace EndlessJourney.UI
 
             SetText(weaponNameText, selectedWeapon.WeaponName);
             SetText(weaponIdText, selectedWeapon.WeaponId);
-            SetText(weaponTypeText, selectedWeapon.Type.ToString());
+            SetText(weaponTypeText, selectedEffectiveWeaponType.ToString());
             SetText(weaponStatsText, $"Length {selectedWeapon.Length:0.##}\nSharpness {selectedWeapon.Sharpness:0.##}\nWeight {selectedWeapon.Weight:0.##}");
-            SetText(weaponStateText, equipped ? "Equipped" : unlocked ? "Unlocked" : "Locked");
+            SetText(weaponStateText, equipped ? dualWieldingModeEnabled ? "Equipped - Dual Wielding" : "Equipped" : unlocked ? "Unlocked" : "Locked");
             SetText(weaponDescriptionText, selectedWeapon.Description);
             SetImage(weaponIconImage, selectedWeapon.Icon);
             SetImage(weaponDetailImage, selectedWeapon.DetailImage);
@@ -126,8 +134,11 @@ namespace EndlessJourney.UI
             WeaponData selectedWeapon,
             string selectedWeaponId,
             string equippedWeaponId,
+            bool canShowDualWieldingButton,
+            bool dualWieldingModeEnabled,
             IReadOnlyList<WeaponPageItemViewData2D> weapons,
-            Action onEquipSelected)
+            Action onEquipSelected,
+            Action onToggleDualWielding)
         {
             ClearActionButtons();
 
@@ -142,6 +153,15 @@ namespace EndlessJourney.UI
             }
 
             SetText(equipButtonText, equipped ? "Equipped" : "Equip");
+
+            if (dualWieldingButton != null)
+            {
+                dualWieldingButton.gameObject.SetActive(canShowDualWieldingButton);
+                dualWieldingButton.interactable = canShowDualWieldingButton;
+                dualWieldingButton.onClick.AddListener(() => onToggleDualWielding?.Invoke());
+            }
+
+            SetText(dualWieldingButtonText, dualWieldingModeEnabled ? "Single Wielding" : "Dual Wielding");
         }
 
         private void ClearRows()
@@ -163,6 +183,11 @@ namespace EndlessJourney.UI
             if (equipButton != null)
             {
                 equipButton.onClick.RemoveAllListeners();
+            }
+
+            if (dualWieldingButton != null)
+            {
+                dualWieldingButton.onClick.RemoveAllListeners();
             }
         }
 

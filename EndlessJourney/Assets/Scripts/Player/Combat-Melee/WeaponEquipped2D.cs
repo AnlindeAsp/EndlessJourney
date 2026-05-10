@@ -14,6 +14,7 @@ namespace EndlessJourney.Player
 
         [Header("Equipped Weapon")]
         [SerializeField] private string equippedWeaponId = string.Empty;
+        [SerializeField] private bool dualWieldingModeEnabled;
         [SerializeField] private bool requireWeaponKnownForEquip = true;
         [SerializeField] private bool requireWeaponUnlockedForEquip = true;
 
@@ -26,8 +27,10 @@ namespace EndlessJourney.Player
         private string _recordPath;
 
         public string EquippedWeaponId => equippedWeaponId ?? string.Empty;
+        public bool DualWieldingModeEnabled => dualWieldingModeEnabled && CanUseDualWieldingForEquippedWeapon();
 
         public event Action<string> OnEquippedWeaponChanged;
+        public event Action<bool> OnDualWieldingModeChanged;
 
         private void Awake()
         {
@@ -73,15 +76,54 @@ namespace EndlessJourney.Player
                 }
             }
 
+            bool previousDualWieldingMode = dualWieldingModeEnabled;
+            bool shouldDisableDualWielding = !CanUseDualWieldingForWeaponId(normalizedId);
+
             if (equippedWeaponId == normalizedId)
             {
+                if (shouldDisableDualWielding && dualWieldingModeEnabled)
+                {
+                    dualWieldingModeEnabled = false;
+                    SaveEquippedStateToRecord();
+                    OnDualWieldingModeChanged?.Invoke(dualWieldingModeEnabled);
+                }
+
                 return true;
             }
 
             equippedWeaponId = normalizedId;
+            if (shouldDisableDualWielding)
+            {
+                dualWieldingModeEnabled = false;
+            }
+
             SaveEquippedStateToRecord();
             OnEquippedWeaponChanged?.Invoke(equippedWeaponId);
+            if (previousDualWieldingMode != dualWieldingModeEnabled)
+            {
+                OnDualWieldingModeChanged?.Invoke(dualWieldingModeEnabled);
+            }
+
             return true;
+        }
+
+        public bool SetDualWieldingMode(bool enabled)
+        {
+            bool normalizedEnabled = enabled && CanUseDualWieldingForEquippedWeapon();
+            if (dualWieldingModeEnabled == normalizedEnabled)
+            {
+                return true;
+            }
+
+            dualWieldingModeEnabled = normalizedEnabled;
+            SaveEquippedStateToRecord();
+            OnDualWieldingModeChanged?.Invoke(dualWieldingModeEnabled);
+            return true;
+        }
+
+        public bool ToggleDualWieldingMode()
+        {
+            return SetDualWieldingMode(!DualWieldingModeEnabled);
         }
 
         public WeaponData GetEquippedWeaponData()
@@ -104,6 +146,22 @@ namespace EndlessJourney.Player
             return weaponLibrary.IsUnlocked(equippedWeaponId);
         }
 
+        public bool CanUseDualWieldingForEquippedWeapon()
+        {
+            return CanUseDualWieldingForWeaponId(equippedWeaponId);
+        }
+
+        public bool CanUseDualWieldingForWeaponId(string weaponId)
+        {
+            if (weaponLibrary == null || string.IsNullOrWhiteSpace(weaponId))
+            {
+                return false;
+            }
+
+            WeaponData weaponData = weaponLibrary.GetWeaponData(weaponId);
+            return weaponData != null && weaponData.DualWieldable;
+        }
+
         private void TryLoadEquippedStateFromRecord()
         {
             if (!loadFromRecordOnAwake)
@@ -117,6 +175,11 @@ namespace EndlessJourney.Player
             }
 
             equippedWeaponId = recordData.equippedWeaponId ?? string.Empty;
+            dualWieldingModeEnabled = recordData.equippedWeaponDualWielding;
+            if (dualWieldingModeEnabled && !CanUseDualWieldingForEquippedWeapon())
+            {
+                dualWieldingModeEnabled = false;
+            }
         }
 
         private void SaveEquippedStateToRecord()
@@ -133,6 +196,7 @@ namespace EndlessJourney.Player
             }
 
             recordData.equippedWeaponId = equippedWeaponId ?? string.Empty;
+            recordData.equippedWeaponDualWielding = dualWieldingModeEnabled;
             PlayerRecordStore2D.Save(_recordPath, recordData, prettyPrintRecordJson);
         }
 
