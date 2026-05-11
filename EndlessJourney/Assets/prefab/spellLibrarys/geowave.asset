@@ -18,7 +18,7 @@ MonoBehaviour:
   description: The call of earth
   supplementaryNote: 
   manaCost: 20
-  singingTime: 0
+  singingTime: 0.5
   castTime: 0.2
   castCooldown: 0.35
   allowCastWhileMovementLocked: 1

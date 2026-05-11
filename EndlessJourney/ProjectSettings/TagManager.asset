@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Ground
+  - enemy
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - PlayerSide
   - PlayerAttack
   - items
-  - 
+  - interactionZone
   - 
   - 
   - 

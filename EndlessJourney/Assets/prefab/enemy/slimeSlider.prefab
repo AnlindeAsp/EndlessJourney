@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 4465728619899086646}
   m_Layer: 7
   m_Name: slimeSlider
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -113,7 +113,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2432733812353226074}
@@ -266,7 +266,7 @@ MonoBehaviour:
   body: {fileID: 2362368819521583021}
   hittable: {fileID: 5524049635052559525}
   visualRoot: {fileID: 3849630276733418692}
-  startFacingDirection: -1
+  startFacingDirection: 1
   isStunned: 0
 --- !u!114 &2699976339078111474
 MonoBehaviour:
@@ -282,7 +282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Enemy.EnemyPatrolWalker2D
   core: {fileID: 5619429748620920856}
   bodyCollider: {fileID: 7972408219293043363}
-  moveSpeed: 2.5
+  moveSpeed: 5
   directionChangeCooldown: 0.08
   obstacleLayers:
     serializedVersion: 2
@@ -319,9 +319,9 @@ MonoBehaviour:
   invulnerable: 0
   blockSelfHits: 1
   hitCooldown: 0
-  maxHealth: 30
+  maxHealth: 50
   startAtMaxHealth: 1
-  startingHealth: 30
+  startingHealth: 50
   currentHealth: 0
   isDead: 0
 --- !u!114 &9116069093760243160
@@ -346,6 +346,7 @@ MonoBehaviour:
   targetLayers:
     serializedVersion: 2
     m_Bits: 256
+  filterByTouchedColliderLayer: 1
   logContactHit: 1
 --- !u!114 &4016956100184580140
 MonoBehaviour:

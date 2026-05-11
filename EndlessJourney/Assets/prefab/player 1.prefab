@@ -1,0 +1,1410 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &208795425043933929
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8703562444320151351}
+  - component: {fileID: 5925010621448968776}
+  m_Layer: 8
+  m_Name: armorModule
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8703562444320151351
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208795425043933929}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2428400241296818852}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5925010621448968776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208795425043933929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70c3f8fb89694dd2a0e5d6e1d02f9e6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerArmor2D
+  maxDurability: 1000
+  startAtMaxDurability: 1
+  startingDurability: 1000
+  damageReductionEfficiency: 0.5
+  armorEnabled: 1
+--- !u!1 &355081466307612699
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9149193062530593904}
+  - component: {fileID: 4727224648585752101}
+  - component: {fileID: 2133976333977937628}
+  - component: {fileID: 8295190104293960371}
+  - component: {fileID: 4678114595622121527}
+  - component: {fileID: 7117357463700439934}
+  m_Layer: 8
+  m_Name: MagicModule
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9149193062530593904
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355081466307612699}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2428400241296818852}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4727224648585752101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355081466307612699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddc6c178ca445ff42b892fa17c300b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerMana2D
+  maxMana: 100
+  maxPotentialMana: 100
+  startingMana: 100
+  startingPotentialMana: 100
+  potentialManaAllow: 1
+  forlornCast: 1
+  normalPotentialRegenPercentPerSecond: 0.1
+  normalManaRegenPercentPerSecond: 0.05
+  exhaustingPotentialRegenPercentPerSecond: 0.05
+  regenMultiplier: 1
+  applyDamageWhenManaOut: 1
+  manaOutDamagePerSecond: 5
+  health: {fileID: 321594986776558877}
+--- !u!114 &2133976333977937628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355081466307612699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9cbad4677b2dfd4482ffff7c8fad76f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.SpellCastSystem
+  core: {fileID: 6520497788721592018}
+  mana: {fileID: 4727224648585752101}
+  health: {fileID: 321594986776558877}
+  projectileLauncher: {fileID: 8295190104293960371}
+  castPoint: {fileID: 9149193062530593904}
+  allowSingingWhileMovingUnlocked: 0
+  allowSingingWhileAirborneUnlocked: 0
+--- !u!114 &8295190104293960371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355081466307612699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96d6762ce0d2c3b4c8aaa636efd8a0a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerProjectileLauncher2D
+  ownerCore: {fileID: 6520497788721592018}
+  firePoint: {fileID: 9149193062530593904}
+  localSpawnOffset: {x: 0.8, y: 0.2}
+  faceByOwnerFacingDirection: 1
+  logLaunch: 1
+--- !u!114 &4678114595622121527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355081466307612699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fa07f96b1bcd347b5befdd1610d7ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.SpellBook2D
+  spellLibrary: {fileID: 0}
+  slotCount: 3
+  availableSlotCount: 3
+  requireSpellUnlockedForEquip: 1
+  equippedSpellIds:
+  - fireball
+  - small_heal
+  - 
+  loadSlotCountFromPlayerDataOnAwake: 1
+  saveSlotCountToPlayerDataOnChange: 1
+  playerDataFileName: PlayerData.json
+  prettyPrintPlayerDataJson: 1
+  loadFromRecordOnAwake: 1
+  saveToRecordOnChange: 1
+  recordFileName: record.json
+  prettyPrintRecordJson: 1
+--- !u!114 &7117357463700439934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355081466307612699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 054ff3b9b2107b249ad59e6c1211f0e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.SpellSlotCaster2D
+  playerInput: {fileID: 1124555243047878414}
+  spellBook: {fileID: 4678114595622121527}
+  spellCastSystem: {fileID: 2133976333977937628}
+  logCastRouting: 1
+--- !u!1 &737072519208123037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3814513945283865691}
+  - component: {fileID: 5031429291860897469}
+  m_Layer: 8
+  m_Name: Circle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3814513945283865691
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737072519208123037}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.559, y: 0.378, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2428400241296818852}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &5031429291860897469
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737072519208123037}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
+--- !u!1 &871776095807824766
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2428400241296818852}
+  - component: {fileID: 9185586791867357319}
+  - component: {fileID: 3208446575618763647}
+  - component: {fileID: 7336265396425296028}
+  - component: {fileID: 6520497788721592018}
+  - component: {fileID: 1124555243047878414}
+  - component: {fileID: 2438364693112087498}
+  - component: {fileID: 2542808704790923235}
+  - component: {fileID: 8929174965059236694}
+  - component: {fileID: 321594986776558877}
+  - component: {fileID: 7597916277566146274}
+  - component: {fileID: 7348974447361749221}
+  - component: {fileID: 2755689781807117682}
+  - component: {fileID: 1755468187545963186}
+  - component: {fileID: 5957835090944648881}
+  - component: {fileID: 9175344798029099705}
+  - component: {fileID: 3716637791989823436}
+  - component: {fileID: 226117845810015068}
+  - component: {fileID: 456113222075257246}
+  m_Layer: 8
+  m_Name: player 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2428400241296818852
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -12, y: 2, z: 0}
+  m_LocalScale: {x: 1, y: 2, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3814513945283865691}
+  - {fileID: 5831729148391461541}
+  - {fileID: 9149193062530593904}
+  - {fileID: 8045646658902442875}
+  - {fileID: 8703562444320151351}
+  - {fileID: 7294477198766081320}
+  - {fileID: 1187904250015857299}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &9185586791867357319
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
+--- !u!50 &3208446575618763647
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 4
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!70 &7336265396425296028
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.9, y: 1}
+  m_Direction: 0
+--- !u!114 &6520497788721592018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44625618f6d686148b0daa1ef377b199, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerCore2D
+  body: {fileID: 3208446575618763647}
+  inputReader: {fileID: 1124555243047878414}
+  groundCheck: {fileID: 154439127380994122}
+  spellCastSystem: {fileID: 2133976333977937628}
+--- !u!114 &1124555243047878414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 148f8249849c6794a8dda3b370527683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerInput2D
+  moveLeftKey: 15
+  moveRightKey: 18
+  moveUpKey: 37
+  moveDownKey: 33
+  jumpKey: 1
+  spellSlot1Key: 41
+  spellSlot2Key: 42
+  spellSlot3Key: 43
+  spellSlot4Key: 44
+  spellSlot5Key: 45
+  attackMouseButton: 0
+  dashMouseButton: 1
+  loadSavedBindingsOnAwake: 1
+  saveBindingsOnRuntimeRebind: 1
+--- !u!114 &2438364693112087498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 214f4472abd069746943c5a6cfdc7279, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerMovement2D
+  core: {fileID: 6520497788721592018}
+  maxRunSpeed: 10
+  groundAcceleration: 70
+  groundDeceleration: 80
+  airAcceleration: 60
+  airDeceleration: 60
+  jumpVelocity: 22
+  coyoteTime: 0.2
+  jumpBufferTime: 0.15
+  fallMultiplier: 1.8
+  lowJumpMultiplier: 2.2
+  enableApexHang: 1
+  apexHangVelocityThreshold: 1.25
+  apexHangTime: 0.08
+  apexHangGravityMultiplier: 0.45
+  maxFallSpeed: 22
+  abilityJumpHorizontalDamping: 0
+--- !u!114 &2542808704790923235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de2b8c311c0197445ac9fa0db4ba8e9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerDash2D
+  core: {fileID: 6520497788721592018}
+  enableDash: 1
+  dashSpeed: 25
+  dashDuration: 0.3
+  dashCooldown: 0.25
+  dashGravityMultiplier: 0
+  postDashSpeedMultiplier: 0.505
+  oneDashPerAirborne: 1
+  preserveVerticalVelocity: 0
+--- !u!114 &8929174965059236694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5c7465bcf4332240ba5bfdf28f5ce17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerDoubleJump2D
+  core: {fileID: 6520497788721592018}
+  movement: {fileID: 2438364693112087498}
+  enableDoubleJump: 1
+  extraJumps: 1
+--- !u!114 &321594986776558877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a08e4f8b5fa27034487b5311a2f88085, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerHealth2D
+  maxHealth: 100
+  startAtMaxHealth: 1
+  startingHealth: 100
+  allowHealingWhenDead: 0
+  armorSource: {fileID: 5925010621448968776}
+  applyArmorToHarmDamage: 1
+  enableHitInvincibility: 1
+  invincibilityDuration: 0.45
+  enableInvincibilityFlicker: 1
+  flickerInterval: 0.08
+  flickerAlphaMultiplier: 0.35
+  flickerRenderers:
+  - {fileID: 9185586791867357319}
+  autoEnterCombatOnDamage: 1
+  combatExitDelay: 5
+  enableNaturalRegen: 1
+  regenInterval: 5
+  regenAmount: 5
+  noRegenBelowNormalizedHealth: 0.5
+  regenMultiplier: 1
+--- !u!114 &7597916277566146274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 746af10b0162c9549bddb22a9133ab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerCombatCore
+  baseStrength: 10
+  equippedWeaponName: None
+  attackRange: 2
+  attackDamagePerHit: 5
+  attackHitCount: 1
+  attackSpeed: 0.35
+--- !u!114 &7348974447361749221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d4cbfc846d0cb4a84a78495d1295cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerMeleeAttack2D
+  core: {fileID: 6520497788721592018}
+  combatCore: {fileID: 7597916277566146274}
+  weaponSystem: {fileID: 2755689781807117682}
+  attackRecoil: {fileID: 5957835090944648881}
+  directionResolver: {fileID: 9175344798029099705}
+  dash: {fileID: 2542808704790923235}
+  doubleJump: {fileID: 8929174965059236694}
+  hitboxCollider: {fileID: 3760253184817929973}
+  disableHitboxWhenInactive: 1
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 128
+  includeTriggerTargets: 0
+  syncPhysicsTransformsBeforeHitScan: 1
+  hitboxOffset: {x: 0.5, y: 0}
+  hitboxScaleMultiplier: {x: 1, y: 1}
+  lockFacingAtAttackStart: 1
+  upAttackHitboxOffset: {x: 0, y: 0.5}
+  upAttackHitboxScaleMultiplier: {x: 1, y: 1}
+  downAttackHitboxOffset: {x: 0, y: -0.5}
+  downAttackHitboxScaleMultiplier: {x: 1, y: 1}
+  downAttackRotationZ: -90
+  enableMeleeAttack: 1
+  requireUsableWeapon: 0
+  allowAttackWhileMovementLocked: 1
+  fallbackAttackInterval: 0.25
+  minimumAttackInterval: 0.08
+  useCombatAttackSpeedAsInterval: 1
+  attackActiveDuration: 0.05
+  resetAirActionsOnDownHit: 1
+  drawHitboxGizmo: 0
+  logHitDebug: 0
+  logAttackBlockReason: 0
+  logAttackSuccess: 0
+--- !u!114 &2755689781807117682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c92eca520ef8ee44797df24dd82dd607, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerWeaponSystem
+  weaponEquipped: {fileID: 1755468187545963186}
+  equippedWeapon: {fileID: 11400000, guid: 6d5cbb84ee3bb71458e251a2a2b934ae, type: 2}
+  combatCore: {fileID: 7597916277566146274}
+--- !u!114 &1755468187545963186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1bb5267d7804a0488a8a3dca2d3719a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.WeaponEquipped2D
+  weaponLibrary: {fileID: 0}
+  equippedWeaponId: 
+  dualWieldingModeEnabled: 0
+  requireWeaponKnownForEquip: 1
+  requireWeaponUnlockedForEquip: 1
+  loadFromRecordOnAwake: 1
+  saveToRecordOnChange: 1
+  recordFileName: record.json
+  prettyPrintRecordJson: 1
+--- !u!114 &5957835090944648881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fbec3c5e83a63a4f933b0cfb5c3952b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerAttackRecoil2D
+  core: {fileID: 6520497788721592018}
+  enableMeleeHitRecoil: 1
+  baseHorizontalRecoil: 15
+  unarmedWeight: 1
+  recoilCooldown: 0.03
+  enableDownAttackRecoil: 1
+  downAttackUpwardRecoil: 20
+--- !u!114 &9175344798029099705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f14d7432f4f918849a4f8a717afd65dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerAttackDirectionResolver2D
+  core: {fileID: 6520497788721592018}
+  downAttackRequiresAirborne: 1
+  verticalIntentThreshold: 0.35
+--- !u!114 &3716637791989823436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80c23c2a98d402644b6cd06fa8e8b3f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerHitKnockback2D
+  core: {fileID: 6520497788721592018}
+  health: {fileID: 321594986776558877}
+  enableKnockback: 1
+  baseKnockbackX: 5
+  damageToKnockbackXRatio: 1
+  maxKnockbackX: 25
+  logKnockback: 0
+--- !u!114 &226117845810015068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52bf5f901bfd7624abf1e38e44a95539, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerAbilityCore2D
+  allowDoubleJump: 1
+  allowDash: 1
+  allowSpellCast: 1
+  allowDualWielding: 1
+  doubleJumpAbilityId: double_jump
+  dashAbilityId: dash
+  spellCastAbilityId: spell_cast
+  dualWieldingAbilityId: dual_wielding
+  doubleJumpModule: {fileID: 8929174965059236694}
+  dashModule: {fileID: 2542808704790923235}
+  spellCastModule: {fileID: 2133976333977937628}
+  loadFromPlayerDataOnAwake: 1
+  saveToPlayerDataOnChange: 1
+  playerDataFileName: PlayerData.json
+  prettyPrintPlayerDataJson: 1
+--- !u!114 &456113222075257246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871776095807824766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 748c5e0bbcc627c47b567eaaee8a9f9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerInteractor2D
+  core: {fileID: 0}
+  interactKey: 32
+  interactCooldown: 0.5
+  logInteract: 1
+--- !u!1 &1658788329634665802
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7294477198766081320}
+  - component: {fileID: 8106958085138035314}
+  m_Layer: 8
+  m_Name: animRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7294477198766081320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658788329634665802}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1880488979618420304}
+  m_Father: {fileID: 2428400241296818852}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8106958085138035314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658788329634665802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32ea9ae80ddeb1843a3c5a062ebe8b16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerMeleeAttackAnimationController2D
+  meleeAttack: {fileID: 7348974447361749221}
+  weaponSystem: {fileID: 2755689781807117682}
+  primaryAnimator: {fileID: 977208135065519343}
+  secondaryAnimator: {fileID: 6122045653653735117}
+  playSecondaryOnlyWhenDualWielding: 1
+  secondaryDelay: 0
+  logSetupWarnings: 1
+--- !u!1 &3830121007318768522
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1880488979618420304}
+  - component: {fileID: 977208135065519343}
+  - component: {fileID: 5675000229947702010}
+  - component: {fileID: 3952424246164154977}
+  m_Layer: 8
+  m_Name: Animator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1880488979618420304
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3830121007318768522}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7294477198766081320}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &977208135065519343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3830121007318768522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39499b9b9a55da8439aa47558fd19555, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerMeleeAttackAnimator2D
+  meleeAttack: {fileID: 7348974447361749221}
+  animator: {fileID: 5675000229947702010}
+  combatCore: {fileID: 7597916277566146274}
+  listenToMeleeAttackEvents: 0
+  forwardAttackTrigger: AttackForward
+  upAttackTrigger: AttackUp
+  downAttackTrigger: AttackDown
+  resetAttackTriggersBeforePlay: 1
+  setAttackDirectionParameter: 1
+  attackDirectionParameter: AttackDirection
+  setAttackFacingParameter: 1
+  attackFacingParameter: AttackFacing
+  mirrorWithAttackFacing: 1
+  mirrorMode: 1
+  mirroredSpriteRenderer: {fileID: 0}
+  mirrorPivotTransform: {fileID: 7294477198766081320}
+  sourceArtFacesLeft: 1
+  mirrorVerticalAttacks: 1
+  applyForwardAttackTransformChange: 1
+  forwardAttackTransform: {fileID: 0}
+  forwardAttackPositionOffset: {x: -1.379, y: 0.398}
+  forwardAttackRotationZ: 6
+  forwardAttackScale: {x: 0.3, y: 0.3}
+  applyUpAttackTransformChange: 1
+  upAttackTransform: {fileID: 0}
+  upAttackPositionOffset: {x: -1, y: 0.1}
+  upAttackRotationZ: -30
+  upAttackScale: {x: 0.5, y: 0.3}
+  scaleWithAttackRange: 1
+  scaledTransform: {fileID: 1880488979618420304}
+  referenceAttackRange: 1
+  captureBaseScaleOnAwake: 1
+  baseLocalScale: {x: 1, y: 1, z: 1}
+  minScaleMultiplier: 0.25
+  maxScaleMultiplier: 3
+  scaleWithAttackDirection: 0
+  forwardScaleMultiplier: {x: 1, y: 1, z: 1}
+  upScaleMultiplier: {x: 1, y: 2, z: 1}
+  downScaleMultiplier: {x: 1, y: 2, z: 1}
+  logMissingReferences: 1
+--- !u!95 &5675000229947702010
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3830121007318768522}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e816bfe5d7096504cb0c8bd2fc973296, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!212 &3952424246164154977
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3830121007318768522}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 2.5, y: 12.54}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_SpriteSortPoint: 0
+--- !u!1 &4834720735074750840
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8045646658902442875}
+  - component: {fileID: 3760253184817929973}
+  m_Layer: 9
+  m_Name: MeleeZone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8045646658902442875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4834720735074750840}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2428400241296818852}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &3760253184817929973
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4834720735074750840}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.28866667}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0, y: -0.5}
+      - {x: 1, y: 0}
+      - {x: 0, y: 0.5}
+      - {x: -2, y: 0.6}
+      - {x: -0.5, y: 0}
+      - {x: -2, y: -0.6}
+  m_UseDelaunayMesh: 1
+--- !u!1 &5654542112183753847
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5831729148391461541}
+  - component: {fileID: 3862942201317138199}
+  - component: {fileID: 154439127380994122}
+  m_Layer: 8
+  m_Name: checkPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5831729148391461541
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5654542112183753847}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.481, z: 0}
+  m_LocalScale: {x: 1, y: 0.1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2428400241296818852}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &3862942201317138199
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5654542112183753847}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  m_Color: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
+--- !u!114 &154439127380994122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5654542112183753847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef224a9facfd2d74c98e32fe5ea9ff87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.GroundCheck2D
+  checkPoint: {fileID: 5831729148391461541}
+  checkRadius: 0.1
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!1 &7536905867692646541
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2858134359191920586}
+  - component: {fileID: 6122045653653735117}
+  - component: {fileID: 8254445046879615197}
+  - component: {fileID: 4482019773316242201}
+  m_Layer: 8
+  m_Name: Animator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2858134359191920586
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7536905867692646541}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1187904250015857299}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6122045653653735117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7536905867692646541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39499b9b9a55da8439aa47558fd19555, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerMeleeAttackAnimator2D
+  meleeAttack: {fileID: 7348974447361749221}
+  animator: {fileID: 8254445046879615197}
+  combatCore: {fileID: 7597916277566146274}
+  listenToMeleeAttackEvents: 0
+  forwardAttackTrigger: AttackForward
+  upAttackTrigger: AttackUp
+  downAttackTrigger: AttackDown
+  resetAttackTriggersBeforePlay: 1
+  setAttackDirectionParameter: 1
+  attackDirectionParameter: AttackDirection
+  setAttackFacingParameter: 1
+  attackFacingParameter: AttackFacing
+  mirrorWithAttackFacing: 1
+  mirrorMode: 1
+  mirroredSpriteRenderer: {fileID: 0}
+  mirrorPivotTransform: {fileID: 1187904250015857299}
+  sourceArtFacesLeft: 1
+  mirrorVerticalAttacks: 1
+  applyForwardAttackTransformChange: 1
+  forwardAttackTransform: {fileID: 0}
+  forwardAttackPositionOffset: {x: -1.379, y: 0.398}
+  forwardAttackRotationZ: 12
+  forwardAttackScale: {x: 0.3, y: 0.3}
+  applyUpAttackTransformChange: 1
+  upAttackTransform: {fileID: 0}
+  upAttackPositionOffset: {x: -1, y: 0.1}
+  upAttackRotationZ: -30
+  upAttackScale: {x: 0.5, y: 0.3}
+  scaleWithAttackRange: 1
+  scaledTransform: {fileID: 2858134359191920586}
+  referenceAttackRange: 1
+  captureBaseScaleOnAwake: 1
+  baseLocalScale: {x: 1, y: 1, z: 1}
+  minScaleMultiplier: 0.25
+  maxScaleMultiplier: 3
+  scaleWithAttackDirection: 0
+  forwardScaleMultiplier: {x: 1, y: 1, z: 1}
+  upScaleMultiplier: {x: 1, y: 2, z: 1}
+  downScaleMultiplier: {x: 1, y: 2, z: 1}
+  logMissingReferences: 1
+--- !u!95 &8254445046879615197
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7536905867692646541}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e816bfe5d7096504cb0c8bd2fc973296, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!212 &4482019773316242201
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7536905867692646541}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 2.5, y: 12.54}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_SpriteSortPoint: 0
+--- !u!1 &8788245856718071781
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1187904250015857299}
+  m_Layer: 8
+  m_Name: secondaryAnim
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1187904250015857299
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8788245856718071781}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2858134359191920586}
+  m_Father: {fileID: 2428400241296818852}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

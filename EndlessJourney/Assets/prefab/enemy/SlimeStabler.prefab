@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 2381807174651056168}
   m_Layer: 7
   m_Name: SlimeStabler
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -35,7 +35,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -19.49, y: 11.33, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8009053427341266612}
@@ -206,9 +206,9 @@ MonoBehaviour:
   invulnerable: 0
   blockSelfHits: 1
   hitCooldown: 0
-  maxHealth: 60
+  maxHealth: 100
   startAtMaxHealth: 1
-  startingHealth: 60
+  startingHealth: 1
   currentHealth: 0
   isDead: 0
 --- !u!114 &3408996596368551318
@@ -233,6 +233,7 @@ MonoBehaviour:
   targetLayers:
     serializedVersion: 2
     m_Bits: 256
+  filterByTouchedColliderLayer: 1
   logContactHit: 1
 --- !u!114 &3928581573218135236
 MonoBehaviour:
