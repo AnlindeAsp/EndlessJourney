@@ -3675,9 +3675,9 @@ MonoBehaviour:
   spawnOnEnable: 1
   spawnOnEnableDelay: 0
   spawnOnInterval: 1
-  spawnInterval: 0.4
+  spawnInterval: 0.8
   spawnCountPerTrigger: 1
-  maxAliveEnemies: 8
+  maxAliveEnemies: 10
   spawnOnHit: 1
   hitSpawnCooldown: 0.25
   requireDamageToSpawn: 0
