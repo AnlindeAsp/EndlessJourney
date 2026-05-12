@@ -64,6 +64,7 @@
     <Compile Include="Assets\Scripts\Enemy\Basic\EnemyDeathBehaviour2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Melee\PlayerWeaponSystem.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IHittable.cs" />
+    <Compile Include="Assets\Scripts\Player\Combat-Melee\WeaponInscriptionEquipped2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyBlackboard2D.cs" />
     <Compile Include="Assets\Scripts\Scriptables\WeaponData.cs" />
     <Compile Include="Assets\Scripts\Scriptables\DamageSpellEffectData2D.cs" />
@@ -102,9 +103,12 @@
     <Compile Include="Assets\Scripts\Enemy\Properties\EnemyHittable.cs" />
     <Compile Include="Assets\Scripts\UI\Storage\Weapon\WeaponPageController2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Core\PlayerAttackRecoil2D.cs" />
+    <Compile Include="Assets\Scripts\Combat\DamageType.cs" />
     <Compile Include="Assets\Scripts\Player\Abilities\PlayerAbilityCore2D.cs" />
     <Compile Include="Assets\Scripts\Player\Movement\PlayerDoubleJump2D.cs" />
+    <Compile Include="Assets\Scripts\Player\Libraries\WeaponInscriptionLibrary2D.cs" />
     <Compile Include="Assets\Scripts\UI\HealthDisplayer.cs" />
+    <Compile Include="Assets\Scripts\Player\Combat-Core\PlayerCombatRuntime2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\Basic\EnemyCore2D.cs" />
     <Compile Include="Assets\Scripts\System\PauseMenuController2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\Combat\EnemyContactAttack2D.cs" />
@@ -113,6 +117,7 @@
     <Compile Include="Assets\Scripts\Scriptables\HealSpellEffectData2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyBase2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyBrainFSM2D.cs" />
+    <Compile Include="Assets\Scripts\Scriptables\WeaponInscriptionData.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Spell\SpellBook2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Projectile\PlayerProjectileLauncher2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Core\PlayerHitKnockback2D.cs" />

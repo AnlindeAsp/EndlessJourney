@@ -19,6 +19,7 @@ namespace EndlessJourney.Player
         [Header("References")]
         [SerializeField] private PlayerCore2D core;
         [SerializeField] private PlayerCombatCore combatCore;
+        [SerializeField] private PlayerCombatRuntime2D combatRuntime;
         [SerializeField] private PlayerWeaponSystem weaponSystem;
         [SerializeField] private PlayerAttackRecoil2D attackRecoil;
         [SerializeField] private PlayerAttackDirectionResolver2D directionResolver;
@@ -200,7 +201,7 @@ namespace EndlessJourney.Player
             if (requireUsableWeapon && weaponSystem != null && !weaponSystem.CanUseEquippedWeapon())
             {
                 // Allow combat-stat testing even when weapon is not usable.
-                if (combatCore.AttackDamagePerHit <= 0f)
+                if (ResolveMeleeDamagePerHit() <= 0f)
                 {
                     if (logAttackBlockReason)
                     {
@@ -210,7 +211,7 @@ namespace EndlessJourney.Player
                 }
             }
 
-            float damagePerHit = Mathf.Max(0f, combatCore.AttackDamagePerHit);
+            float damagePerHit = ResolveMeleeDamagePerHit();
             if (damagePerHit <= 0f)
             {
                 if (logAttackBlockReason)
@@ -349,8 +350,8 @@ namespace EndlessJourney.Player
         private float TryApplyDamage(Collider2D col, GameObject targetRoot)
         {
             ResolveReceivers(targetRoot, out IHittable hittable, out IDamageable2D damageable);
-            int hitRepeats = Mathf.Max(1, combatCore.AttackHitCount);
-            float damagePerHit = Mathf.Max(0f, combatCore.AttackDamagePerHit);
+            int hitRepeats = ResolveMeleeHitCount();
+            float damagePerHit = ResolveMeleeDamagePerHit();
             float totalApplied = 0f;
 
             Vector2 hitDirection = ResolveHitDirection();
@@ -360,18 +361,12 @@ namespace EndlessJourney.Player
             {
                 for (int i = 0; i < hitRepeats; i++)
                 {
-                    HitContext context = new HitContext(
-                        gameObject,
-                        hitboxCollider,
-                        hitPoint,
-                        hitDirection,
-                        damagePerHit,
-                        HitType.Melee);
-
+                    HitContext context = CreateMeleeHitContext(hitPoint, hitDirection, i);
                     HitResult result = hittable.ReceiveHit(context);
                     if (result.WasApplied)
                     {
                         totalApplied += result.DamageApplied > 0f ? result.DamageApplied : damagePerHit;
+                        combatRuntime?.NotifyMeleeHitApplied(context, result, targetRoot);
                     }
                 }
 
@@ -385,6 +380,8 @@ namespace EndlessJourney.Player
                     if (damageable.ReceiveDamage(damagePerHit, gameObject))
                     {
                         totalApplied += damagePerHit;
+                        HitContext context = CreateMeleeHitContext(hitPoint, hitDirection, i);
+                        combatRuntime?.NotifyMeleeHitApplied(context, HitResult.Applied(damagePerHit), targetRoot);
                     }
                 }
 
@@ -392,6 +389,49 @@ namespace EndlessJourney.Player
             }
 
             return 0f;
+        }
+
+        private HitContext CreateMeleeHitContext(Vector2 hitPoint, Vector2 hitDirection, int hitIndex)
+        {
+            if (combatRuntime != null)
+            {
+                return combatRuntime.CreateMeleeHitContext(
+                    gameObject,
+                    hitboxCollider,
+                    hitPoint,
+                    hitDirection,
+                    hitIndex);
+            }
+
+            int hitCount = ResolveMeleeHitCount();
+            WeaponType weaponType = weaponSystem != null ? weaponSystem.EffectiveWeaponType : WeaponType.Sword;
+            float weaponWeight = weaponSystem != null ? weaponSystem.EffectiveWeaponWeight : 0f;
+            return new HitContext(
+                gameObject,
+                hitboxCollider,
+                hitPoint,
+                hitDirection,
+                ResolveMeleeDamagePerHit(),
+                HitType.Melee,
+                DamageType.Physical,
+                weaponType,
+                weaponWeight,
+                hitIndex,
+                hitCount);
+        }
+
+        private int ResolveMeleeHitCount()
+        {
+            return combatRuntime != null
+                ? combatRuntime.MeleeHitCount
+                : Mathf.Max(1, combatCore.AttackHitCount);
+        }
+
+        private float ResolveMeleeDamagePerHit()
+        {
+            return combatRuntime != null
+                ? combatRuntime.MeleeDamagePerHit
+                : Mathf.Max(0f, combatCore.AttackDamagePerHit);
         }
 
         private void TryApplyHitRecoilOnce()

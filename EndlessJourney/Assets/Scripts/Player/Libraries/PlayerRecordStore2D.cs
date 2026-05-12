@@ -20,6 +20,13 @@ namespace EndlessJourney.Player
     }
 
     [Serializable]
+    public struct WeaponInscriptionStateEntry2D
+    {
+        public string weaponId;
+        public string inscriptionId;
+    }
+
+    [Serializable]
     public class PlayerRecordData2D
     {
         public SpellUnlockStateEntry2D[] unlockedSpellIds = Array.Empty<SpellUnlockStateEntry2D>();
@@ -27,6 +34,8 @@ namespace EndlessJourney.Player
         public string[] equippedSpellIds = Array.Empty<string>();
         public string equippedWeaponId = string.Empty;
         public bool equippedWeaponDualWielding;
+        public WeaponInscriptionStateEntry2D[] weaponInscriptionIds = Array.Empty<WeaponInscriptionStateEntry2D>();
+        public string equippedWeaponInscriptionId = string.Empty;
     }
 
     /// <summary>
@@ -98,6 +107,8 @@ namespace EndlessJourney.Player
                 data.unlockedWeaponIds ??= Array.Empty<WeaponUnlockStateEntry2D>();
                 data.equippedSpellIds ??= Array.Empty<string>();
                 data.equippedWeaponId ??= string.Empty;
+                data.weaponInscriptionIds ??= Array.Empty<WeaponInscriptionStateEntry2D>();
+                data.equippedWeaponInscriptionId ??= string.Empty;
                 return true;
             }
             catch (Exception ex)
@@ -126,6 +137,8 @@ namespace EndlessJourney.Player
                 data.unlockedWeaponIds ??= Array.Empty<WeaponUnlockStateEntry2D>();
                 data.equippedSpellIds ??= Array.Empty<string>();
                 data.equippedWeaponId ??= string.Empty;
+                data.weaponInscriptionIds ??= Array.Empty<WeaponInscriptionStateEntry2D>();
+                data.equippedWeaponInscriptionId ??= string.Empty;
 
                 string json = JsonUtility.ToJson(data, prettyPrint);
                 File.WriteAllText(recordPath, json);

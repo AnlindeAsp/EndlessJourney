@@ -8952,6 +8952,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1737654430}
   m_CullTransparentMesh: 1
+--- !u!1 &1746606634 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4834720735074750840, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
+  m_PrefabInstance: {fileID: 2064899705081311178}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1746606637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1746606634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 348f331f216e7724baca252d329e4b6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerCombatRuntime2D
+  combatCore: {fileID: 8351990933602191243}
+  weaponSystem: {fileID: 8351990933602191247}
+  meleeDamageType: 0
+  fallbackWeaponType: 0
+  fallbackWeaponWeight: 1
+  logMissingReferences: 1
 --- !u!1001 &1768467344
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9264,6 +9287,91 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1846345023}
   m_CullTransparentMesh: 1
+--- !u!1001 &1881337309
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2699976339078111474, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: moveSpeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3849630276733418692, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -43.532265
+      objectReference: {fileID: 0}
+    - target: {fileID: 3849630276733418692, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.472619
+      objectReference: {fileID: 0}
+    - target: {fileID: 3849630276733418692, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3849630276733418692, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3849630276733418692, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3849630276733418692, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3849630276733418692, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3849630276733418692, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3849630276733418692, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3849630276733418692, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4016956100184580140, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: baseKnockbackX
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4016956100184580140, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: useWeaponWeightForKnockback
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4016956100184580140, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: weaponWeightToKnockbackXRatio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4016956100184580140, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: weaponWeightToKnockbackYRatio
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5524049635052559525, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: maxHealth
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 5524049635052559525, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: startingHealth
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139643759572263129, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: m_Name
+      value: slimeSlider (3)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 46bec9131637517409670640e6957015, type: 3}
 --- !u!114 &1885931443 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5925010621448968776, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
@@ -10630,10 +10738,18 @@ PrefabInstance:
       propertyPath: spellLibrary
       value: 
       objectReference: {fileID: 141132399}
+    - target: {fileID: 7348974447361749221, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
+      propertyPath: combatRuntime
+      value: 
+      objectReference: {fileID: 1746606637}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 737072519208123037, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4834720735074750840, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1746606637}
   m_SourcePrefab: {fileID: 100100000, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
 --- !u!1001 &2076385126877357146
 PrefabInstance:
@@ -10853,6 +10969,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44625618f6d686148b0daa1ef377b199, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerCore2D
+--- !u!114 &8351990933602191243 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7597916277566146274, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
+  m_PrefabInstance: {fileID: 2064899705081311178}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 746af10b0162c9549bddb22a9133ab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerCombatCore
+--- !u!114 &8351990933602191247 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2755689781807117682, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
+  m_PrefabInstance: {fileID: 2064899705081311178}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c92eca520ef8ee44797df24dd82dd607, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerWeaponSystem
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -10887,3 +11025,4 @@ SceneRoots:
   - {fileID: 518038383}
   - {fileID: 987241999}
   - {fileID: 224318424}
+  - {fileID: 1881337309}

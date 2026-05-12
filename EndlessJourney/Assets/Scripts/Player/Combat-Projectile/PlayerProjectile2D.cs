@@ -22,6 +22,7 @@ namespace EndlessJourney.Player
         [Header("Damage")]
         [SerializeField, Min(0f)] private float damage = 10f;
         [SerializeField] private HitType hitType = HitType.Projectile;
+        [SerializeField] private DamageType damageType = DamageType.Physical;
         [SerializeField] private LayerMask targetLayers = ~0;
         [SerializeField] private bool includeTriggerTargets = true;
         [SerializeField] private bool preventRepeatHitOnSameTarget = true;
@@ -205,8 +206,12 @@ namespace EndlessJourney.Player
                     hitPoint,
                     hitDirection,
                     damage,
-                    hitType
-                );
+                    hitType,
+                    damageType,
+                    WeaponType.Sword,
+                    0f,
+                    0,
+                    1);
 
                 HitResult result = hittable.ReceiveHit(context);
                 if (result.WasApplied)

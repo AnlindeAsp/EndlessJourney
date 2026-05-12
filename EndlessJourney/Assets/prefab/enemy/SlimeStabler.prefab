@@ -255,10 +255,14 @@ MonoBehaviour:
   maxHitStunDuration: 0.28
   stunHorizontalDamping: 18
   baseKnockbackX: 2
-  damageToKnockbackXRatio: 0.04
+  useWeaponWeightForKnockback: 1
+  weaponWeightToKnockbackXRatio: 0.15
+  weaponWeightToKnockbackYRatio: 0.05
+  swordKnockbackMultiplier: 1
+  dualBladesKnockbackMultiplier: 0.7
+  heavyKnockbackMultiplier: 1.3
   enableVerticalKnockback: 0
   baseKnockbackY: 2
-  damageToKnockbackYRatio: 0.02
   knockResistance: 1
   logHitReaction: 0
 --- !u!114 &23823952704324291

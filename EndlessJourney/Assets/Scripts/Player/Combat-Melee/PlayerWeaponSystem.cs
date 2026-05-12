@@ -13,12 +13,16 @@ namespace EndlessJourney.Player
     {
         [Header("Weapon")]
         [SerializeField] private WeaponEquipped2D weaponEquipped;
+        [SerializeField] private WeaponInscriptionEquipped2D inscriptionEquipped;
         [SerializeField] private WeaponData equippedWeapon;
         [SerializeField] private PlayerCombatCore combatCore;
 
         public WeaponData EquippedWeapon => equippedWeapon;
+        public WeaponInscriptionData EquippedInscription => inscriptionEquipped != null ? inscriptionEquipped.GetEquippedInscriptionData() : null;
         public bool IsDualWieldingModeEnabled => weaponEquipped != null && weaponEquipped.DualWieldingModeEnabled;
         public WeaponType EffectiveWeaponType => ResolveEffectiveWeaponType(equippedWeapon, IsDualWieldingModeEnabled);
+        public float EffectiveWeaponSharpness => ResolveEffectiveSharpness(equippedWeapon);
+        public float EffectiveWeaponWeight => ResolveEffectiveWeight(equippedWeapon);
 
         public event Action<WeaponData> OnWeaponEquipped;
 
@@ -48,6 +52,11 @@ namespace EndlessJourney.Player
                 weaponEquipped.OnEquippedWeaponChanged += HandleEquippedWeaponChanged;
                 weaponEquipped.OnDualWieldingModeChanged += HandleDualWieldingModeChanged;
             }
+
+            if (inscriptionEquipped != null)
+            {
+                inscriptionEquipped.OnEquippedInscriptionChanged += HandleEquippedInscriptionChanged;
+            }
         }
 
         private void Start()
@@ -61,6 +70,11 @@ namespace EndlessJourney.Player
             {
                 weaponEquipped.OnEquippedWeaponChanged -= HandleEquippedWeaponChanged;
                 weaponEquipped.OnDualWieldingModeChanged -= HandleDualWieldingModeChanged;
+            }
+
+            if (inscriptionEquipped != null)
+            {
+                inscriptionEquipped.OnEquippedInscriptionChanged -= HandleEquippedInscriptionChanged;
             }
         }
 
@@ -138,6 +152,8 @@ namespace EndlessJourney.Player
 
             float strength = Mathf.Max(0.01f, combatCore.BaseStrength);
             float attackRange = equippedWeapon.Length + 0.25f;
+            float effectiveSharpness = EffectiveWeaponSharpness;
+            float effectiveWeight = EffectiveWeaponWeight;
             float damagePerHit;
             int hitCount;
             WeaponType effectiveWeaponType = EffectiveWeaponType;
@@ -145,22 +161,22 @@ namespace EndlessJourney.Player
             switch (effectiveWeaponType)
             {
                 case WeaponType.DualBlades:
-                    damagePerHit = strength * equippedWeapon.Sharpness * 0.7f;
+                    damagePerHit = strength * effectiveSharpness * 0.7f;
                     hitCount = 2;
                     break;
                 case WeaponType.Heavy:
-                    damagePerHit = (strength + equippedWeapon.Weight) * equippedWeapon.Sharpness;
+                    damagePerHit = (strength + effectiveWeight) * effectiveSharpness;
                     hitCount = 1;
                     break;
                 default:
-                    damagePerHit = strength * equippedWeapon.Sharpness;
+                    damagePerHit = strength * effectiveSharpness;
                     hitCount = 1;
                     break;
             }
             // Developer notes, 0.1 is the fastest possible attack speed
             // 10 weight: 1.2s, 1s
             // 1 weight: 0.3s, 0.25s
-            float attackSpeed = (equippedWeapon.Weight + 1f)/ (strength - 0f);
+            float attackSpeed = (effectiveWeight + 1f)/ (strength - 0f);
 
             combatCore.ApplyWeaponSnapshot(
                 equippedWeapon.WeaponName,
@@ -180,6 +196,26 @@ namespace EndlessJourney.Player
         {
             RecalculateCombatSnapshot();
             OnWeaponEquipped?.Invoke(equippedWeapon);
+        }
+
+        private void HandleEquippedInscriptionChanged(string inscriptionId)
+        {
+            RecalculateCombatSnapshot();
+            OnWeaponEquipped?.Invoke(equippedWeapon);
+        }
+
+        private float ResolveEffectiveSharpness(WeaponData weapon)
+        {
+            float sharpness = weapon != null ? weapon.Sharpness : 0f;
+            WeaponInscriptionData inscription = EquippedInscription;
+            return inscription != null ? inscription.ModifySharpness(sharpness) : sharpness;
+        }
+
+        private float ResolveEffectiveWeight(WeaponData weapon)
+        {
+            float weight = weapon != null ? weapon.Weight : 0f;
+            WeaponInscriptionData inscription = EquippedInscription;
+            return inscription != null ? inscription.ModifyWeight(weight) : weight;
         }
 
         private void SyncFromEquippedState()

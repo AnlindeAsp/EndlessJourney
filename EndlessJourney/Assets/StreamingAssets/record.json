@@ -27,5 +27,7 @@
     ""
   ],
   "equippedWeaponId": "beginner_sword",
-  "equippedWeaponDualWielding": false
+  "equippedWeaponDualWielding": false,
+  "weaponInscriptionIds": [],
+  "equippedWeaponInscriptionId": ""
 }

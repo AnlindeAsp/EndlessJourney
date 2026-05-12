@@ -22,11 +22,15 @@ namespace EndlessJourney.Enemy
         [SerializeField, Min(0f)] private float stunHorizontalDamping = 18f;
 
         [Header("Knockback")]
-        [SerializeField, Min(0f)] private float baseKnockbackX = 4.5f;
-        [SerializeField, Min(0f)] private float damageToKnockbackXRatio = 0.08f;
+        [SerializeField, Min(0f)] private float baseKnockbackX = 3f;
+        [SerializeField] private bool useWeaponWeightForKnockback = true;
+        [SerializeField, Min(0f)] private float weaponWeightToKnockbackXRatio = 1f;
+        [SerializeField, Min(0f)] private float weaponWeightToKnockbackYRatio = 0.5f;
+        [SerializeField, Min(0f)] private float swordKnockbackMultiplier = 1f;
+        [SerializeField, Min(0f)] private float dualBladesKnockbackMultiplier = 0.6f;
+        [SerializeField, Min(0f)] private float heavyKnockbackMultiplier = 1.5f;
         [SerializeField] private bool enableVerticalKnockback = false;
         [SerializeField, Min(0f)] private float baseKnockbackY = 2f;
-        [SerializeField, Min(0f)] private float damageToKnockbackYRatio = 0.02f;
         [SerializeField, Min(0f)] private float knockResistance = 1f;
 
         [Header("Debug")]
@@ -111,7 +115,8 @@ namespace EndlessJourney.Enemy
                 return;
             }
 
-            ApplyHitStun(context.Damage);
+            float appliedDamage = result.DamageApplied > 0f ? result.DamageApplied : context.Damage;
+            ApplyHitStun(appliedDamage);
             ApplyKnockback(context);
         }
 
@@ -133,9 +138,14 @@ namespace EndlessJourney.Enemy
 
         private void ApplyKnockback(HitContext context)
         {
-            float knockbackScale = 1f / (1f + Mathf.Max(0f, knockResistance));
-            float knockbackX = (baseKnockbackX + Mathf.Max(0f, context.Damage) * damageToKnockbackXRatio) * knockbackScale;
-            float knockbackY = (baseKnockbackY + Mathf.Max(0f, context.Damage) * damageToKnockbackYRatio) * knockbackScale;
+            float knockbackScale = Mathf.Max(0, 1f -  Mathf.Max(0f, knockResistance) * 0.1f);
+            float weightKnockbackX = useWeaponWeightForKnockback ? context.WeaponWeight * weaponWeightToKnockbackXRatio : 0f;
+            float weightKnockbackY = useWeaponWeightForKnockback ? context.WeaponWeight * weaponWeightToKnockbackYRatio : 0f;
+            float weaponTypeMultiplier = ResolveWeaponTypeKnockbackMultiplier(context.WeaponType);
+            float knockbackX = (baseKnockbackX + weightKnockbackX)
+                               * weaponTypeMultiplier
+                               * knockbackScale;
+            float knockbackY = (baseKnockbackY + weightKnockbackY) * weaponTypeMultiplier * knockbackScale;
 
             float dirX = ResolveHorizontalKnockbackDirection(context);
             float dirY = ResolveVerticalKnockbackDirection(context);
@@ -150,7 +160,20 @@ namespace EndlessJourney.Enemy
 
             if (logHitReaction)
             {
-                Debug.Log($"Enemy hit reaction: stun={_hitStunTimer:0.###}, kb=({velocity.x:0.##}, {velocity.y:0.##})");
+                Debug.Log($"Enemy hit reaction: stun={_hitStunTimer:0.###}, kb=({velocity.x:0.##}, {velocity.y:0.##}), weapon={context.WeaponType}, weight={context.WeaponWeight:0.##}, hit={context.HitIndex + 1}/{context.HitCount}");
+            }
+        }
+
+        private float ResolveWeaponTypeKnockbackMultiplier(WeaponType weaponType)
+        {
+            switch (weaponType)
+            {
+                case WeaponType.DualBlades:
+                    return dualBladesKnockbackMultiplier;
+                case WeaponType.Heavy:
+                    return heavyKnockbackMultiplier;
+                default:
+                    return swordKnockbackMultiplier;
             }
         }
 
@@ -191,9 +214,12 @@ namespace EndlessJourney.Enemy
             maxHitStunDuration = Mathf.Max(0f, maxHitStunDuration);
             stunHorizontalDamping = Mathf.Max(0f, stunHorizontalDamping);
             baseKnockbackX = Mathf.Max(0f, baseKnockbackX);
-            damageToKnockbackXRatio = Mathf.Max(0f, damageToKnockbackXRatio);
+            weaponWeightToKnockbackXRatio = Mathf.Max(0f, weaponWeightToKnockbackXRatio);
+            weaponWeightToKnockbackYRatio = Mathf.Max(0f, weaponWeightToKnockbackYRatio);
+            swordKnockbackMultiplier = Mathf.Max(0f, swordKnockbackMultiplier);
+            dualBladesKnockbackMultiplier = Mathf.Max(0f, dualBladesKnockbackMultiplier);
+            heavyKnockbackMultiplier = Mathf.Max(0f, heavyKnockbackMultiplier);
             baseKnockbackY = Mathf.Max(0f, baseKnockbackY);
-            damageToKnockbackYRatio = Mathf.Max(0f, damageToKnockbackYRatio);
             knockResistance = Mathf.Max(0f, knockResistance);
         }
     }
