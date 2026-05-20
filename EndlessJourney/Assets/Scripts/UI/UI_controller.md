@@ -22,6 +22,8 @@ Player presses R in an interactable zone
 Gameplay + ESC -> open PauseMenu
 SavingLibrary + ESC -> close SavingLibrary
 SavingLibrary + R -> close SavingLibrary
+Forge + ESC -> close Forge
+Forge + R -> close Forge
 PauseMenu + ESC -> close PauseMenu
 ```
 
@@ -34,6 +36,7 @@ Owns the current high-level UI state:
 - `Gameplay`
 - `PauseMenu`
 - `SavingLibrary`
+- `Forge`
 - `Inventory`
 - `Map`
 - `Settings`
@@ -79,6 +82,83 @@ Responsibilities:
 - Hide or refresh the world prompt when UI state changes.
 
 It should not directly open canvas roots, lock player state, or handle cursor state.
+
+## OpenForge2D
+
+Location: `Assets/Scripts/Interaction/OpenForge2D.cs`
+
+Responsibilities:
+
+- Inherit trigger/prompt behavior from `TriggerInteractable2D`.
+- Respond to player world interaction at a forge / blacksmith point.
+- Request `GameCanvasManager2D` to open the forge canvas.
+- Hide or refresh the world prompt when UI state changes.
+
+It should not directly edit weapon inscription data.
+
+## WeaponInscriptionPageController2D
+
+Location: `Assets/Scripts/UI/Forge/Inscription/WeaponInscriptionPageController2D.cs`
+
+Handles player operations on the forge inscription page.
+
+Responsibilities:
+
+- Read available weapons from `WeaponLibrary2D`.
+- Read available inscriptions from `WeaponInscriptionLibrary2D`.
+- Read and write per-weapon inscription mapping through `WeaponInscriptionEquipped2D`.
+- Track selected weapon id and selected inscription id.
+- Let `A/D` switch focus between weapon list and inscription list.
+- Let `W/S` move within the focused list.
+- Let `Space` engrave the selected inscription onto the selected weapon.
+- Let `Backspace/Delete` erase the selected weapon's inscription.
+- Ask `WeaponInscriptionPageDisplayer2D` to render updated UI.
+
+It should not directly create UI rows or write display text.
+
+## WeaponInscriptionPageDisplayer2D
+
+Location: `Assets/Scripts/UI/Forge/Inscription/WeaponInscriptionPageDisplayer2D.cs`
+
+Renders the forge inscription page.
+
+Responsibilities:
+
+- Spawn weapon rows and inscription rows.
+- Render selected weapon details and current inscription.
+- Render selected inscription details.
+- Bind Engrave and Erase buttons to controller-provided callbacks.
+- Show which list currently has keyboard focus.
+
+It should not directly save records or change weapon inscription state.
+
+## WeaponInscriptionWeaponRow2D
+
+Location: `Assets/Scripts/UI/Forge/Inscription/WeaponInscriptionWeaponRow2D.cs`
+
+Represents one selectable weapon row in the forge inscription page.
+
+Responsibilities:
+
+- Display weapon name, icon, and current inscription name.
+- Show selected, equipped, engraved, and locked indicators.
+- Invoke the provided weapon-selection callback when clicked.
+
+It should not know about `WeaponLibrary2D` or write record data.
+
+## WeaponInscriptionChoiceRow2D
+
+Location: `Assets/Scripts/UI/Forge/Inscription/WeaponInscriptionChoiceRow2D.cs`
+
+Represents one selectable inscription row in the forge inscription page.
+
+Responsibilities:
+
+- Display inscription name and effect type.
+- Show selected and engraved-on-current-weapon indicators.
+- Invoke the provided inscription-selection callback when clicked.
+
+It should not know about `WeaponInscriptionEquipped2D`.
 
 ## StorageCanvasController2D
 
@@ -264,4 +344,29 @@ SpellPageController2D
 
 SpellPageDisplayer2D
 -> UI rendering
+```
+
+Weapon inscription state is split like this:
+
+```text
+WeaponInscriptionData
+-> static inscription configuration
+
+WeaponInscriptionLibrary2D
+-> all inscription assets
+-> resolves inscription id to asset
+
+WeaponInscriptionEquipped2D
+-> per-weapon inscription mapping
+-> saves weaponId -> inscriptionId to record
+
+PlayerWeaponSystem
+-> reads the currently equipped weapon's inscription
+-> converts static inscription effects into combat snapshot values
+
+WeaponInscriptionPageController2D
+-> forge UI operations
+
+WeaponInscriptionPageDisplayer2D
+-> forge UI rendering
 ```

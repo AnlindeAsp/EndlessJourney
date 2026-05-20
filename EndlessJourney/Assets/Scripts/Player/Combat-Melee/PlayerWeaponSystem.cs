@@ -56,6 +56,7 @@ namespace EndlessJourney.Player
             if (inscriptionEquipped != null)
             {
                 inscriptionEquipped.OnEquippedInscriptionChanged += HandleEquippedInscriptionChanged;
+                inscriptionEquipped.OnWeaponInscriptionChanged += HandleWeaponInscriptionChanged;
             }
         }
 
@@ -75,6 +76,7 @@ namespace EndlessJourney.Player
             if (inscriptionEquipped != null)
             {
                 inscriptionEquipped.OnEquippedInscriptionChanged -= HandleEquippedInscriptionChanged;
+                inscriptionEquipped.OnWeaponInscriptionChanged -= HandleWeaponInscriptionChanged;
             }
         }
 
@@ -200,6 +202,22 @@ namespace EndlessJourney.Player
 
         private void HandleEquippedInscriptionChanged(string inscriptionId)
         {
+            RecalculateCombatSnapshot();
+            OnWeaponEquipped?.Invoke(equippedWeapon);
+        }
+
+        private void HandleWeaponInscriptionChanged(string weaponId, string inscriptionId)
+        {
+            if (equippedWeapon == null || string.IsNullOrWhiteSpace(weaponId))
+            {
+                return;
+            }
+
+            if (!string.Equals(equippedWeapon.WeaponId, weaponId.Trim(), StringComparison.Ordinal))
+            {
+                return;
+            }
+
             RecalculateCombatSnapshot();
             OnWeaponEquipped?.Invoke(equippedWeapon);
         }

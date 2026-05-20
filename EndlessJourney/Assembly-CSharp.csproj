@@ -57,9 +57,12 @@
     <Compile Include="Assets\Scripts\Player\Properties\PlayerMana2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyPatrolWalker2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Core\PlayerCombatCore.cs" />
+    <Compile Include="Assets\Scripts\Interaction\OpenForge2D.cs" />
     <Compile Include="Assets\Scripts\Combat\HitResult.cs" />
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyPerception2D.cs" />
+    <Compile Include="Assets\Scripts\UI\Forge\Inscription\WeaponInscriptionPageDisplayer2D.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IPlayerHarmful.cs" />
+    <Compile Include="Assets\Scripts\UI\Forge\Inscription\WeaponInscriptionWeaponRow2D.cs" />
     <Compile Include="Assets\Scripts\System\GameCanvasManager2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\Basic\EnemyDeathBehaviour2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Melee\PlayerWeaponSystem.cs" />
@@ -75,6 +78,7 @@
     <Compile Include="Assets\Scripts\UI\Storage\Spell\SpellPageSlotButton2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Projectile\ProjectileMovement2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyFloatingWanderer2D.cs" />
+    <Compile Include="Assets\Scripts\UI\Forge\Inscription\WeaponInscriptionPageController2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Projectile\PlayerProjectile2D.cs" />
     <Compile Include="Assets\Scripts\Player\Movement\PlayerCore2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Core\PlayerAttackDirectionResolver2D.cs" />
@@ -131,6 +135,7 @@
     <Compile Include="Assets\Scripts\Interfaces\IPickable.cs" />
     <Compile Include="Assets\Scripts\Player\Libraries\PlayerDataStore2D.cs" />
     <Compile Include="Assets\Scripts\Combat\HitContext.cs" />
+    <Compile Include="Assets\Scripts\UI\Forge\Inscription\WeaponInscriptionChoiceRow2D.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IDamageable2D.cs" />
     <Compile Include="Assets\Scripts\UI\Storage\StorageCanvasController2D.cs" />
     <Compile Include="Assets\Scripts\Scriptables\BuffSpellEffectData2D.cs" />

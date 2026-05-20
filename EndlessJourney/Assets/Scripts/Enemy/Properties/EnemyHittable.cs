@@ -19,6 +19,9 @@ namespace EndlessJourney.Enemy
         [SerializeField, Min(0f)] private float currentHealth;
         [SerializeField] private bool isDead;
 
+        [Header("Debug")]
+        [SerializeField] private bool logDamageOnHit = true;
+
         public float CurrentHealth => currentHealth;
         public float MaxHealth => maxHealth;
         public bool IsDead => isDead;
@@ -63,6 +66,15 @@ namespace EndlessJourney.Enemy
             }
 
             OnDamaged?.Invoke(applied);
+            if (logDamageOnHit)
+            {
+                string sourceName = context.Source != null ? context.Source.name : "Unknown";
+                Debug.Log(
+                    $"{name} took {applied:0.##} {context.DamageType} damage from {sourceName}. " +
+                    $"HP {currentHealth:0.##}/{maxHealth:0.##}, weapon {context.WeaponType}, " +
+                    $"hit {context.HitIndex + 1}/{context.HitCount}.",
+                    this);
+            }
 
             bool killed = currentHealth <= 0f;
             if (killed && !isDead)

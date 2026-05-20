@@ -12,6 +12,7 @@ namespace EndlessJourney.UI
         Gameplay,
         PauseMenu,
         SavingLibrary,
+        Forge,
         Inventory,
         Map,
         Settings
@@ -26,17 +27,21 @@ namespace EndlessJourney.UI
         [Header("References (Assign Manually)")]
         [SerializeField] private PauseMenuController2D pauseMenuController;
         [SerializeField] private GameObject savingLibraryRoot;
+        [SerializeField] private GameObject forgeRoot;
         [Tooltip("Optional fallback cores to lock for non-pause gameplay canvases.")]
         [SerializeField] private PlayerCore2D[] playerCoresToLock;
 
         [Header("Input Routing")]
         [SerializeField] private bool routeEscape = true;
         [SerializeField] private bool routeSavingLibraryCloseKey = true;
+        [SerializeField] private bool routeForgeCloseKey = true;
 #if ENABLE_INPUT_SYSTEM
         [SerializeField] private Key savingLibraryCloseKey = Key.R;
+        [SerializeField] private Key forgeCloseKey = Key.R;
 #endif
 #if ENABLE_LEGACY_INPUT_MANAGER
         [SerializeField] private KeyCode legacySavingLibraryCloseKey = KeyCode.R;
+        [SerializeField] private KeyCode legacyForgeCloseKey = KeyCode.R;
 #endif
 
         [Header("Pause Menu")]
@@ -46,6 +51,9 @@ namespace EndlessJourney.UI
         [SerializeField] private bool hideSavingLibraryOnAwake = true;
         [SerializeField] private bool lockMovementWhileSavingLibraryOpen = true;
         [SerializeField] private bool lockActionsWhileSavingLibraryOpen = true;
+
+        [Header("Forge")]
+        [SerializeField] private bool hideForgeOnAwake = true;
 
         [Header("Cursor")]
         [SerializeField] private bool showCursorForGameplayCanvases = true;
@@ -77,6 +85,11 @@ namespace EndlessJourney.UI
             {
                 savingLibraryRoot.SetActive(false);
             }
+
+            if (forgeRoot != null && hideForgeOnAwake)
+            {
+                forgeRoot.SetActive(false);
+            }
         }
 
         private void Update()
@@ -93,6 +106,15 @@ namespace EndlessJourney.UI
                 && WasSavingLibraryClosePressedThisFrame())
             {
                 CloseSavingLibrary();
+                return;
+            }
+
+            if (routeForgeCloseKey
+                && _currentState == GameCanvasState2D.Forge
+                && Time.frameCount > _stateOpenedFrame
+                && WasForgeClosePressedThisFrame())
+            {
+                CloseForge();
             }
         }
 
@@ -120,6 +142,45 @@ namespace EndlessJourney.UI
             ApplyGameplayCanvasCursorState();
             SetState(GameCanvasState2D.SavingLibrary);
             return true;
+        }
+
+        public bool TryOpenForge(GameObject interactor)
+        {
+            if (_currentState != GameCanvasState2D.Gameplay)
+            {
+                return false;
+            }
+
+            if (forgeRoot == null)
+            {
+                Debug.LogError("GameCanvasManager2D cannot open Forge because forgeRoot is not assigned.", this);
+                return false;
+            }
+
+            _activeCanvasPlayerCore = ResolvePlayerCore(interactor);
+            forgeRoot.SetActive(true);
+            SetGameplayCanvasPlayerLocked(true);
+            ApplyGameplayCanvasCursorState();
+            SetState(GameCanvasState2D.Forge);
+            return true;
+        }
+
+        public void CloseForge()
+        {
+            if (_currentState != GameCanvasState2D.Forge)
+            {
+                return;
+            }
+
+            if (forgeRoot != null)
+            {
+                forgeRoot.SetActive(false);
+            }
+
+            SetGameplayCanvasPlayerLocked(false);
+            RestoreGameplayCanvasCursorState();
+            _activeCanvasPlayerCore = null;
+            SetState(GameCanvasState2D.Gameplay);
         }
 
         public void CloseSavingLibrary()
@@ -176,6 +237,9 @@ namespace EndlessJourney.UI
                 case GameCanvasState2D.SavingLibrary:
                     CloseSavingLibrary();
                     break;
+                case GameCanvasState2D.Forge:
+                    CloseForge();
+                    break;
                 default:
                     break;
             }
@@ -193,6 +257,9 @@ namespace EndlessJourney.UI
                     break;
                 case GameCanvasState2D.SavingLibrary:
                     CloseSavingLibrary();
+                    break;
+                case GameCanvasState2D.Forge:
+                    CloseForge();
                     break;
                 default:
                     CloseCurrentCanvas();
@@ -326,6 +393,23 @@ namespace EndlessJourney.UI
 
 #if ENABLE_LEGACY_INPUT_MANAGER
             return Input.GetKeyDown(legacySavingLibraryCloseKey);
+#else
+            return false;
+#endif
+        }
+
+        private bool WasForgeClosePressedThisFrame()
+        {
+#if ENABLE_INPUT_SYSTEM
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard != null && keyboard[forgeCloseKey].wasPressedThisFrame)
+            {
+                return true;
+            }
+#endif
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+            return Input.GetKeyDown(legacyForgeCloseKey);
 #else
             return false;
 #endif

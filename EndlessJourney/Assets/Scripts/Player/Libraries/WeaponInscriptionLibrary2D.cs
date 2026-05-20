@@ -14,6 +14,7 @@ namespace EndlessJourney.Player
         [SerializeField] private WeaponInscriptionData[] allInscriptions = Array.Empty<WeaponInscriptionData>();
 
         private readonly Dictionary<string, WeaponInscriptionData> _inscriptionById = new Dictionary<string, WeaponInscriptionData>(16);
+        private bool _indexBuilt;
 
         public int InscriptionCount => allInscriptions != null ? allInscriptions.Length : 0;
 
@@ -29,6 +30,7 @@ namespace EndlessJourney.Player
                 return false;
             }
 
+            EnsureInscriptionIndexReady();
             return _inscriptionById.ContainsKey(inscriptionId.Trim());
         }
 
@@ -40,6 +42,7 @@ namespace EndlessJourney.Player
                 return false;
             }
 
+            EnsureInscriptionIndexReady();
             return _inscriptionById.TryGetValue(inscriptionId.Trim(), out inscriptionData) && inscriptionData != null;
         }
 
@@ -62,6 +65,7 @@ namespace EndlessJourney.Player
         public void RebuildInscriptionIndex()
         {
             _inscriptionById.Clear();
+            _indexBuilt = true;
 
             if (allInscriptions == null)
             {
@@ -78,6 +82,19 @@ namespace EndlessJourney.Player
 
                 _inscriptionById[inscriptionData.InscriptionId] = inscriptionData;
             }
+        }
+
+        private void EnsureInscriptionIndexReady()
+        {
+            if (!_indexBuilt)
+            {
+                RebuildInscriptionIndex();
+            }
+        }
+
+        private void OnValidate()
+        {
+            _indexBuilt = false;
         }
     }
 }

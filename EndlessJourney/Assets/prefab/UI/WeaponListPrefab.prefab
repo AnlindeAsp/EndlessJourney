@@ -361,6 +361,7 @@ GameObject:
   - component: {fileID: 35995580467728156}
   - component: {fileID: 1523045717485920570}
   - component: {fileID: 8031425688483775228}
+  - component: {fileID: 4287159159844114108}
   m_Layer: 5
   m_Name: WeaponListPrefab
   m_TagString: Untagged
@@ -461,3 +462,21 @@ MonoBehaviour:
   selectedIndicator: {fileID: 493732617351956886}
   equippedIndicator: {fileID: 0}
   lockedIndicator: {fileID: 0}
+  rowCanvasGroup: {fileID: 4287159159844114108}
+  selectedAlpha: 1
+  unselectedAlpha: 0.55
+  normalNameColor: {r: 1, g: 1, b: 1, a: 1}
+  equippedNameColor: {r: 1, g: 0.78, b: 0.18, a: 1}
+  lockedNameColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+--- !u!225 &4287159159844114108
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7074047437947025170}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
