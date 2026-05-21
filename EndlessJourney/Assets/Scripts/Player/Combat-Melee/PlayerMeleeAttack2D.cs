@@ -351,7 +351,6 @@ namespace EndlessJourney.Player
         {
             ResolveReceivers(targetRoot, out IHittable hittable, out IDamageable2D damageable);
             int hitRepeats = ResolveMeleeHitCount();
-            float damagePerHit = ResolveMeleeDamagePerHit();
             float totalApplied = 0f;
 
             Vector2 hitDirection = ResolveHitDirection();
@@ -365,7 +364,7 @@ namespace EndlessJourney.Player
                     HitResult result = hittable.ReceiveHit(context);
                     if (result.WasApplied)
                     {
-                        totalApplied += result.DamageApplied > 0f ? result.DamageApplied : damagePerHit;
+                        totalApplied += result.DamageApplied > 0f ? result.DamageApplied : context.Damage;
                         combatRuntime?.NotifyMeleeHitApplied(context, result, targetRoot);
                     }
                 }
@@ -377,11 +376,11 @@ namespace EndlessJourney.Player
             {
                 for (int i = 0; i < hitRepeats; i++)
                 {
-                    if (damageable.ReceiveDamage(damagePerHit, gameObject))
+                    HitContext context = CreateMeleeHitContext(hitPoint, hitDirection, i);
+                    if (damageable.ReceiveDamage(context.Damage, gameObject))
                     {
-                        totalApplied += damagePerHit;
-                        HitContext context = CreateMeleeHitContext(hitPoint, hitDirection, i);
-                        combatRuntime?.NotifyMeleeHitApplied(context, HitResult.Applied(damagePerHit), targetRoot);
+                        totalApplied += context.Damage;
+                        combatRuntime?.NotifyMeleeHitApplied(context, HitResult.Applied(context.Damage), targetRoot);
                     }
                 }
 

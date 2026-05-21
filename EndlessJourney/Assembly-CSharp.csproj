@@ -139,6 +139,7 @@
     <Compile Include="Assets\Scripts\Interfaces\IDamageable2D.cs" />
     <Compile Include="Assets\Scripts\UI\Storage\StorageCanvasController2D.cs" />
     <Compile Include="Assets\Scripts\Scriptables\BuffSpellEffectData2D.cs" />
+    <Compile Include="Assets\Scripts\Player\Properties\PlayerInvincibilityCollision2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Spell\SpellSlotCaster2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Melee\PlayerMeleeAttackAnimationController2D.cs" />
     <Compile Include="Assets\Scripts\Interaction\TriggerInteractable2D.cs" />

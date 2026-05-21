@@ -64,6 +64,7 @@ namespace EndlessJourney.Player
         public float MaxHealth => maxHealth;
         public bool IsDead => _isDead;
         public bool IsInvincible => enableHitInvincibility && _invincibilityTimer > 0f;
+        public float InvincibilityRemaining => Mathf.Max(0f, _invincibilityTimer);
         public float HealthNormalized => maxHealth > 0f ? _currentHealth / maxHealth : 0f;
         public bool IsInCombat => _forcedInCombat || _combatTimer > 0f;
 
@@ -80,6 +81,7 @@ namespace EndlessJourney.Player
         public event Action<float> OnDamaged;
         public event Action<float, GameObject> OnHarmDamaged;
         public event Action<float, float, float, GameObject> OnHarmDamageResolved;
+        public event Action<bool> OnInvincibilityChanged;
         public event Action<float> OnDirectHealthLost;
         public event Action<float> OnHealed;
         public event Action OnDied;
@@ -287,10 +289,16 @@ namespace EndlessJourney.Player
                 return;
             }
 
+            bool wasInvincible = IsInvincible;
             _invincibilityTimer = invincibilityDuration;
             _flickerTimer = 0f;
             _flickerLowAlpha = false;
             ApplyFlickerAlpha(1f);
+
+            if (!wasInvincible)
+            {
+                OnInvincibilityChanged?.Invoke(true);
+            }
         }
 
         private void TickInvincibility(float deltaTime)
@@ -325,6 +333,7 @@ namespace EndlessJourney.Player
 
         private void StopInvincibility(bool restoreVisual)
         {
+            bool wasInvincible = IsInvincible;
             _invincibilityTimer = 0f;
             _flickerTimer = 0f;
             _flickerLowAlpha = false;
@@ -332,6 +341,11 @@ namespace EndlessJourney.Player
             if (restoreVisual)
             {
                 ApplyFlickerAlpha(1f);
+            }
+
+            if (wasInvincible)
+            {
+                OnInvincibilityChanged?.Invoke(false);
             }
         }
 

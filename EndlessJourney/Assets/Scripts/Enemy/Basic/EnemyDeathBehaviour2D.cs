@@ -3,13 +3,17 @@ using UnityEngine;
 namespace EndlessJourney.Enemy
 {
     /// <summary>
-    /// Handles enemy death presentation-only behavior.
-    /// On death: disable configured colliders and renderers.
+    /// Handles enemy death shutdown behavior.
+    /// On death: disable configured gameplay behaviours, colliders, and renderers.
     /// </summary>
     public class EnemyDeathBehaviour2D : MonoBehaviour
     {
         [Header("References (Assign Manually)")]
         [SerializeField] private EnemyHittable hittable;
+
+        [Header("Disable Behaviours On Death (Assign Manually)")]
+        [Tooltip("Gameplay scripts that should stop after death, such as AI, contact attack, perception, or spawners.")]
+        [SerializeField] private MonoBehaviour[] behavioursToDisable;
 
         [Header("Disable On Death (Assign Manually)")]
         [SerializeField] private Collider2D[] collidersToDisable;
@@ -55,6 +59,7 @@ namespace EndlessJourney.Enemy
 
             _deathApplied = true;
 
+            DisableBehaviours();
             if (collidersToDisable != null)
             {
                 for (int i = 0; i < collidersToDisable.Length; i++)
@@ -81,7 +86,24 @@ namespace EndlessJourney.Enemy
 
             if (logDeathAction)
             {
-                Debug.Log($"{name} death behaviour applied: colliders/renderers disabled.", this);
+                Debug.Log($"{name} death behaviour applied: behaviours/colliders/renderers disabled.", this);
+            }
+        }
+
+        private void DisableBehaviours()
+        {
+            if (behavioursToDisable == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < behavioursToDisable.Length; i++)
+            {
+                MonoBehaviour behaviour = behavioursToDisable[i];
+                if (behaviour != null && behaviour != this)
+                {
+                    behaviour.enabled = false;
+                }
             }
         }
     }

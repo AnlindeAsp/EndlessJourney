@@ -2813,6 +2813,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SlimeStablerBoss
       objectReference: {fileID: 0}
+    - target: {fileID: 2381807174651056168, guid: 0a21fbfd86c8d624895f785a8b5db736, type: 3}
+      propertyPath: behavioursToDisable.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2381807174651056168, guid: 0a21fbfd86c8d624895f785a8b5db736, type: 3}
+      propertyPath: 'behavioursToDisable.Array.data[0]'
+      value: 
+      objectReference: {fileID: 706617944}
+    - target: {fileID: 2381807174651056168, guid: 0a21fbfd86c8d624895f785a8b5db736, type: 3}
+      propertyPath: 'behavioursToDisable.Array.data[1]'
+      value: 
+      objectReference: {fileID: 706617947}
     - target: {fileID: 3408996596368551318, guid: 0a21fbfd86c8d624895f785a8b5db736, type: 3}
       propertyPath: contactDamage
       value: 20
@@ -3728,6 +3740,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46bec9131637517409670640e6957015, type: 3}
+--- !u!1 &571057724 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 208795425043933929, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
+  m_PrefabInstance: {fileID: 2064899705081311178}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &580127815
 GameObject:
   m_ObjectHideFlags: 0
@@ -4253,7 +4270,18 @@ MonoBehaviour:
   removeFromAliveWhenEnemyDies: 1
   ignoreInactiveAliveEnemies: 1
   logSpawnBlocked: 0
-  logSpawned: 1
+  logSpawned: 0
+--- !u!114 &706617947 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3928581573218135236, guid: 0a21fbfd86c8d624895f785a8b5db736, type: 3}
+  m_PrefabInstance: {fileID: 376875774}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706617933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4282a973a7be6d4f9c7f884bb969bfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Enemy.EnemyHitReaction2D
 --- !u!1 &710404836
 GameObject:
   m_ObjectHideFlags: 0
@@ -11381,10 +11409,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerCombatRuntime2D
   combatCore: {fileID: 8351990933602191243}
   weaponSystem: {fileID: 8351990933602191247}
+  playerHealth: {fileID: 2378643079947403758}
+  playerMana: {fileID: 4960015938234310757}
   meleeDamageType: 0
   fallbackWeaponType: 0
   fallbackWeaponWeight: 1
   logMissingReferences: 1
+  logDynamicInscriptionEffects: 0
+  comboDamageRampStacks: 0
 --- !u!114 &1746606640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11819,12 +11851,33 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5925010621448968776, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
   m_PrefabInstance: {fileID: 2064899705081311178}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 571057724}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 70c3f8fb89694dd2a0e5d6e1d02f9e6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerArmor2D
+--- !u!114 &1885931445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571057724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eb0caf0b153e664e96e5dbe6d764d7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerInvincibilityCollision2D
+  health: {fileID: 2378643079947403758}
+  ignoreCollisionWhileInvincible: 1
+  playerCollisionLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  enemyCollisionLayers:
+    serializedVersion: 2
+    m_Bits: 128
+  logCollisionState: 1
 --- !u!1 &1920610434
 GameObject:
   m_ObjectHideFlags: 0
@@ -13265,6 +13318,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 208795425043933929, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
+      propertyPath: m_Name
+      value: DefenseModule
+      objectReference: {fileID: 0}
     - target: {fileID: 871776095807824766, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
       propertyPath: m_Name
       value: player
@@ -13321,6 +13378,14 @@ PrefabInstance:
       propertyPath: spellLibrary
       value: 
       objectReference: {fileID: 141132399}
+    - target: {fileID: 4727224648585752101, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
+      propertyPath: forlornCast
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4727224648585752101, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
+      propertyPath: allowNaturalRegen
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4834720735074750840, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
       propertyPath: m_Name
       value: Melee
@@ -13340,6 +13405,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4834720735074750840, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1746606640}
+    - targetCorrespondingSourceObject: {fileID: 208795425043933929, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1885931445}
   m_SourcePrefab: {fileID: 100100000, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
 --- !u!1001 &2076385126877357146
 PrefabInstance:

@@ -24,6 +24,8 @@ namespace EndlessJourney.Player
         [SerializeField] private bool forlornCast = false;
 
         [Header("Natural Regeneration")]
+        [Tooltip("When false, natural mana regeneration is disabled without blocking direct restore effects.")]
+        [SerializeField] private bool allowNaturalRegen = true;
         [Tooltip("Normal state: PotentialMana contributes this percentage per second.")]
         [SerializeField, Min(0f)] private float normalPotentialRegenPercentPerSecond = 0.10f;
         [Tooltip("Normal state: Mana contributes this percentage per second.")]
@@ -94,6 +96,16 @@ namespace EndlessJourney.Player
         /// True when normal mana is below zero (mana debt).
         /// </summary>
         public bool HasManaDebt => _currentMana < 0f;
+
+        /// <summary>
+        /// Whether natural mana regeneration is allowed.
+        /// Direct restore effects still work while this is false.
+        /// </summary>
+        public bool AllowNaturalRegen
+        {
+            get => allowNaturalRegen;
+            set => allowNaturalRegen = value;
+        }
 
         /// <summary>
         /// External multiplier for natural mana regen.
@@ -339,6 +351,11 @@ namespace EndlessJourney.Player
         private void ApplyNaturalRegen(float deltaTime)
         {
             if (deltaTime <= 0f)
+            {
+                return;
+            }
+
+            if (!allowNaturalRegen)
             {
                 return;
             }
