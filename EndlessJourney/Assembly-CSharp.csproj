@@ -69,7 +69,6 @@
     <Compile Include="Assets\Scripts\Interfaces\IHittable.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Melee\WeaponInscriptionEquipped2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyBlackboard2D.cs" />
-    <Compile Include="Assets\Scripts\Scriptables\ArmorData.cs" />
     <Compile Include="Assets\Scripts\Scriptables\WeaponData.cs" />
     <Compile Include="Assets\Scripts\Scriptables\DamageSpellEffectData2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\Spawning\EnemySpawner2D.cs" />
@@ -80,18 +79,20 @@
     <Compile Include="Assets\Scripts\Player\Combat-Projectile\ProjectileMovement2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyFloatingWanderer2D.cs" />
     <Compile Include="Assets\Scripts\UI\Forge\Inscription\WeaponInscriptionPageController2D.cs" />
+    <Compile Include="Assets\Scripts\Player\Properties\ArmorEquipped2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Projectile\PlayerProjectile2D.cs" />
     <Compile Include="Assets\Scripts\Player\Movement\PlayerCore2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Core\PlayerAttackDirectionResolver2D.cs" />
     <Compile Include="Assets\Scripts\Player\Properties\PlayerHealth2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Spell\SpellCastSystem.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Melee\PlayerMeleeAttack2D.cs" />
+    <Compile Include="Assets\Scripts\Player\Properties\PlayerArmorEquipmentSystem2D.cs" />
     <Compile Include="Assets\Scripts\Player\Combat-Melee\WeaponEquipped2D.cs" />
     <Compile Include="Assets\Scripts\UI\Storage\Spell\SpellPageDisplayer2D.cs" />
     <Compile Include="Assets\Scripts\Player\Libraries\WeaponLibrary2D.cs" />
-    <Compile Include="Assets\Scripts\Player\Libraries\ArmorLibrary2D.cs" />
     <Compile Include="Assets\Scripts\Scriptables\SpellEffectData2D.cs" />
     <Compile Include="Assets\Scripts\UI\ArmorDisplayer.cs" />
+    <Compile Include="Assets\Scripts\Scriptables\ArmorData.cs" />
     <Compile Include="Assets\Scripts\Camera\SimpleCameraFollow2D.cs" />
     <Compile Include="Assets\Scripts\UI\ManaDisplay.cs" />
     <Compile Include="Assets\Scripts\UI\Storage\Weapon\WeaponPageRow2D.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Assets\Scripts\Player\Combat-Melee\PlayerMeleeAttackAnimator2D.cs" />
     <Compile Include="Assets\Scripts\Player\Interaction\PlayerInteractor2D.cs" />
     <Compile Include="Assets\Scripts\Interfaces\ISpellBuffReceiver2D.cs" />
+    <Compile Include="Assets\Scripts\Player\Libraries\ArmorLibrary2D.cs" />
     <Compile Include="Assets\Scripts\Interaction\ReadInteractable2D.cs" />
     <Compile Include="Assets\Scripts\Items\AbilityPickupItem2D.cs" />
     <Compile Include="Assets\Scripts\Enemy\AI\EnemyStabler2D.cs" />
@@ -135,8 +137,6 @@
     <Compile Include="Assets\Scripts\Enemy\Combat\EnemyMeleeAttack2D.cs" />
     <Compile Include="Assets\Scripts\UI\Storage\Spell\SpellPageSpellNameRow2D.cs" />
     <Compile Include="Assets\Scripts\Player\Properties\PlayerArmor2D.cs" />
-    <Compile Include="Assets\Scripts\Player\Properties\ArmorEquipped2D.cs" />
-    <Compile Include="Assets\Scripts\Player\Properties\PlayerArmorEquipmentSystem2D.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IPickable.cs" />
     <Compile Include="Assets\Scripts\Player\Libraries\PlayerDataStore2D.cs" />
     <Compile Include="Assets\Scripts\Combat\HitContext.cs" />
