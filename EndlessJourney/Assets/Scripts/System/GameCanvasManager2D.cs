@@ -314,7 +314,7 @@ namespace EndlessJourney.UI
 
             if (lockActionsWhileSavingLibraryOpen)
             {
-                core.SetActionLocked(locked);
+                core.SetActionLocked(locked, this);
             }
         }
 

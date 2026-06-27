@@ -19,13 +19,17 @@ namespace EndlessJourney.Enemy
         [SerializeField] private EnemyBlackboard2D blackboard;
         [SerializeField] private EnemyPatrolWalker2D patrolModule;
         [SerializeField] private EnemyContactAttack2D contactAttackModule;
+        [SerializeField] private EnemyMeleeAttack2D meleeAttackModule;
 
         [Header("FSM Tuning")]
         [SerializeField, Min(0f)] private float chaseSpeed = 2.8f;
         [SerializeField, Min(0f)] private float returnSpeed = 2.2f;
+        [Tooltip("Fallback range used only when no EnemyMeleeAttack2D is assigned.")]
         [SerializeField, Min(0f)] private float attackRange = 1.25f;
         [SerializeField, Min(0f)] private float loseSightMemoryDuration = 1.5f;
         [SerializeField, Min(0f)] private float returnArrivalDistance = 0.15f;
+        [Tooltip("When enabled, a detected target stays valid until it is destroyed or leaves the scene.")]
+        [SerializeField] private bool chaseRememberedTargetUntilGone = true;
         [Tooltip("When enabled, contact damage stays active in all alive states (patrol/chase/attack/return).")]
         [SerializeField] private bool keepContactAttackAlwaysActive = true;
 
@@ -38,6 +42,7 @@ namespace EndlessJourney.Enemy
             blackboard = GetComponent<EnemyBlackboard2D>();
             patrolModule = GetComponent<EnemyPatrolWalker2D>();
             contactAttackModule = GetComponent<EnemyContactAttack2D>();
+            meleeAttackModule = GetComponent<EnemyMeleeAttack2D>();
         }
 
         private void Awake()
@@ -66,6 +71,8 @@ namespace EndlessJourney.Enemy
                 if (contactAttackModule != null) contactAttackModule.enabled = false;
                 return;
             }
+
+            blackboard.RefreshTrackedTarget(transform.position);
 
             EnemyBlackboard2D.BrainState next = DecideNextState();
             if (next != blackboard.CurrentState)
@@ -115,6 +122,7 @@ namespace EndlessJourney.Enemy
             bool hasTarget = blackboard.HasTarget;
             bool canSee = blackboard.CanSeeTarget;
             bool hasMemory = blackboard.HasRecentSight(loseSightMemoryDuration);
+            bool shouldChaseKnownTarget = chaseRememberedTargetUntilGone && hasTarget;
             float distance = blackboard.DistanceToTarget;
 
             if (core != null && core.IsStunned)
@@ -125,16 +133,20 @@ namespace EndlessJourney.Enemy
             switch (blackboard.CurrentState)
             {
                 case EnemyBlackboard2D.BrainState.Patrol:
-                    if (canSee || hasMemory)
+                    if (canSee || hasMemory || shouldChaseKnownTarget)
                     {
                         return EnemyBlackboard2D.BrainState.Chase;
                     }
                     return EnemyBlackboard2D.BrainState.Patrol;
 
                 case EnemyBlackboard2D.BrainState.Chase:
-                    if (hasTarget && distance <= attackRange)
+                    if (hasTarget && IsTargetInAttackRange())
                     {
                         return EnemyBlackboard2D.BrainState.Attack;
+                    }
+                    if (shouldChaseKnownTarget)
+                    {
+                        return EnemyBlackboard2D.BrainState.Chase;
                     }
                     if (!canSee && !hasMemory)
                     {
@@ -143,13 +155,18 @@ namespace EndlessJourney.Enemy
                     return EnemyBlackboard2D.BrainState.Chase;
 
                 case EnemyBlackboard2D.BrainState.Attack:
+                    if (meleeAttackModule != null && meleeAttackModule.IsInAttackSequence)
+                    {
+                        return EnemyBlackboard2D.BrainState.Attack;
+                    }
+
                     if (!hasTarget)
                     {
                         return EnemyBlackboard2D.BrainState.Return;
                     }
-                    if (distance > attackRange * 1.15f)
+                    if (!IsTargetInAttackRange(GetAttackExitRangeMultiplier()))
                     {
-                        return canSee || hasMemory
+                        return canSee || hasMemory || shouldChaseKnownTarget
                             ? EnemyBlackboard2D.BrainState.Chase
                             : EnemyBlackboard2D.BrainState.Return;
                     }
@@ -161,9 +178,9 @@ namespace EndlessJourney.Enemy
                         return EnemyBlackboard2D.BrainState.HitStun;
                     }
 
-                    if (canSee || hasMemory)
+                    if (canSee || hasMemory || shouldChaseKnownTarget)
                     {
-                        return hasTarget && distance <= attackRange
+                        return hasTarget && IsTargetInAttackRange()
                             ? EnemyBlackboard2D.BrainState.Attack
                             : EnemyBlackboard2D.BrainState.Chase;
                     }
@@ -177,7 +194,7 @@ namespace EndlessJourney.Enemy
                     return EnemyBlackboard2D.BrainState.Return;
 
                 case EnemyBlackboard2D.BrainState.Return:
-                    if (canSee || hasMemory)
+                    if (canSee || hasMemory || shouldChaseKnownTarget)
                     {
                         return EnemyBlackboard2D.BrainState.Chase;
                     }
@@ -229,6 +246,11 @@ namespace EndlessJourney.Enemy
             }
 
             core.StopMovement();
+
+            if (meleeAttackModule != null && blackboard.HasTarget)
+            {
+                meleeAttackModule.TryStartAttack(blackboard.CurrentTarget);
+            }
         }
 
         private void TickHitStun()
@@ -249,6 +271,28 @@ namespace EndlessJourney.Enemy
             int direction = deltaX >= 0f ? 1 : -1;
             core.FaceDirection(direction);
             core.SetHorizontalVelocity(direction * returnSpeed);
+        }
+
+        private bool IsTargetInAttackRange(float rangeMultiplier = 1f)
+        {
+            if (!blackboard.HasTarget)
+            {
+                return false;
+            }
+
+            if (meleeAttackModule != null)
+            {
+                float range = meleeAttackModule.AttackDetectionRange * Mathf.Max(0f, rangeMultiplier);
+                float sqrDistance = ((Vector2)blackboard.CurrentTarget.position - (Vector2)transform.position).sqrMagnitude;
+                return sqrDistance <= range * range;
+            }
+
+            return blackboard.DistanceToTarget <= attackRange * Mathf.Max(0f, rangeMultiplier);
+        }
+
+        private float GetAttackExitRangeMultiplier()
+        {
+            return meleeAttackModule != null ? 1.05f : 1.15f;
         }
     }
 }

@@ -15,7 +15,7 @@ MonoBehaviour:
   inscriptionId: sharpness
   inscriptionName: Sharpness
   flavorText: Sword is always good to be sharp?
-  description: Lighten your weapon weight
+  description: Increase sharpness of your weapon
   effectType: 1
   value: 1.2
   timeoutSeconds: 0

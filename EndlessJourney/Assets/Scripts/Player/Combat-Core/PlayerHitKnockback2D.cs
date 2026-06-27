@@ -10,6 +10,10 @@ namespace EndlessJourney.Player
         [Header("References (Assign Manually)")]
         [SerializeField] private PlayerCore2D core;
         [SerializeField] private PlayerHealth2D health;
+        [SerializeField] private PlayerDash2D dash;
+
+        [Header("Dash Interrupt")]
+        [SerializeField] private bool cancelDashOnHarm = true;
 
         [Header("Horizontal Knockback")]
         [SerializeField] private bool enableKnockback = true;
@@ -50,6 +54,11 @@ namespace EndlessJourney.Player
             if (!enableKnockback || core == null || core.Body == null || health == null || health.IsDead)
             {
                 return;
+            }
+
+            if (cancelDashOnHarm && dash != null && dash.IsDashing)
+            {
+                dash.CancelDash();
             }
 
             float directionX = ResolveHorizontalDirection(source);

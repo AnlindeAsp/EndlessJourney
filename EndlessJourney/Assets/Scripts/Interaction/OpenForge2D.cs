@@ -1,3 +1,4 @@
+using EndlessJourney.Player;
 using EndlessJourney.UI;
 using UnityEngine;
 
@@ -12,6 +13,10 @@ namespace EndlessJourney.Interaction
         [Header("Canvas Manager")]
         [SerializeField] private GameCanvasManager2D canvasManager;
         [SerializeField] private bool closeWhenPlayerLeaves = true;
+
+        [Header("Armor")]
+        [SerializeField] private bool repairArmorOnOpen = true;
+        [SerializeField] private PlayerArmorEquipmentSystem2D armorEquipmentSystem;
 
         [Header("Debug")]
         [SerializeField] private bool logStateChanges;
@@ -65,6 +70,7 @@ namespace EndlessJourney.Interaction
             if (canvasManager.TryOpenForge(interactor))
             {
                 HidePromptDisplay();
+                RepairArmorIfConfigured();
 
                 if (logStateChanges)
                 {
@@ -82,6 +88,16 @@ namespace EndlessJourney.Interaction
             }
 
             HidePromptDisplay();
+        }
+
+        private void RepairArmorIfConfigured()
+        {
+            if (!repairArmorOnOpen || armorEquipmentSystem == null)
+            {
+                return;
+            }
+
+            armorEquipmentSystem.RepairEquippedArmorFull();
         }
     }
 }

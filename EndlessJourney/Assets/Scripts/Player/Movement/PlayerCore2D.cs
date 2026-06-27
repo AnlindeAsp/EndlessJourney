@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace EndlessJourney.Player
@@ -24,7 +25,8 @@ namespace EndlessJourney.Player
         private bool _justLanded;
         private int _facingDirection = 1;
         private bool _movementLocked;
-        private bool _actionLocked;
+        private static readonly object LegacyActionLockOwner = new object();
+        private readonly HashSet<object> _actionLockOwners = new HashSet<object>();
 
         /// <summary>Cached Rigidbody2D used by movement abilities.</summary>
         public Rigidbody2D Body => body;
@@ -54,7 +56,10 @@ namespace EndlessJourney.Player
         public bool IsMovementLocked => _movementLocked;
 
         /// <summary>When true, ability modules should block action starts.</summary>
-        public bool IsActionLocked => _actionLocked;
+        public bool IsActionLocked => _actionLockOwners.Count > 0;
+
+        /// <summary>Number of systems currently holding an action lock, useful for debugging lock leaks.</summary>
+        public int ActionLockCount => _actionLockOwners.Count;
 
         /// <summary>Optional spell system reference for higher-level coordination.</summary>
         public SpellCastSystem SpellCast => spellCastSystem;
@@ -135,7 +140,40 @@ namespace EndlessJourney.Player
         /// </summary>
         public void SetActionLocked(bool locked)
         {
-            _actionLocked = locked;
+            SetActionLocked(locked, LegacyActionLockOwner);
+        }
+
+        /// <summary>
+        /// Locks or unlocks action starts for a specific owner.
+        /// Different systems can release their own lock without clearing locks owned by others.
+        /// </summary>
+        public void SetActionLocked(bool locked, object owner)
+        {
+            object lockOwner = owner ?? LegacyActionLockOwner;
+            if (locked)
+            {
+                _actionLockOwners.Add(lockOwner);
+                return;
+            }
+
+            _actionLockOwners.Remove(lockOwner);
+        }
+
+        /// <summary>
+        /// Returns true when the given owner currently holds an action lock.
+        /// </summary>
+        public bool IsActionLockedBy(object owner)
+        {
+            object lockOwner = owner ?? LegacyActionLockOwner;
+            return _actionLockOwners.Contains(lockOwner);
+        }
+
+        /// <summary>
+        /// Clears every action lock. Intended only for hard recovery/debug flows.
+        /// </summary>
+        public void ClearAllActionLocks()
+        {
+            _actionLockOwners.Clear();
         }
 
         /// <summary>

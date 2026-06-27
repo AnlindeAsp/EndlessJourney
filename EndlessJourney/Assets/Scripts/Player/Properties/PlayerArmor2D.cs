@@ -78,6 +78,20 @@ namespace EndlessJourney.Player
             SetDurabilityInternal(maxDurability, true);
         }
 
+        public void ApplyArmorStats(float newMaxDurability, float newDamageReductionEfficiency, bool restoreFullDurability)
+        {
+            maxDurability = Mathf.Max(1f, newMaxDurability);
+            damageReductionEfficiency = Mathf.Clamp01(newDamageReductionEfficiency);
+
+            if (restoreFullDurability)
+            {
+                SetDurabilityInternal(maxDurability, true);
+                return;
+            }
+
+            SetDurabilityInternal(_currentDurability, true);
+        }
+
         public void SetDurability(float value)
         {
             SetDurabilityInternal(value, true);

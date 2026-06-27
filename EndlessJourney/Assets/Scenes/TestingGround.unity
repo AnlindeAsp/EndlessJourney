@@ -10342,6 +10342,90 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1614083259}
   m_CullTransparentMesh: 1
+--- !u!1 &1618065004
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1618065006}
+  - component: {fileID: 1618065005}
+  m_Layer: 7
+  m_Name: weaponPositive
+  m_TagString: enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!60 &1618065005
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618065004}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0, y: 1}
+      - {x: -0.95105654, y: 0.30901697}
+      - {x: -0.5877852, y: -0.80901706}
+      - {x: 0.58778536, y: -0.80901694}
+      - {x: 0.9510565, y: 0.30901712}
+  m_UseDelaunayMesh: 1
+--- !u!4 &1618065006
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618065004}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -1.33, y: -0, z: 0}
+  m_LocalScale: {x: 0.5, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4349802603905718307}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1 &1635527464
 GameObject:
   m_ObjectHideFlags: 0
@@ -11775,11 +11859,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3849630276733418692, guid: 46bec9131637517409670640e6957015, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -43.532265
+      value: -47.53
       objectReference: {fileID: 0}
     - target: {fileID: 3849630276733418692, guid: 46bec9131637517409670640e6957015, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.472619
+      value: 6.83
       objectReference: {fileID: 0}
     - target: {fileID: 3849630276733418692, guid: 46bec9131637517409670640e6957015, type: 3}
       propertyPath: m_LocalPosition.z
@@ -11836,6 +11920,14 @@ PrefabInstance:
     - target: {fileID: 5524049635052559525, guid: 46bec9131637517409670640e6957015, type: 3}
       propertyPath: startingHealth
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7972408219293043363, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9116069093760243160, guid: 46bec9131637517409670640e6957015, type: 3}
+      propertyPath: attackCooldown
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 9139643759572263129, guid: 46bec9131637517409670640e6957015, type: 3}
       propertyPath: m_Name
@@ -13370,10 +13462,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2542808704790923235, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
+      propertyPath: dashCooldown
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 2755689781807117682, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
       propertyPath: inscriptionEquipped
       value: 
       objectReference: {fileID: 1746606640}
+    - target: {fileID: 3716637791989823436, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
+      propertyPath: dash
+      value: 
+      objectReference: {fileID: 8351990933602191251}
     - target: {fileID: 4678114595622121527, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
       propertyPath: spellLibrary
       value: 
@@ -13594,6 +13694,137 @@ PrefabInstance:
       addedObject: {fileID: 931848697}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 776f808fd4cb5c9448804e0b8a853195, type: 3}
+--- !u!4 &2950973453138883005
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3666621156758124873}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4349802603905718307}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &3024705738369717066
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640069747116704830}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!1 &3666621156758124873
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2950973453138883005}
+  - component: {fileID: 8521756733314037416}
+  m_Layer: 7
+  m_Name: weaponbody
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &3803374272126600145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640069747116704830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff8569786e5702e4ebca767e4913491c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Enemy.EnemyDeathBehaviour2D
+  hittable: {fileID: 5014870177347090498}
+  behavioursToDisable:
+  - {fileID: 8640069747116704835}
+  - {fileID: 8640069747116704834}
+  - {fileID: 8640069747116704833}
+  - {fileID: 8640069747116704832}
+  - {fileID: 8625502356775711039}
+  - {fileID: 5014870177347090498}
+  collidersToDisable:
+  - {fileID: 7463193773691629124}
+  renderersToDisable:
+  - {fileID: 7685685596352716618}
+  logDeathAction: 0
+--- !u!4 &4349802603905718307
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640069747116704830}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -49.36, y: 1.93, z: 0}
+  m_LocalScale: {x: 1.5, y: 2.5, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2950973453138883005}
+  - {fileID: 1618065006}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4507575948698256587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640069747116704830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4282a973a7be6d4f9c7f884bb969bfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Enemy.EnemyHitReaction2D
+  core: {fileID: 4957620613641809151}
+  hittable: {fileID: 5014870177347090498}
+  enableHitReaction: 1
+  baseHitStunDuration: 0.1
+  damageToHitStun: 0.01
+  maxHitStunDuration: 5
+  stunHorizontalDamping: 18
+  baseKnockbackX: 2
+  useWeaponWeightForKnockback: 1
+  weaponWeightToKnockbackXRatio: 1
+  weaponWeightToKnockbackYRatio: 0.5
+  swordKnockbackMultiplier: 1
+  dualBladesKnockbackMultiplier: 0.75
+  heavyKnockbackMultiplier: 1.5
+  enableVerticalKnockback: 0
+  baseKnockbackY: 2
+  knockResistance: 1
+  logHitReaction: 0
 --- !u!114 &4696067233628731627 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1124555243047878414, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
@@ -13605,6 +13836,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 148f8249849c6794a8dda3b370527683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerInput2D
+--- !u!114 &4957620613641809151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640069747116704830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cd5641867532f6448d211dbc8928188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Enemy.EnemyCore2D
+  body: {fileID: 3024705738369717066}
+  hittable: {fileID: 5014870177347090498}
+  visualRoot: {fileID: 4349802603905718307}
+  startFacingDirection: 1
+  isStunned: 0
 --- !u!114 &4960015938234310757 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4727224648585752101, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
@@ -13616,6 +13864,133 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddc6c178ca445ff42b892fa17c300b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerMana2D
+--- !u!114 &5014870177347090498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640069747116704830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04dbf961be8edfb4a8751c191fca158f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Enemy.EnemyHittable
+  canReceiveHit: 1
+  invulnerable: 0
+  blockSelfHits: 1
+  hitCooldown: 0
+  maxHealth: 500
+  startAtMaxHealth: 1
+  startingHealth: 5
+  currentHealth: 0
+  isDead: 0
+  logDamageOnHit: 1
+--- !u!61 &7463193773691629124
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640069747116704830}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 128
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.8, y: 0.99}
+  m_EdgeRadius: 0
+--- !u!212 &7685685596352716618
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640069747116704830}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Color: {r: 0.07450979, g: 0.5732972, b: 0.90588236, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
 --- !u!114 &8351990933602191242 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6520497788721592018, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
@@ -13649,6 +14024,259 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c92eca520ef8ee44797df24dd82dd607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerWeaponSystem
+--- !u!114 &8351990933602191251 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2542808704790923235, guid: 00dbfc0501a8123488d72c7e70728615, type: 3}
+  m_PrefabInstance: {fileID: 2064899705081311178}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de2b8c311c0197445ac9fa0db4ba8e9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Player.PlayerDash2D
+--- !u!61 &8521756733314037416
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3666621156758124873}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1.1, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &8625502356775711039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640069747116704830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 481f4ea1f5483bf48a7169a6e9c2270e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Enemy.EnemyContactAttack2D
+  core: {fileID: 4957620613641809151}
+  damageZone: {fileID: 8521756733314037416}
+  useRootTriggerCallbacks: 0
+  useRootCollisionCallbacks: 1
+  requireAssignedDamageZoneForForwardedHits: 1
+  contactDamage: 20
+  attackCooldown: 0.5
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  filterByTouchedColliderLayer: 1
+  logContactHit: 1
+--- !u!1 &8640069747116704830
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4349802603905718307}
+  - component: {fileID: 7685685596352716618}
+  - component: {fileID: 3024705738369717066}
+  - component: {fileID: 7463193773691629124}
+  - component: {fileID: 4957620613641809151}
+  - component: {fileID: 5014870177347090498}
+  - component: {fileID: 8625502356775711039}
+  - component: {fileID: 4507575948698256587}
+  - component: {fileID: 3803374272126600145}
+  - component: {fileID: 8640069747116704835}
+  - component: {fileID: 8640069747116704834}
+  - component: {fileID: 8640069747116704833}
+  - component: {fileID: 8640069747116704832}
+  - component: {fileID: 8640069747116704836}
+  m_Layer: 7
+  m_Name: chaser
+  m_TagString: enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &8640069747116704832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640069747116704830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3748db2b811e18f4c92ee276c949edf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Enemy.EnemyPatrolWalker2D
+  core: {fileID: 4957620613641809151}
+  bodyCollider: {fileID: 7463193773691629124}
+  moveSpeed: 2
+  directionChangeCooldown: 0.08
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  wallCheckDistance: 0.08
+  useColliderHalfWidthOffset: 1
+  wallCheckExtraOffsetX: 0.02
+  wallCheckOffsetY: 0
+  turnBackAtLedge: 1
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  useColliderBottomForLedgeCheck: 1
+  ledgeCheckExtraOffsetX: 0.02
+  ledgeCheckStartOffsetY: 0.05
+  ledgeCheckDistance: 0.3
+  drawWallCheckRay: 1
+  wallCheckRayColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  drawLedgeCheckRay: 1
+  ledgeCheckRayColor: {r: 0, g: 1, b: 1, a: 1}
+--- !u!114 &8640069747116704833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640069747116704830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92d169ec4bd313b4d808f80a19a3bcc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Enemy.EnemyPerception2D
+  blackboard: {fileID: 8640069747116704835}
+  core: {fileID: 4957620613641809151}
+  eyePoint: {fileID: 0}
+  detectionRadius: 4
+  fieldOfView: 140
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  requireLineOfSight: 0
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  scanInterval: 0.1
+  eyeOffset: {x: 0, y: 0.35}
+  keepTargetAfterDetection: 1
+  debugSeenIndicator: {fileID: 0}
+  drawSightRay: 0
+  sightRayColor: {r: 0, g: 1, b: 1, a: 1}
+--- !u!114 &8640069747116704834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640069747116704830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc9b137d193523a48ba5386f7898ef6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Enemy.EnemyBrainFSM2D
+  core: {fileID: 4957620613641809151}
+  blackboard: {fileID: 8640069747116704835}
+  patrolModule: {fileID: 8640069747116704832}
+  contactAttackModule: {fileID: 8625502356775711039}
+  meleeAttackModule: {fileID: 0}
+  chaseSpeed: 2.8
+  returnSpeed: 2.2
+  attackRange: 1.25
+  loseSightMemoryDuration: 1.5
+  returnArrivalDistance: 0.15
+  chaseRememberedTargetUntilGone: 1
+  keepContactAttackAlwaysActive: 1
+  logStateChange: 0
+--- !u!114 &8640069747116704835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640069747116704830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5b99484cc96a4548a598e8593ace9e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Enemy.EnemyBlackboard2D
+  currentTarget: {fileID: 0}
+  hasDetectedTarget: 0
+  canSeeTarget: 0
+  distanceToTarget: 0
+  lastKnownTargetPosition: {x: 0, y: 0}
+  lastSeenTime: -999
+  currentState: 0
+--- !u!114 &8640069747116704836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640069747116704830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd4fb9d702742b64a8c9e7a18560721b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndlessJourney.Enemy.EnemyMeleeAttack2D
+  core: {fileID: 4957620613641809151}
+  hitboxCollider: {fileID: 1618065005}
+  attackDetectionRange: 3.5
+  requireTargetInRangeToStart: 1
+  windupDuration: 0.3
+  activeDuration: 0.12
+  recoveryDuration: 0.25
+  cooldownDuration: 0.65
+  damage: 15
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  filterByTouchedColliderLayer: 1
+  includeTriggerTargets: 1
+  faceTargetOnStart: 1
+  lockFacingDuringAttack: 0
+  stopMovementDuringAttackSequence: 1
+  enableHitboxOnlyDuringActiveFrames: 1
+  currentState: 0
+  logAttackState: 0
+  logHit: 0
+  drawAttackDetectionRange: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -13683,5 +14311,6 @@ SceneRoots:
   - {fileID: 987241999}
   - {fileID: 224318424}
   - {fileID: 1881337309}
+  - {fileID: 4349802603905718307}
   - {fileID: 1231889822}
   - {fileID: 1208291281}

@@ -1,119 +1,276 @@
 # Player Properties Specification
 
-## Scope
-本文件描述以下两个模块的当前函数职责与流程：
+This document describes the current responsibilities and public flow for:
+
 - `PlayerHealth2D`
 - `PlayerMana2D`
+- `PlayerArmor2D` at the health integration level
+- `ArmorEquipped2D` and `PlayerArmorEquipmentSystem2D` at the equipment backend level
+- `PlayerInvincibilityCollision2D` at the damage-invincibility integration level
 
-不包含 UI 展示层（如 `HealthDisplayer` / `ManaDisplay`）。
-
----
+UI display components such as `HealthDisplayer`, `ManaDisplay`, and `ArmorDisplayer` are not covered here.
 
 ## PlayerHealth2D
-文件：`Assets/Scripts/Player/Properties/PlayerHealth2D.cs`
 
-### Public API / Event
-| Function / Member | 作用 |
-|---|---|
-| `CurrentHealth / MaxHealth / IsDead / IsInvincible / HealthNormalized / IsInCombat` | 对外只读状态。 |
-| `RegenMultiplier { get; set; }` | 外部可调自然回复倍率（>=0）。 |
-| `TakeDamage(float amount)` | 兼容入口，等同 `TakeHarmDamage`。 |
-| `TakeHarmDamage(float amount)` | 受伤扣血路径：受无敌限制，可触发入战斗与受击无敌。 |
-| `ApplyNonHarmHealthLoss(float amount, bool enterCombat=false)` | 非受伤扣血路径：不受无敌限制，不触发无敌（如 mana out / DoT）。 |
-| `ReceiveHarm(float amount, GameObject source)` | `IPlayerHarmful` 接口入口，成功后记录 `LastHarmSource`。 |
-| `CanReceiveHarm()` | 返回当前是否可被“受伤类”伤害命中。 |
-| `Heal(float amount)` | 治疗，不超过 `maxHealth`。 |
-| `SetHealth(float value)` | 直接设血（调试/存档恢复）。 |
-| `Revive(bool fullHeal=true)` | 复活并恢复生命。 |
-| `SetForcedInCombat(bool inCombat)` | 强制战斗态开关。 |
-| `EnterCombat()` | 刷新战斗计时并重置 regen tick。 |
-| `OnHealthChanged` | 生命值变化事件（current,max）。 |
-| `OnDamaged` | 任意扣血成功时触发（harm 与 non-harm 共用底层）。 |
-| `OnNonHarmHealthLost` | 仅 non-harm 扣血成功时触发。 |
-| `OnHealed` | 治疗成功时触发。 |
-| `OnDied` | 死亡时触发。 |
+File: `Assets/Scripts/Player/Properties/PlayerHealth2D.cs`
 
-### Private Function
-| Function | 作用 |
-|---|---|
-| `Awake()` | 初始化闪烁渲染器与初始生命状态。 |
-| `Update()` | 驱动无敌计时、战斗计时、自然恢复。 |
-| `InitializeHealth()` | 用初始配置设置 `_currentHealth/_isDead` 并发首帧事件。 |
-| `StartInvincibility()` | 启动受击无敌与闪烁状态。 |
-| `TickInvincibility(float dt)` | 每帧推进无敌/闪烁。 |
-| `StopInvincibility(bool restoreVisual)` | 停止无敌并恢复显示。 |
-| `CacheFlickerRenderers()` | 缓存受击闪烁使用的 `SpriteRenderer` 与基色。 |
-| `ApplyFlickerAlpha(float alphaMultiplier)` | 应用闪烁透明度。 |
-| `TickCombatState(float dt)` | 推进离战计时。 |
-| `ApplyNaturalRegen(float dt)` | 按 `regenInterval/regenAmount` 做离战恢复。 |
-| `Die()` | 处理死亡标记与事件。 |
-| `ApplyHealthLossCore(float amount, bool enterCombat, out float appliedDamage)` | 扣血核心（harm / non-harm 共用）。 |
-| `OnValidate()` | Inspector 参数约束。 |
-| `OnDisable()` | 组件停用时恢复闪烁显示状态。 |
+`PlayerHealth2D` owns player health, harm damage, direct health loss, healing, death, combat-state timing, natural health regeneration, armor resolution, and post-hit invincibility.
 
-### Health 流程（简版）
-1. 外部调用 `TakeHarmDamage` 或 `ApplyNonHarmHealthLoss`。  
-2. 两条路径都走 `ApplyHealthLossCore` 扣血。  
-3. harm 路径在成功后触发 `StartInvincibility`；non-harm 不触发。  
-4. `Update` 中持续处理：无敌倒计时、战斗状态、自然回复。  
-5. 若血量降到 0，进入 `Die` 并触发 `OnDied`。
+### Damage Entry Points
 
----
+`ReceiveHarm(float amount, GameObject source)`
+
+- Main external entry for enemy/world attacks.
+- Respects hit invincibility.
+- Applies armor when `applyArmorToHarmDamage` is enabled and `armorSource` is assigned.
+- Can enter combat automatically.
+- Starts post-hit invincibility when the player survives.
+- Records `LastHarmSource`.
+- Raises `OnHarmDamaged` and `OnHarmDamageResolved`.
+
+`ReceiveDirectHealthLoss(float amount, bool enterCombat = false)`
+
+- Main external entry for effect/drain damage such as ManaOut, poison, or scripted health loss.
+- Ignores hit invincibility.
+- Does not apply armor.
+- Does not start hit invincibility.
+- Can optionally enter combat.
+- Raises `OnDirectHealthLost`.
+
+`CanReceiveHarm()`
+
+- Returns false when the player is dead or currently harm-invincible.
+- Used by enemy contact/active attack systems before calling `ReceiveHarm`.
+
+### Public State
+
+- `CurrentHealth`
+- `MaxHealth`
+- `IsDead`
+- `IsInvincible`
+- `InvincibilityRemaining`
+- `HealthNormalized`
+- `IsInCombat`
+- `RegenMultiplier`
+- `LastHarmSource`
+
+### Public Events
+
+- `OnHealthChanged(float current, float max)`
+- `OnDamaged(float appliedDamage)`
+- `OnHarmDamaged(float incomingDamage, GameObject source)`
+- `OnHarmDamageResolved(float incomingDamage, float finalDamage, float armorAbsorbed, GameObject source)`
+- `OnInvincibilityChanged(bool isInvincible)`
+- `OnDirectHealthLost(float appliedDamage)`
+- `OnHealed(float appliedHeal)`
+- `OnDied()`
+
+### Other Public Operations
+
+- `Heal(float amount)`
+- `SetHealth(float value)`
+- `Revive(bool fullHeal = true)`
+- `SetForcedInCombat(bool inCombat)`
+- `EnterCombat()`
+
+### Health Flow
+
+```text
+Enemy/world attack
+-> ReceiveHarm(amount, source)
+-> CanReceiveHarm gate
+-> ApplyHarmDamage
+-> optional armor reduction
+-> ApplyHealthLossCore
+-> StartInvincibility if alive
+-> broadcast harm/resolved events
+```
+
+```text
+ManaOut / poison / scripted drain
+-> ReceiveDirectHealthLoss(amount, enterCombat)
+-> ApplyHealthLossCore
+-> broadcast direct health loss event
+```
+
+### Armor Integration
+
+`PlayerHealth2D` does not own armor values. It only asks `PlayerArmor2D` to resolve incoming harm damage.
+
+Current armor rule:
+
+- Armor has durability and reduction efficiency.
+- Harm damage is reduced by armor while armor is not broken.
+- The final hit still receives full configured reduction even if remaining durability is lower than the absorbed amount.
+- After that hit, armor durability reaches zero and the armor becomes broken.
+- Broken armor no longer reduces harm damage.
+
+### Armor Equipment Backend
+
+`ArmorData` defines a small set of armor variants. Current armor data is intentionally limited to:
+
+- stable armor id
+- display data
+- max durability
+- damage reduction efficiency
+
+`ArmorLibrary2D` owns armor asset lookup and unlock state.
+
+`ArmorEquipped2D` owns the currently equipped armor id and saves it to `record.json`.
+
+`PlayerArmorEquipmentSystem2D` bridges equipment data into `PlayerArmor2D`:
+
+```text
+ArmorEquipped2D equippedArmorId
+-> ArmorLibrary2D resolves ArmorData
+-> PlayerArmorEquipmentSystem2D.ApplyEquippedArmorToRuntime
+-> PlayerArmor2D.ApplyArmorStats(maxDurability, reduction, restoreFull)
+```
+
+Inspector requirements:
+
+- Assign `ArmorLibrary2D` on `ArmorEquipped2D`.
+- Assign `ArmorEquipped2D` and `PlayerArmor2D` on `PlayerArmorEquipmentSystem2D`.
+- Assign `PlayerArmorEquipmentSystem2D` on `OpenForge2D` only when Forge should repair armor on open.
+
+Current limitation:
+
+- Armor backend exists, but Armor Forge UI is not implemented yet.
+- ArmorData assets and scene/prefab bindings still require Unity verification.
 
 ## PlayerMana2D
-文件：`Assets/Scripts/Player/Properties/PlayerMana2D.cs`
 
-### Public API / Event
-| Function / Member | 作用 |
-|---|---|
-| `CurrentMana / MaxMana / CurrentPotentialMana / MaxPotentialMana / NetMana` | 双槽当前值与上限。 |
-| `ManaNormalized / PotentialManaNormalized` | 双槽归一化值。 |
-| `ManaExhausting` | `PotentialMana` 未满即视为 exhausting。 |
-| `ManaOut` | `PotentialMana <= 0`。 |
-| `PotentialManaAllow { get; set; }` | 是否允许进入潜能槽过载消耗。 |
-| `ForlornCast { get; set; }` | 过载下是否允许最后一次强制施法（可进入负 mana debt）。 |
-| `HasManaDebt` | normal mana 是否为负。 |
-| `RegenMultiplier { get; set; }` | 自然恢复倍率。 |
-| `HasEnoughMana(float cost)` | 按当前规则判断是否可支付。 |
-| `TrySpendMana(float cost)` | 执行消耗：优先 normal，再 potential；forlorn 可进入负债。 |
-| `RestoreMana(float amount)` | 回蓝，优先补 `PotentialMana`，再补 normal。 |
-| `SetMana(float value)` | 直接设 normal mana。 |
-| `SetPotentialMana(float value)` | 直接设 potential mana。 |
-| `SetManaState(float manaValue, float potentialManaValue)` | 直接设双槽状态。 |
-| `OnManaChanged` | normal 变化事件。 |
-| `OnPotentialManaChanged` | potential 变化事件。 |
-| `OnManaStateChanged` | 双槽合并变化事件。 |
-| `OnManaSpent` | 成功消耗事件。 |
-| `OnManaRestored` | 成功恢复事件。 |
-| `OnManaOutChanged` | mana out 状态变化事件。 |
+File: `Assets/Scripts/Player/Properties/PlayerMana2D.cs`
 
-### Private Function
-| Function | 作用 |
-|---|---|
-| `Awake()` | 自动尝试绑定 `PlayerHealth2D`，初始化法力。 |
-| `Update()` | 每帧执行自然恢复与 mana-out 扣血。 |
-| `InitializeMana()` | 应用起始双槽并发初始事件。 |
-| `ApplyNaturalRegen(float dt)` | 依据状态计算每秒恢复并分配到双槽。 |
-| `ApplyManaOutDamage(float dt)` | `ManaOut` 时对血量施加 non-harm 持续扣血。 |
-| `AddRecoveryWithPriority(float amount)` | 恢复核心：先 potential 后 normal。 |
-| `RaiseManaEvents()` | 统一发出 mana/potential/state 变化事件。 |
-| `NotifyManaOutIfChanged(bool previousState, bool forceNotify=false)` | mana-out 状态变化通知。 |
-| `OnValidate()` | Inspector 参数约束。 |
+`PlayerMana2D` owns the dual-pool mana model:
 
-### Mana 流程（简版）
-1. 施法前 `HasEnoughMana` 先判断可支付性。  
-2. `TrySpendMana` 扣蓝：先 normal，再 potential，必要时（forlorn）进入负 normal。  
-3. `Update` 每帧执行 `ApplyNaturalRegen`：  
-   - normal 状态：`potential*normalPotentialRate + mana*normalManaRate`  
-   - exhausting 状态：`potential*exhaustingRate`  
-   - 若 `mana < 0`（debt）则自然回复停用。  
-4. `PotentialMana == 0` 时 `ManaOut = true`，`ApplyManaOutDamage` 对 `PlayerHealth2D` 施加 non-harm 伤害。  
-5. 所有状态变化通过 `RaiseManaEvents / OnManaOutChanged` 对 UI/系统广播。
+- `Mana`: normal cast resource.
+- `PotentialMana`: overload reserve and ManaOut gate.
 
----
+It handles spending, restoring, natural regeneration, external natural-regen blocking, and ManaOut health drain.
 
-## 关系图（高层）
-1. `SpellCastSystem` 调用 `PlayerMana2D.HasEnoughMana/TrySpendMana`。  
-2. `PlayerMana2D` 在 `ManaOut` 时调用 `PlayerHealth2D.ApplyNonHarmHealthLoss`。  
-3. `PlayerHealth2D` 统一处理死亡、无敌与自然恢复。  
-4. UI 层（`HealthDisplayer/ManaDisplay`）只监听事件，不直接改数值。
+### Public State
+
+- `CurrentMana`
+- `MaxMana`
+- `CurrentPotentialMana`
+- `MaxPotentialMana`
+- `NetMana`
+- `ManaNormalized`
+- `PotentialManaNormalized`
+- `ManaExhausting`
+- `ManaOut`
+- `PotentialManaAllow`
+- `ForlornCast`
+- `HasManaDebt`
+- `AllowNaturalRegen`
+- `RegenMultiplier`
+- `IsNaturalRegenBlockedExternally`
+
+### Public Events
+
+- `OnManaChanged(float current, float max)`
+- `OnPotentialManaChanged(float current, float max)`
+- `OnManaStateChanged(float manaCurrent, float manaMax, float potentialCurrent, float potentialMax)`
+- `OnManaSpent(float spentAmount)`
+- `OnManaRestored(float restoredAmount)`
+- `OnManaOutChanged(bool isManaOut)`
+
+### Public Operations
+
+`HasEnoughMana(float cost)`
+
+- Checks whether current rules allow the cost to be paid.
+- Without overload, only normal mana is usable.
+- With overload, `Mana + PotentialMana` is usable.
+- With `ForlornCast`, one forced cast can create normal mana debt before debt already exists.
+
+`TrySpendMana(float cost)`
+
+- Spends normal mana first.
+- Then spends potential mana if overload is allowed.
+- In forlorn mode, unresolved cost can become negative normal mana debt.
+
+`RestoreMana(float amount)`
+
+- Restores `PotentialMana` first.
+- Then restores normal `Mana`.
+- Works even when `AllowNaturalRegen` is false.
+
+`SetMana(float value)`
+
+- Directly sets normal mana.
+
+`SetPotentialMana(float value)`
+
+- Directly sets potential mana.
+
+`SetManaState(float manaValue, float potentialManaValue)`
+
+- Directly sets both pools.
+
+`SetNaturalRegenBlocked(bool blocked)`
+
+- Temporary external block for natural mana regeneration.
+- Used by spell singing so active casting can stop passive recovery.
+
+### Natural Regeneration
+
+Natural mana regeneration is skipped when:
+
+- `AllowNaturalRegen` is false.
+- `SetNaturalRegenBlocked(true)` is active.
+- normal mana is below zero.
+- calculated regeneration is zero.
+
+Important distinction:
+
+```text
+AllowNaturalRegen / SetNaturalRegenBlocked
+-> only affect passive regen
+-> do not block RestoreMana()
+-> do not block ManaOnHit inscription restore
+```
+
+### ManaOut Flow
+
+```text
+PotentialMana <= 0
+-> ManaOut = true
+-> ApplyManaOutDamage
+-> PlayerHealth2D.ReceiveDirectHealthLoss
+```
+
+ManaOut damage is direct health loss, so it does not trigger hit invincibility and does not apply armor.
+
+## Integration Notes
+
+### Enemy Damage
+
+Enemy contact and active melee attacks should use:
+
+```csharp
+playerHealth.ReceiveHarm(damage, enemyGameObject);
+```
+
+or the `IPlayerHarmful` interface.
+
+### Effect Damage
+
+Effect/drain damage should use:
+
+```csharp
+playerHealth.ReceiveDirectHealthLoss(amount, enterCombat);
+```
+
+### Invincibility Collision
+
+`PlayerInvincibilityCollision2D` listens to `PlayerHealth2D.OnInvincibilityChanged`.
+
+When enabled and configured, it can temporarily ignore physics collision between player layers and enemy layers during hit invincibility. This prevents the player from being trapped in enemy bodies while invincible.
+
+Inspector requirements:
+
+- Assign `PlayerHealth2D`.
+- Set `playerCollisionLayers`, usually `PlayerSide`.
+- Set `enemyCollisionLayers`, usually `Enemy`.

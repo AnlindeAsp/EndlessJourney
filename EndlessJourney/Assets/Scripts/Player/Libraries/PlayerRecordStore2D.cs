@@ -20,6 +20,13 @@ namespace EndlessJourney.Player
     }
 
     [Serializable]
+    public struct ArmorUnlockStateEntry2D
+    {
+        public string armorId;
+        public bool unlocked;
+    }
+
+    [Serializable]
     public struct WeaponInscriptionStateEntry2D
     {
         public string weaponId;
@@ -31,8 +38,10 @@ namespace EndlessJourney.Player
     {
         public SpellUnlockStateEntry2D[] unlockedSpellIds = Array.Empty<SpellUnlockStateEntry2D>();
         public WeaponUnlockStateEntry2D[] unlockedWeaponIds = Array.Empty<WeaponUnlockStateEntry2D>();
+        public ArmorUnlockStateEntry2D[] unlockedArmorIds = Array.Empty<ArmorUnlockStateEntry2D>();
         public string[] equippedSpellIds = Array.Empty<string>();
         public string equippedWeaponId = string.Empty;
+        public string equippedArmorId = string.Empty;
         public bool equippedWeaponDualWielding;
         public WeaponInscriptionStateEntry2D[] weaponInscriptionIds = Array.Empty<WeaponInscriptionStateEntry2D>();
         public string equippedWeaponInscriptionId = string.Empty;
@@ -105,8 +114,10 @@ namespace EndlessJourney.Player
 
                 data.unlockedSpellIds ??= Array.Empty<SpellUnlockStateEntry2D>();
                 data.unlockedWeaponIds ??= Array.Empty<WeaponUnlockStateEntry2D>();
+                data.unlockedArmorIds ??= Array.Empty<ArmorUnlockStateEntry2D>();
                 data.equippedSpellIds ??= Array.Empty<string>();
                 data.equippedWeaponId ??= string.Empty;
+                data.equippedArmorId ??= string.Empty;
                 data.weaponInscriptionIds ??= Array.Empty<WeaponInscriptionStateEntry2D>();
                 data.equippedWeaponInscriptionId ??= string.Empty;
                 return true;
@@ -135,8 +146,10 @@ namespace EndlessJourney.Player
 
                 data.unlockedSpellIds ??= Array.Empty<SpellUnlockStateEntry2D>();
                 data.unlockedWeaponIds ??= Array.Empty<WeaponUnlockStateEntry2D>();
+                data.unlockedArmorIds ??= Array.Empty<ArmorUnlockStateEntry2D>();
                 data.equippedSpellIds ??= Array.Empty<string>();
                 data.equippedWeaponId ??= string.Empty;
+                data.equippedArmorId ??= string.Empty;
                 data.weaponInscriptionIds ??= Array.Empty<WeaponInscriptionStateEntry2D>();
                 data.equippedWeaponInscriptionId ??= string.Empty;
 
@@ -186,6 +199,27 @@ namespace EndlessJourney.Player
                 entries[index++] = new WeaponUnlockStateEntry2D
                 {
                     weaponId = pair.Key,
+                    unlocked = pair.Value
+                };
+            }
+
+            return entries;
+        }
+
+        public static ArmorUnlockStateEntry2D[] BuildArmorUnlockEntries(Dictionary<string, bool> unlockedById)
+        {
+            if (unlockedById == null || unlockedById.Count == 0)
+            {
+                return Array.Empty<ArmorUnlockStateEntry2D>();
+            }
+
+            ArmorUnlockStateEntry2D[] entries = new ArmorUnlockStateEntry2D[unlockedById.Count];
+            int index = 0;
+            foreach (KeyValuePair<string, bool> pair in unlockedById)
+            {
+                entries[index++] = new ArmorUnlockStateEntry2D
+                {
+                    armorId = pair.Key,
                     unlocked = pair.Value
                 };
             }

@@ -61,9 +61,7 @@ namespace EndlessJourney.Player
 
             if (_isDashing)
             {
-                _isDashing = false;
-                core.SetMovementLocked(false);
-                core.RestoreDefaultGravity();
+                CancelDash();
             }
         }
 
@@ -176,6 +174,23 @@ namespace EndlessJourney.Player
         {
             _airDashAvailable = true;
             _cooldownTimer = 0f;
+        }
+
+        /// <summary>
+        /// Stops the current dash without applying post-dash velocity.
+        /// Used by harm reactions so knockback can take over immediately.
+        /// </summary>
+        public void CancelDash()
+        {
+            if (!_isDashing || core == null)
+            {
+                return;
+            }
+
+            _isDashing = false;
+            _dashTimer = 0f;
+            core.SetMovementLocked(false);
+            core.RestoreDefaultGravity();
         }
     }
 }

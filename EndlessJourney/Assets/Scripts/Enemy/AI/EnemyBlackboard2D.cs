@@ -20,6 +20,7 @@ namespace EndlessJourney.Enemy
 
         [Header("Target Memory (Read-Only At Runtime)")]
         [SerializeField] private Transform currentTarget;
+        [SerializeField] private bool hasDetectedTarget;
         [SerializeField] private bool canSeeTarget;
         [SerializeField] private float distanceToTarget;
         [SerializeField] private Vector2 lastKnownTargetPosition;
@@ -30,6 +31,7 @@ namespace EndlessJourney.Enemy
 
         public Transform CurrentTarget => currentTarget;
         public bool HasTarget => currentTarget != null;
+        public bool HasDetectedTarget => hasDetectedTarget;
         public bool CanSeeTarget => canSeeTarget;
         public float DistanceToTarget => distanceToTarget;
         public Vector2 LastKnownTargetPosition => lastKnownTargetPosition;
@@ -43,23 +45,65 @@ namespace EndlessJourney.Enemy
         /// </summary>
         public void SetPerception(Transform target, bool visible, float distance, Vector2 knownPosition)
         {
-            currentTarget = target;
-            canSeeTarget = visible;
+            if (target != null)
+            {
+                currentTarget = target;
+            }
+
+            canSeeTarget = visible && currentTarget != null;
             distanceToTarget = Mathf.Max(0f, distance);
             lastKnownTargetPosition = knownPosition;
 
-            if (visible)
+            if (canSeeTarget)
             {
+                hasDetectedTarget = true;
                 lastSeenTime = Time.time;
             }
         }
 
         /// <summary>
-        /// Clears current target but keeps last-known position and timestamp.
+        /// Keeps target memory but marks current line of sight as lost.
+        /// </summary>
+        public void MarkTargetOutOfSight(bool keepCurrentTarget)
+        {
+            canSeeTarget = false;
+
+            if (keepCurrentTarget && currentTarget != null)
+            {
+                RefreshTrackedTarget(transform.position);
+                return;
+            }
+
+            currentTarget = null;
+            hasDetectedTarget = false;
+            distanceToTarget = 0f;
+        }
+
+        /// <summary>
+        /// Refreshes live target distance/position while chasing a remembered target.
+        /// </summary>
+        public void RefreshTrackedTarget(Vector2 observerPosition)
+        {
+            if (currentTarget == null)
+            {
+                hasDetectedTarget = false;
+                canSeeTarget = false;
+                distanceToTarget = 0f;
+                return;
+            }
+
+            Vector2 currentPosition = currentTarget.position;
+            distanceToTarget = Vector2.Distance(observerPosition, currentPosition);
+            lastKnownTargetPosition = currentPosition;
+        }
+
+        /// <summary>
+        /// Clears current target and detection memory, but keeps last-known position/timestamp for inspection.
         /// </summary>
         public void ClearTarget()
         {
             currentTarget = null;
+            hasDetectedTarget = false;
             canSeeTarget = false;
             distanceToTarget = 0f;
         }

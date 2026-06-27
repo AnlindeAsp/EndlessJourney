@@ -228,7 +228,7 @@ namespace EndlessJourney.Player
             _accumulatedChannelDamage = 0f;
             _channelDamageInterruptThreshold = Mathf.Max(0f, singingTime * 3f);
 
-            core.SetActionLocked(true);
+            core.SetActionLocked(true, this);
 
             if (!allowSingingWhileMovingUnlocked)
             {
@@ -343,7 +343,7 @@ namespace EndlessJourney.Player
             _castingSpell = spellData;
             _phaseDuration = castTime;
             _phaseTimer = castTime;
-            core.SetActionLocked(true);
+            core.SetActionLocked(true, this);
             core.SetGravityMultiplier(0f);
             _castLockZeroGravityApplied = true;
             core.Body.linearVelocity = Vector2.zero;
@@ -371,7 +371,7 @@ namespace EndlessJourney.Player
             _phaseTimer = 0f;
             _phaseDuration = 0f;
             _castingSpell = null;
-            core.SetActionLocked(false);
+            core.SetActionLocked(false, this);
             RestoreGravityAfterCastLockIfNeeded();
         }
 
@@ -391,7 +391,7 @@ namespace EndlessJourney.Player
             _phaseTimer = 0f;
             _phaseDuration = 0f;
             _castingSpell = null;
-            core.SetActionLocked(false);
+            core.SetActionLocked(false, this);
 
             OnCastInterrupted?.Invoke(interruptedSpell, damageTaken, threshold);
         }
@@ -412,7 +412,7 @@ namespace EndlessJourney.Player
 
             if (core != null)
             {
-                core.SetActionLocked(false);
+                core.SetActionLocked(false, this);
                 RestoreGravityAfterCastLockIfNeeded();
             }
 
